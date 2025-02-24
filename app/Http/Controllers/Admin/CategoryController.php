@@ -1,0 +1,125 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Image;
+use App\Traits\ImageHandler;
+use Illuminate\Http\Request;
+
+class CategoryController extends Controller
+{
+    use ImageHandler;
+
+    public function index()
+    {
+        $categories = Category::paginate(10);
+
+        return view('admins.categories.index', compact('categories'));
+    }
+
+    public function create()
+    {
+        $parentCategory = Category::whereNull('parent_id')->get();
+        return view('admins.categories.create', compact('parentCategory'));
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'color' => 'required|string',
+            'order' => 'required|integer',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $category = Category::create([
+            'name' => $request->name,
+            'desc' => $request->description,
+            'color' => $request->color,
+            'order' => $request->order,
+            'featured' => $request->featured ?? false,
+            'parent_id' => $request->parent_id,
+        ]);
+
+        // Upload images and associate with category
+        if ($request->hasFile('images')) {
+            $paths = $this->uploadMultiImage($request->images, 'uploads');
+
+            foreach ($paths as $path) {
+                $category->images()->create(['path' => $path]);
+            }
+        }
+
+        return redirect()->route('admin.categories.index')->with('success', __('lang.category_created'));
+    }
+
+    public function edit($id)
+    {
+        $category = Category::findOrFail($id);
+        $parentCategory = Category::whereNull('parent_id')->where('id', '!=',$category->id)->get();
+
+        return view('admins.categories.edit', compact('category', 'parentCategory'));
+    }
+
+    public function update(Request $request, Category $category)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'color' => 'required|string',
+            'order' => 'required|integer',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $category->update([
+            'name' => $request->name,
+            'desc' => $request->description,
+            'color' => $request->color,
+            'order' => $request->order,
+            'featured' => $request->featured ?? false,
+            'parent_id' => $request->parent_id,
+        ]);
+
+        // Handle Image Updates (Optional: Remove Old Images if Needed)
+        if ($request->hasFile('images')) {
+            $paths = $this->uploadMultiImage($request->images, 'uploads');
+
+            foreach ($paths as $path) {
+                $category->images()->create(['path' => $path]);
+            }
+        }
+
+        return redirect()->route('admin.categories.index')->with('success', __('lang.category_updated'));
+    }
+
+    public function destroy($id)
+    {
+        $category = Category::findOrFail($id);
+
+        if ($category->children()->exists()) {
+            return redirect()->back()->with('error', __('categories.cannot_delete_has_children'));
+        }
+
+        if ($category->image) {
+            $category->deleteImage($category->image->path);
+            $category->image()->delete();
+        }
+
+        $category->delete();
+
+        return redirect()->back()->with('success', __('lang.category_deleted'));
+    }
+
+    public function deleteImage_($id)
+    {
+        $image = Image::findOrFail($id);
+        $this->deleteImage($image->path);
+        $image->delete(); 
+
+        return response()->json(['success' => true]);
+    }
+
+}
