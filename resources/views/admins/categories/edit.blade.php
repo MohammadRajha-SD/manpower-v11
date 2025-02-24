@@ -11,7 +11,7 @@
 
     <x-admins.cards.content :name1="__('lang.category_table')" :name2="__('lang.category_create')"
         route1="admin.categories.index" route2="admin.categories.create" :name3="__('lang.category_edit')"
-        :route3="url()->current()" :isEditMode="true">
+        :route3="['admin.categories.edit', $category->id]" :isEditMode="true">
 
         <form action="{{route('admin.categories.update', $category->id)}}" method="post" enctype="multipart/form-data">
             @csrf
@@ -75,19 +75,20 @@
                             <!-- Preview existing images -->
                             <div class="row g-3 mb-2">
                                 @foreach($category->images as $image)
-                                    <div class="col-md-4 col-sm-6 text-center">
-                                        <div class="border rounded p-2 bg-light shadow-sm d-flex flex-column align-items-center">
-                                            <img src="{{ asset($image->path) }}" class="img-fluid rounded mb-2"
-                                                style="width: 75px; height: 75px; object-fit: cover;">
-                                            <button type="button" class="btn btn-danger btn-sm delete-image" 
-                                                data-id="{{ $image->id }}" style="width: 80%; max-width: 100px;">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
+                                <div class="col-md-4 col-sm-6 text-center">
+                                    <div
+                                        class="border rounded p-2 bg-light shadow-sm d-flex flex-column align-items-center">
+                                        <img src="{{ asset($image->path) }}" class="img-fluid rounded mb-2"
+                                            style="width: 75px; height: 75px; object-fit: cover;">
+                                        <button type="button" class="btn btn-danger btn-sm delete-image"
+                                            data-id="{{ $image->id }}" style="width: 80%; max-width: 100px;">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
+                                </div>
                                 @endforeach
                             </div>
-                            
+
                             <!-- Upload new images -->
                             <div style="width: 100%" class="dropzone image" id="image" data-field="image">
                                 <input type="file" name="images[]" multiple />
@@ -128,7 +129,8 @@
                                 data-empty="@lang('lang.category_parent_id_placeholder')">
                                 <option value="">@lang('lang.category_parent_id_placeholder')</option>
                                 @foreach ($parentCategory as $value)
-                                <option value="{{ $value->id }}" {{$category->parent_id == $value->id ? 'selected' : ''}}>{{ $value->name }}</option>
+                                <option value="{{ $value->id }}" {{$category->parent_id == $value->id ? 'selected' :
+                                    ''}}>{{ $value->name }}</option>
                                 @endforeach
                             </select>
 
@@ -143,10 +145,12 @@
                 <div
                     class="form-group col-12 d-flex flex-column flex-md-row justify-content-md-end justify-content-sm-center border-top pt-4">
                     <div class="d-flex flex-row justify-content-between align-items-center">
-                        <label for="featured" class="control-label my-0 mx-3">{!! __('lang.category_featured_help') !!}</label>
+                        <label for="featured" class="control-label my-0 mx-3">{!! __('lang.category_featured_help')
+                            !!}</label>
                         <input type="hidden" name="featured" value="0" id="hidden_featured">
                         <span class="icheck-{{ setting('theme_color') }}">
-                            <input type="checkbox" name="featured" value="1" @if ($category->featured == 1) checked @endif id="featured">
+                            <input type="checkbox" name="featured" value="1" @if ($category->featured == 1) checked
+                            @endif id="featured">
                             <label for="featured"></label>
                         </span>
                     </div>
@@ -169,38 +173,63 @@
         $(document).ready(function() {
             $(".delete-image").on("click", function() {
                 let imageId = $(this).data("id");
-                let parentDiv = $(this).closest(".col-md-3");
     
                 // Dynamically generate the route URL
-                let deleteUrl = "{{ route('admin.category.image.delete', ['id' => '__imageId__']) }}";
+                let deleteUrl = "{{ route('admin.image.delete', ['id' => '__imageId__']) }}";
                 deleteUrl = deleteUrl.replace('__imageId__', imageId); // Replace placeholder with actual imageId
-    
-                if (confirm("Are you sure you want to delete this image?")) {
-                    $.ajax({
-                    url: deleteUrl,
-                        type: "DELETE",
-                        data: {
-                            _token: $("meta[name='csrf-token']").attr("content")
-                        },
-                        success: function(data) {
-                            if (data.success) {
-                                parentDiv.fadeOut(300, function() {
-                                    $(this).remove();
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: deleteUrl,
+                            type: "DELETE",
+                            data: {
+                                _token: $("meta[name='csrf-token']").attr("content")
+                            },
+                            success: function(data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: data.message,
+                                        confirmButtonText: 'OK'
+                                    }).then(()=>{
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'danger',
+                                        title: 'Error!',
+                                        text: "Could not delete image.",
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'danger',
+                                    title: 'Error!',
+                                    text: "An error occurred while trying to delete the image.",
+                                    confirmButtonText: 'OK'
                                 });
-                            } else {
-                                alert("Error: Could not delete image.");
                             }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error:", error);
-                            alert("An error occurred while trying to delete the image.");
-                        }
-                    });
-                }
+                        });
+                    }
+                });
             });
+
         });
     </script>
-    
+
     @push('scripts_lib')
     <script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('vendor/summernote/summernote.min.js')}}"></script>

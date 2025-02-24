@@ -53,7 +53,7 @@ class CategoryController extends Controller
             }
         }
 
-        return redirect()->route('admin.categories.index')->with('success', __('lang.category_created'));
+        return redirect()->route('admin.categories.index')->with('success', __('lang.saved_successfully',['operator' => __('lang.category')]));
     }
 
     public function edit($id)
@@ -83,7 +83,6 @@ class CategoryController extends Controller
             'parent_id' => $request->parent_id,
         ]);
 
-        // Handle Image Updates (Optional: Remove Old Images if Needed)
         if ($request->hasFile('images')) {
             $paths = $this->uploadMultiImage($request->images, 'uploads');
 
@@ -92,7 +91,7 @@ class CategoryController extends Controller
             }
         }
 
-        return redirect()->route('admin.categories.index')->with('success', __('lang.category_updated'));
+        return redirect()->route('admin.categories.index')->with('success', __('lang.updated_successfully',['operator' => __('lang.category')]));
     }
 
     public function destroy($id)
@@ -100,7 +99,7 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
         if ($category->children()->exists()) {
-            return redirect()->back()->with('error', __('categories.cannot_delete_has_children'));
+            return redirect()->back()->with('error', __('lang.cannot_delete_has_children'));
         }
 
         if ($category->image) {
@@ -110,16 +109,6 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->back()->with('success', __('lang.category_deleted'));
+        return redirect()->back()->with('success', __('lang.deleted_successfully', ['operator' => __('lang.category')]));
     }
-
-    public function deleteImage_($id)
-    {
-        $image = Image::findOrFail($id);
-        $this->deleteImage($image->path);
-        $image->delete(); 
-
-        return response()->json(['success' => true]);
-    }
-
 }

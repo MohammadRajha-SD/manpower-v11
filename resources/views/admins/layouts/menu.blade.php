@@ -1,22 +1,25 @@
-<x-admins.sidebar-item
- :name="__('lang.dashboard')" 
- icon="fas fa-tachometer-alt" 
- :activeRoutes="['admin.dashboard']"
- route="dashboard"
-/>
+<x-admins.sidebar-item :name="__('lang.dashboard')" icon="fas fa-tachometer-alt" :activeRoutes="['admin.dashboard']"
+    route="dashboard" />
 
 <li class="nav-header">{{trans('lang.app_management')}}</li>
 
-<x-admins.sidebar-item
- :name="__('lang.category_plural')" 
- icon="fas fa-folder-open" 
- :activeRoutes="['admin.categories*']"
- route="categories.index"
-/>
+<x-admins.sidebar-items :name="__('lang.e_provider_plural')" :routes="[['admin.provider*'], 'menu-open']"
+    icon="fas fa-users-cog">
+    <x-admins.sidebar-item :name="__('lang.e_provider_plural')" icon="fas fa-list" :activeRoutes="['admin.providers*']"
+        route="providers.index" />
+    <x-admins.sidebar-item :name="__('lang.e_provider_type_plural')" icon="fas fa-list"
+        :activeRoutes="['admin.provider-types*']" route="provider-types.index" />
+</x-admins.sidebar-items>
 
-<x-admins.sidebar-item
- :name="__('lang.pack')" 
- icon="fas fa-folder-open" 
- :activeRoutes="['admin.packs*']"
- route="packs.index"
-/>
+<x-admins.sidebar-item :name="__('lang.category_plural')" icon="fas fa-folder-open"
+    :activeRoutes="['admin.categories*']" route="categories.index" />
+
+{{--
+<x-admins.sidebar-item :name="__('lang.pack')" icon="fas fa-folder-open" :activeRoutes="['admin.packs*']"
+    route="packs.index" /> --}}
+
+<x-admins.sidebar-items :name="__('lang.e_service_plural')" :routes="[['admin.services*'], 'menu-open']"
+    icon="fas fa-pencil-ruler">
+    <x-admins.sidebar-item :name="__('lang.e_service_table')" icon="fas fa-list" :activeRoutes="['admin.services*']"
+        route="services.index" />
+</x-admins.sidebar-items>

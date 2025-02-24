@@ -117,11 +117,64 @@
     <script src="{{asset('vendor/bootstrap-v4-rtl/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
     <script src="{{asset('js/iziToast.js')}}"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="{{asset('https://www.gstatic.com/firebasejs/7.2.0/firebase-app.js')}}"></script>
-
-    <script src="{{asset('https://www.gstatic.com/firebasejs/7.2.0/firebase-messaging.js')}}"></script>
+    <!-- SWEET ALERT --->
+    <script>
+        $(document).ready(function(){
+            $.ajaxSetup({
+                headers:{
+                    'X_CSRF_TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $('body').on('click', '.delete-item', function(event) {
+                event.preventDefault();
+                let deleteUrl = $(this).attr('href');
+                swal({
+                    title: "Are you sure?",
+                    text: 'you won\'t be able to revet this!',
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    buttons: true,
+                    dangerMode: true,
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            type: 'DELETE',
+                            url: deleteUrl,
+                            success: function(data) {
+                                if(data.status == 'success'){
+                                    swal(data.message, {
+                                        title:'Deleted!',
+                                        icon: "success",
+                                    }).then(() => {
+                                        window.location.reload();
+                                    })
+                                }else if(data.status == 'error'){
+                                    swal(data.message, {
+                                        title:'Can\'t Delete it!',
+                                        icon: "error",
+                                    });
+                                }
+                            },
+    
+                            error: function(xhr, status, error){
+                                window.location.reload();
+                            }
+                        });
+    
+                    }
+                });
+            });
+        });
+    
+    
+    </script>
+    <!-- SWEET ALERT // --->
 
     @if ($errors->any())
     @foreach ($errors->all() as $error)

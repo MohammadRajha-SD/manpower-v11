@@ -145,7 +145,6 @@
         </form>
     </x-admins.cards.content>
 
-    {{-- @include('layouts.media_modal') --}}
     @push('scripts_lib')
     <script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('vendor/summernote/summernote.min.js')}}"></script>

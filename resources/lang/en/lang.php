@@ -1767,12 +1767,6 @@ return [
     'contact_us_desc' => 'Messages Sent From Customers',
 
 
-    /** CATEGORIES TRANSLATION    */
-    'category_created' => 'Category created successfully.',
-    'category_deleted' => 'Category deleted successfully.',
-    'category_updated' => 'Category updated successfully.',
-    'no_category_found' => 'No category found.',
-    'cannot_delete_has_children' => 'Cannot delete this category because it has child categories.',
-
-    /** CATEGORIES TRANSLATION // */
+    'no_data_found' => 'No data found.',
+    'cannot_delete_has_children' => 'Cannot delete this item because it has children.',
 ];

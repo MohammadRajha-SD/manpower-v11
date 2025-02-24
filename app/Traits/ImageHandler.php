@@ -40,6 +40,7 @@ trait ImageHandler
 
         return $this->uploadMultiImage($images, $destinationPath);
     }
+    
     public function deleteImage($imagePath)
     {
         if ($imagePath && File::exists($imagePath)) {

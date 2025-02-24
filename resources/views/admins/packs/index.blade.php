@@ -73,7 +73,7 @@
                 @empty
                 <tr>
                     <td colspan="9" class="text-center">
-                        {{ __('lang.no_category_found') }}
+                        {{ __('lang.no_data_found') }}
                     </td>
                 </tr>
                 @endforelse

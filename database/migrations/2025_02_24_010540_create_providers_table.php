@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('providers', function (Blueprint $table) {
+            $table->id();
+            $table->json('name');
+            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('provider_type_id');
+            $table->json('description');
+            $table->string('phone_number');
+            $table->string('mobile_number');
+            $table->decimal('availability_range', 10, 2);
+            $table->boolean('available')->default(1);
+            $table->boolean('featured')->default(0);
+            $table->boolean('accepted')->default(1);
+            $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
+            $table->foreign('provider_type_id')->references('id')->on('provider_types')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('providers');
+    }
+};

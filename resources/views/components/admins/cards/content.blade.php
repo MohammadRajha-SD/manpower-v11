@@ -36,7 +36,7 @@ $route_2 = $route2 != null ? route($route2) : '#';
 
                     @if($isEditMode == true)
                     <li class="nav-item ">
-                        <a class="nav-link {{ setActive([$route3]) }}" href="{!! $route3 !!}"><i
+                        <a class="nav-link {{ setActive([$route3[0]]) }}" href="{!! route($route3[0], $route3[1]) !!}"><i
                                 class="fa fa-plus mr-2"></i>{!! $name3
                             !!}
                         </a>

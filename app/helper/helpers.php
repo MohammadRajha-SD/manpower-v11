@@ -5,12 +5,12 @@ use Illuminate\Support\Str;
 
 /** Set Sidebar Item Active */
 if (!function_exists('setActive')) {
-    function setActive(array $route)
+    function setActive(array $route, $returned = 'active')
     {
         if (is_array($route)) {
             foreach ($route as $r) {
                 if (request()->routeIs($r)) {
-                    return 'active';
+                    return $returned;
                 }
             }
         }
@@ -102,11 +102,31 @@ if (!function_exists('image_item')) {
     }
 }
 
-if (!function_exists('toJsonLang')) {
-    function toJsonLang($value)
-    {
-        $lang = app()->getLocale() ?? 'en';
 
-        return json_encode([$lang => $value], JSON_UNESCAPED_UNICODE);
+if (!function_exists('toJsonLang')) {
+
+    function isActive($name)
+    {
+        if ($name) {
+            return "<span class='badge badge-danger'>" . trans('lang.yes') . "</span>";
+        } else {
+            return "<span class='badge badge-success'>" . trans('lang.no') . "</span>";
+        }
     }
+}
+
+function formattedDate($modelObject, $attributeName = 'updated_at')
+{
+    if (setting('is_human_date_format', false)) {
+        $html = '<span data-toggle="tooltip" data-placement="left" title="${date}">${dateHuman}</span>';
+    } else {
+        $html = '<span data-toggle="tooltip" data-placement="left" title="${dateHuman}">${date}</span>';
+    }
+    if (!isset($modelObject[$attributeName])) {
+        return '';
+    }
+    $dateObj = new Carbon($modelObject[$attributeName]);
+    $replace = preg_replace('/\$\{date\}/', $dateObj->format(setting('date_format', 'l jS F Y (h:i:s)')), $html);
+    $replace = preg_replace('/\$\{dateHuman\}/', $dateObj->diffForHumans(), $replace);
+    return $replace;
 }
