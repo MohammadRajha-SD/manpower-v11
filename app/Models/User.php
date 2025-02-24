@@ -39,13 +39,13 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // public function images()
-    // {
-    //     return $this->morphMany(Image::class, 'imageable');
-    // }
-
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function providers()
+    {
+        return $this->belongsToMany(Provider::class, 'provider_user');
     }
 }

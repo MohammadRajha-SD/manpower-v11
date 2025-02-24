@@ -1,6 +1,6 @@
 <x-admin-layout>
     <x-admins.cards.header :name="__('lang.e_provider_type_plural')" :desc="__('lang.e_provider_type_desc')"
-        :table_name="__('lang.e_provider_type_table')" :route="route('admin.providers.index')" />
+        :table_name="__('lang.e_provider_type_table')" :route="route('admin.provider-types.index')" />
 
     <x-admins.cards.content :name1="__('lang.e_provider_type_table')" :name2="__('lang.e_provider_type_create')"
         route1="admin.provider-types.index" route2="admin.provider-types.create">

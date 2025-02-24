@@ -53,13 +53,13 @@ class CategoryController extends Controller
             }
         }
 
-        return redirect()->route('admin.categories.index')->with('success', __('lang.saved_successfully',['operator' => __('lang.category')]));
+        return redirect()->route('admin.categories.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.category')]));
     }
 
     public function edit($id)
     {
         $category = Category::findOrFail($id);
-        $parentCategory = Category::whereNull('parent_id')->where('id', '!=',$category->id)->get();
+        $parentCategory = Category::whereNull('parent_id')->where('id', '!=', $category->id)->get();
 
         return view('admins.categories.edit', compact('category', 'parentCategory'));
     }
@@ -91,7 +91,7 @@ class CategoryController extends Controller
             }
         }
 
-        return redirect()->route('admin.categories.index')->with('success', __('lang.updated_successfully',['operator' => __('lang.category')]));
+        return redirect()->route('admin.categories.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.category')]));
     }
 
     public function destroy($id)
@@ -99,16 +99,26 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
 
         if ($category->children()->exists()) {
-            return redirect()->back()->with('error', __('lang.cannot_delete_has_children'));
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children'),
+            ]);
         }
 
-        if ($category->image) {
-            $category->deleteImage($category->image->path);
-            $category->image()->delete();
+        // Check if provider has images before deleting
+        if ($category->images()->exists()) {
+            // Delete related images
+            foreach ($category->images as $image) {
+                $image->delete();
+                $category->deleteImage($image->path);
+            }
         }
 
         $category->delete();
 
-        return redirect()->back()->with('success', __('lang.deleted_successfully', ['operator' => __('lang.category')]));
+        return response()->json([
+            'status' => 'success',
+            'message' => trans('lang.deleted_successfully', ['operator' => trans('lang.category')])
+        ], 200);
     }
 }

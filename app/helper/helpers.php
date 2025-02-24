@@ -103,30 +103,27 @@ if (!function_exists('image_item')) {
 }
 
 
-if (!function_exists('toJsonLang')) {
+if (!function_exists('isActive')) {
 
-    function isActive($name)
+    function isActive($name, $color = "danger", $returned = null)
     {
+        $returned = $returned ?? __('lang.yes'); // Default value if not provided
+
         if ($name) {
-            return "<span class='badge badge-danger'>" . trans('lang.yes') . "</span>";
+            return "<span class='badge badge-" . $color . "'>" . $returned . "</span>";
         } else {
             return "<span class='badge badge-success'>" . trans('lang.no') . "</span>";
         }
     }
 }
 
-function formattedDate($modelObject, $attributeName = 'updated_at')
-{
-    if (setting('is_human_date_format', false)) {
-        $html = '<span data-toggle="tooltip" data-placement="left" title="${date}">${dateHuman}</span>';
-    } else {
-        $html = '<span data-toggle="tooltip" data-placement="left" title="${dateHuman}">${date}</span>';
-    }
-    if (!isset($modelObject[$attributeName])) {
+if (!function_exists('isFeatured')) {
+
+    function isFeatured($name, $color = "info", $returned = 'featured')
+    {
+        if ($name) {
+            return "<br/><span class='badge badge-" . $color . "'>" . $returned . "</span>" ;
+        }
         return '';
     }
-    $dateObj = new Carbon($modelObject[$attributeName]);
-    $replace = preg_replace('/\$\{date\}/', $dateObj->format(setting('date_format', 'l jS F Y (h:i:s)')), $html);
-    $replace = preg_replace('/\$\{dateHuman\}/', $dateObj->diffForHumans(), $replace);
-    return $replace;
 }

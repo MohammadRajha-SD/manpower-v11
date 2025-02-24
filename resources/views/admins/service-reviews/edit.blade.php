@@ -17,6 +17,7 @@
         
         <form action="{{route('admin.service-reviews.update',$service_review->id)}}" method="post">
             @csrf
+            @method('PUT')
             <div class="row">
                 <div class="d-flex flex-column col-sm-12 col-md-6">
                     <!-- Rate Field -->

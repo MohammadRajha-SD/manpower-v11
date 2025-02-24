@@ -98,7 +98,6 @@
                     </div>
 
                     <!-- Parent Id Field -->
-
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="parent_id" class="col-md-3 control-label text-md-right mx-1">
                             @lang("lang.category_parent_id")
@@ -118,8 +117,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
+
                 <!-- Submit Field -->
                 <div
                     class="form-group col-12 d-flex flex-column flex-md-row justify-content-md-end justify-content-sm-center border-top pt-4">
@@ -139,8 +138,6 @@
                         <i class="fa fa-undo"></i> {{ trans('lang.cancel') }}
                     </a>
                 </div>
-
-
             </div>
         </form>
     </x-admins.cards.content>
