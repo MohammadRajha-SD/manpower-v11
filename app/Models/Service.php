@@ -44,9 +44,13 @@ class Service extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
-    
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(ServiceReview::class, 'service_id');
     }
 }

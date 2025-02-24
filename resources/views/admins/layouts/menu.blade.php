@@ -18,8 +18,11 @@
 <x-admins.sidebar-item :name="__('lang.pack')" icon="fas fa-folder-open" :activeRoutes="['admin.packs*']"
     route="packs.index" /> --}}
 
-<x-admins.sidebar-items :name="__('lang.e_service_plural')" :routes="[['admin.services*'], 'menu-open']"
+<x-admins.sidebar-items :name="__('lang.e_service_plural')" :routes="[['admin.services*', 'admin.service-reviews*'], 'menu-open']"
     icon="fas fa-pencil-ruler">
     <x-admins.sidebar-item :name="__('lang.e_service_table')" icon="fas fa-list" :activeRoutes="['admin.services*']"
         route="services.index" />
+
+    <x-admins.sidebar-item :name="__('lang.e_service_review_plural')" icon="fas fa-comments" :activeRoutes="['admin.service-reviews*']"
+        route="service-reviews.index" />
 </x-admins.sidebar-items>

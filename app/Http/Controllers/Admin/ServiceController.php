@@ -98,9 +98,21 @@ class ServiceController extends Controller
 
     public function destroy($id)
     {
+
         $service = Service::findOrFail($id);
+
+        if ($service->reviews()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children'),
+            ]);
+        }
+
         $service->delete();
 
-        return redirect()->back()->with('success', __('lang.deleted_successfully', ['operator' => __('lang.e_provider_type')]));
+        return response()->json([
+            'status' => 'success',
+            'message' => trans('lang.deleted_successfully', ['operator' => trans('lang.e_service')])
+        ], 200);
     }
 }

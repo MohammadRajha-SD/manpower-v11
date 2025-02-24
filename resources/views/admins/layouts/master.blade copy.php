@@ -147,30 +147,31 @@
                             type: 'DELETE',
                             url: deleteUrl,
                             success: function(data) {
-                                if (data.status === 'success') {
-                                    Swal.fire({
-                                        title: "Deleted!",
-                                        text: data.message,
-                                        icon: "success"
-                                    }).then(() => {
-                                        window.location.reload();
-                                    });
-                                } else if (data.status === 'error') {
-                                    Swal.fire({
-                                        title: "Can't Delete it!",
-                                        text: data.message,
-                                        icon: "error"
-                                    });
-                                }
+                                console.log(data)
+                                // if (data.status === 'success') {
+                                //     Swal.fire({
+                                //         title: "Deleted!",
+                                //         text: data.message,
+                                //         icon: "success"
+                                //     }).then(() => {
+                                //         window.location.reload();
+                                //     });
+                                // } else if (data.status === 'error') {
+                                //     Swal.fire({
+                                //         title: "Can't Delete it!",
+                                //         text: data.message,
+                                //         icon: "error"
+                                //     });
+                                // }
                             },
                             error: function(xhr, status, error) {
-                                Swal.fire({
-                                    title: "Error",
-                                    text: "Something went wrong!",
-                                    icon: "error"
-                                }).then(() => {
-                                    window.location.reload();
-                                });
+                                // Swal.fire({
+                                //     title: "Error",
+                                //     text: "Something went wrong!",
+                                //     icon: "error"
+                                // }).then(() => {
+                                //     window.location.reload();
+                                // });
                             }
                         });
                     }
