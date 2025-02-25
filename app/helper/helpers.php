@@ -33,7 +33,6 @@ if (!function_exists('setting')) {
 }
 
 if (!function_exists('appLogo')) {
-    // todo: path of image like uploads
     function appLogo()
     {
         $logo = setting('app_logo', null);
@@ -45,8 +44,7 @@ if (!function_exists('user_image')) {
     function user_image($user)
     {
         if ($user && $user->image) {
-            // todo:
-            return asset('storage/' . $user->image->path);
+            return asset('uploads/' . $user->image->path);
         }
 
         return asset('images/avatar_default.png');

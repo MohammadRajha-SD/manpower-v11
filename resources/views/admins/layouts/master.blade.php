@@ -76,8 +76,7 @@
                         <i class="fa fas fa-angle-down"></i> {!! auth()->user()->username !!}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        {{-- {{route('users.profile')}} --}}
-                        <a href="" class="dropdown-item"> <i class="fas fa-user mr-2"></i>
+                        <a href="{{route('admin.user.profile')}}" class="dropdown-item {{setActive(['admin.user.profile'])}}"> <i class="fas fa-user mr-2"></i>
                             {{trans('lang.user_profile')}} </a>
                         <div class="dropdown-divider"></div>
 
