@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\FaqCategoryController;
+use App\Http\Controllers\Admin\FaqController;
 use App\Http\Controllers\Admin\PackController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\ProviderController;
@@ -22,6 +24,8 @@ Route::resource('packs', PackController::class);
 Route::resource('addresses', AddressController::class);
 Route::resource('taxes', TaxController::class);
 Route::resource('coupons', CouponController::class);
+Route::resource('faqs', FaqController::class);
+Route::resource('faq-categories', FaqCategoryController::class);
 
 Route::resource('services', ServiceController::class);
 Route::resource('service-reviews', ServiceReviewController::class);
