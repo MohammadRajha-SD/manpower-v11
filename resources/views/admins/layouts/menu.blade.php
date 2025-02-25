@@ -3,8 +3,8 @@
 
 <li class="nav-header">{{trans('lang.app_management')}}</li>
 
-<x-admins.sidebar-items :name="__('lang.e_provider_plural')" :routes="[['admin.provider*', 'admin.addresses*'], 'menu-open']"
-    icon="fas fa-users-cog">
+<x-admins.sidebar-items :name="__('lang.e_provider_plural')"
+    :routes="[['admin.provider*', 'admin.addresses*', 'admin.taxes*', 'provider-schedules*'], 'menu-open']" icon="fas fa-users-cog">
     <x-admins.sidebar-item :name="__('lang.e_provider_plural')" icon="fas fa-list" :activeRoutes="['admin.providers*']"
         route="providers.index" />
     <x-admins.sidebar-item :name="__('lang.e_provider_type_plural')" icon="fas fa-list"
@@ -15,6 +15,9 @@
 
     <x-admins.sidebar-item :name="__('lang.tax_plural')" icon="fas fa-coins" :activeRoutes="['admin.taxes*']"
         route="taxes.index" />
+
+    <x-admins.sidebar-item :name="__('lang.availability_hour_plural')" icon="fas fa-business-time" :activeRoutes="['admin.provider-schedules*']"
+        route="provider-schedules.index" />
 </x-admins.sidebar-items>
 
 <x-admins.sidebar-item :name="__('lang.category_plural')" icon="fas fa-folder-open"

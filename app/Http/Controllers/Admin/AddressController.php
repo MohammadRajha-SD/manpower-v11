@@ -61,6 +61,15 @@ class AddressController extends Controller
     public function destroy($id)
     {
         $address = Address::findOrFail($id);
+
+        // Check if the address is linked to any providers
+        if ($address->providers()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children' ,['operator' => __('lang.provider')]),
+            ]);
+        }
+
         $address->delete();
 
         return response()->json([

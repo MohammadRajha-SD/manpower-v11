@@ -1768,5 +1768,6 @@ return [
 
 
     'no_data_found' => 'No data found.',
-    'cannot_delete_has_children' => 'Cannot delete this item because it has children.',
+    'cannot_delete_has_children' => 'Cannot delete this item because it has :operator.',
+    
 ];

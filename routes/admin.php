@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\DeleteImageController;
+use App\Http\Controllers\Admin\ProviderScheduleController;
 use App\Http\Controllers\Admin\ServiceReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
@@ -25,5 +26,6 @@ Route::resource('service-reviews', ServiceReviewController::class);
 
 Route::resource('providers', ProviderController::class);
 Route::resource('provider-types', ProviderTypeController::class);
+Route::resource('provider-schedules', ProviderScheduleController::class);
 
 Route::delete('image/{id}/delete', [DeleteImageController::class, 'deleteImageFunc'])->name('image.delete');

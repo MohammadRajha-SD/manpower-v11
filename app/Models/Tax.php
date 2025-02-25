@@ -9,9 +9,10 @@ class Tax extends Model
 {
     use HasFactory;
 
-    public function providers()
-{
-    return $this->belongsToMany(Provider::class, 'provider_tax');
-}
+    protected $guarded = [];
 
+    public function providers()
+    {
+        return $this->belongsToMany(Provider::class, 'provider_tax');
+    }
 }

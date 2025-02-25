@@ -118,12 +118,19 @@ if (!function_exists('isActive')) {
 }
 
 if (!function_exists('isFeatured')) {
-
     function isFeatured($name, $color = "info", $returned = 'featured')
     {
         if ($name) {
-            return "<br/><span class='badge badge-" . $color . "'>" . $returned . "</span>" ;
+            return "<br/><span class='badge badge-" . $color . "'>" . $returned . "</span>";
         }
         return '';
     }
 }
+
+if (!function_exists('getDays')) {
+    function getDays()
+    {
+        return ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    }
+}
+

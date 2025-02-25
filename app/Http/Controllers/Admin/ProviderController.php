@@ -194,6 +194,12 @@ class ProviderController extends Controller
         try {
             DB::beginTransaction();
 
+            if ($provider->schedules()->exists()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.availability_hour')]),
+                ]);
+            }
             // Detach related records to avoid foreign key constraints
             $provider->addresses()->detach();
             $provider->users()->detach();

@@ -11,7 +11,7 @@ class Provider extends Model
 {
     use HasFactory, HasTranslations;
     use ImageHandler;
-    
+
     protected $fillable = [
         'name',
         'category_id',
@@ -58,6 +58,11 @@ class Provider extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'provider_user');
+    }
+
+    public function schedules()
+    {
+        return $this->hasMany(ProviderSchedule::class);
     }
 }
 
