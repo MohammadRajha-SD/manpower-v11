@@ -105,14 +105,15 @@ if (!function_exists('image_item')) {
 
 if (!function_exists('isActive')) {
 
-    function isActive($name, $color = "danger", $returned = null)
+    function isActive($name, $color1 = "danger", $color2 = "success", $returned1 = null, $returned2 = null)
     {
-        $returned = $returned ?? __('lang.yes'); // Default value if not provided
+        $returned1 = $returned1 ?? __('lang.yes'); // Default value if not provided
+        $returned2 = $returned2 ?? __('lang.no'); // Default value if not provided
 
         if ($name) {
-            return "<span class='badge badge-" . $color . "'>" . $returned . "</span>";
+            return "<span class='badge badge-" . $color1 . "'>" . $returned1 . "</span>";
         } else {
-            return "<span class='badge badge-success'>" . trans('lang.no') . "</span>";
+            return "<span class='badge badge-" . $color2 . "'>" . $returned2 . "</span>";
         }
     }
 }

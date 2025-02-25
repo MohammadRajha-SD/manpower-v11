@@ -35,3 +35,6 @@
     <x-admins.sidebar-item :name="__('lang.e_service_review_plural')" icon="fas fa-comments"
         :activeRoutes="['admin.service-reviews*']" route="service-reviews.index" />
 </x-admins.sidebar-items>
+
+<x-admins.sidebar-item :name="__('lang.coupon_plural')" icon="fas fa-ticket-alt"
+    :activeRoutes="['admin.coupons*']" route="coupons.index" />

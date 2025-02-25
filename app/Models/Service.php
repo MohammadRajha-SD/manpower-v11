@@ -53,4 +53,15 @@ class Service extends Model
     {
         return $this->hasMany(ServiceReview::class, 'service_id');
     }
+
+    public function coupons()
+    {
+        return $this->morphToMany(Coupon::class, 'discountable');
+    }
+
+
+    public function discountables()
+    {
+        return $this->morphMany('App\Models\Discountable', 'discountable');
+    }
 }
