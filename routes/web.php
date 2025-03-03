@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LocaleController;
 
@@ -15,18 +16,14 @@ use App\Http\Controllers\LocaleController;
 */
 
 Route::get('/', function () {
-    $name = 'mhmd';
-    $desc = 'web developer';
-
-   dd(toJsonLang($name));
-   dd(toJsonLang($desc));
-
     return view('welcome');
 });
 
 Route::middleware(['web'])->group(function () {
     Route::get('/locale/{lang}', [LocaleController::class, 'setLocale']);
 });
+
+// Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

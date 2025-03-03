@@ -12,7 +12,7 @@
 </style>
 
 @props(['name1' => null, 'name2' => null, 'route2'=> null, 'route1'=>null ,'isEditMode' => false, 'route3' => null,
-'name3' => null])
+'name3' => null, 'isCreateMode' => 'true'])
 @php
 $route_1 = $route1 != null ? route($route1) : '#';
 $route_2 = $route2 != null ? route($route2) : '#';
@@ -27,12 +27,14 @@ $route_2 = $route2 != null ? route($route2) : '#';
                         <a class="nav-link {{ setActive([$route1]) }}" href="{!! $route_1 !!}"><i
                                 class="fa fa-list mr-2"></i>{!! $name1 !!} </a>
                     </li>
+                    @if($isCreateMode)
                     <li class="nav-item ">
                         <a class="nav-link {{ setActive([$route2]) }}" href="{!! $route_2 !!}"><i
-                                class="fa fa-plus mr-2"></i>{!! $name2
+                            class="fa fa-plus mr-2"></i>{!! $name2
                             !!}
                         </a>
                     </li>
+                    @endif
 
                     @if($isEditMode == true)
                     <li class="nav-item ">

@@ -95,7 +95,7 @@ class ProviderController extends Controller
             }
             DB::commit();
 
-            return redirect()->route('admin.providers.index')->with('success', __('lang.created_successfully', ['operator' => __('lang.address')]));
+            return redirect()->route('admin.providers.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.e_provider')]));
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Error creating provider: ' . $e->getMessage());
@@ -182,7 +182,7 @@ class ProviderController extends Controller
 
             DB::commit();
 
-            return redirect()->route('admin.providers.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.address')]));
+            return redirect()->route('admin.providers.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.e_provider')]));
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Error updating provider: ' . $e->getMessage());
@@ -197,7 +197,7 @@ class ProviderController extends Controller
             if ($provider->schedules()->exists()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.availability_hour')]),
+                    'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.e_provider')]),
                 ]);
             }
             // Detach related records to avoid foreign key constraints
@@ -220,7 +220,7 @@ class ProviderController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => trans('lang.deleted_successfully', ['operator' => trans('lang.provider')])
+                'message' => trans('lang.deleted_successfully', ['operator' => trans('lang.e_provider')])
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();

@@ -91,12 +91,21 @@ if (!function_exists('desc_limit')) {
 if (!function_exists('image_item')) {
     function image_item($item)
     {
-        if ($item && count($item->images) > 0) {
-            $path = $item->images->first()->path;
-            return "<img class='rounded' style='height:50px;width:50px;' src='" . asset($path) . "' alt=''>";
+        if ($item && $item->image) {
+            $path = $item->image->path;
+            return "<img class='rounded' style='height:75px;width:75px;' src='" . asset($path) . "' alt=''>";
         } else {
             return "<img class='rounded' style='height:50px;width:50px;' src='" . asset('images/image_default.png') . "' alt='default image'>";
         }
+        // if ($item && count($item->images) > 0) {
+        //     $path = $item->images->first()->path;
+        //     return "<img class='rounded' style='height:50px;width:50px;' src='" . asset($path) . "' alt=''>";
+        // }elseif ($item && $item->image()->exists()) {
+        //     $path = $item->image->path;
+        //     return "<img class='rounded' style='height:50px;width:50px;' src='" . asset($path) . "' alt=''>";
+        // } else {
+        //     return "<img class='rounded' style='height:50px;width:50px;' src='" . asset('images/image_default.png') . "' alt='default image'>";
+        // }
     }
 }
 

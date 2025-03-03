@@ -68,7 +68,7 @@ class ProviderTypeController extends Controller
         $provider_type = ProviderType::findOrFail($id);
 
         if ($provider_type->children()->exists()) {
-            return redirect()->back()->with('error', __('lang.cannot_delete_has_children'));
+            return redirect()->back()->with('error', __('lang.cannot_delete_has_children', ['operator'=> __('lang.e_provider_type')]));
         }
 
         $provider_type->delete();
