@@ -6,201 +6,209 @@
 <link rel="stylesheet" href="{{asset('vendor/dropzone/min/dropzone.min.css')}}">
 @endpush
 <x-admin-layout>
-    <x-admins.cards.header :name="__('lang.category_plural')" :desc="__('lang.category_desc')"
-        :table_name="__('lang.category_edit')" :route="route('admin.categories.index')" />
+    <x-admins.cards.header :name="__('lang.pack')" :desc="__('lang.pack_management')" :table_name="__('lang.pack')"
+        :route="route('admin.packs.index')" />
 
-    <x-admins.cards.content :name1="__('lang.category_table')" :name2="__('lang.category_create')"
-        route1="admin.categories.index" route2="admin.categories.create" :name3="__('lang.category_edit')"
-        :route3="url()->current()" :isEditMode="true">
+    <x-admins.cards.content :name1="__('lang.pack_management')" :name2="__('lang.create_pack')"
+        route1="admin.packs.index" route2="admin.packs.create" :isEditMode="true"
+        :route3="['admin.packs.edit', $pack->id]" :name3="__('lang.update_pack')">
 
-        <form action="{{route('admin.categories.update', $category->id)}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('admin.packs.update', $pack->id)}}" method="post">
             @csrf
             @method('PUT')
             <div class="row">
-                <div class="d-flex flex-column col-sm-12 col-md-6">
-                    <!-- Name Field -->
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="name" class="col-md-3 control-label text-md-right mx-1">
-                            @lang("lang.category_name")</label>
-
-                        <div class="col-md-9">
-                            <input type="text" name="name" id="name" class="form-control" value="{{$category->name}}"
-                                placeholder="@lang('lang.category_name_placeholder')" required />
-
-                            <div class="form-text text-muted">
-                                @lang("lang.category_name_help")
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Color Field -->
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="color" class="col-md-3 control-label text-md-right mx-1">
-                            @lang("lang.category_color")</label>
-
-                        <div class="col-md-9">
-                            <input type="text" name="color" id="color" value="{{$category->color}}" class="form-control"
-                                placeholder="@lang('lang.category_color_placeholder')" required />
-
-                            <div class="form-text text-muted">
-                                @lang("lang.category_color_help")
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Description Field -->
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="description" class="col-md-3 control-label text-md-right mx-1">
-                            @lang("lang.category_description")</label>
-
-                        <div class="col-md-9">
-                            <textarea name="description" id="description" class="form-control"
-                                placeholder="@lang('lang.category_description_placeholder')" required>
-                                {!! $category->desc !!}
-                            </textarea>
-
-                            <div class="form-text text-muted">@lang("lang.category_description_help")</div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="d-flex flex-column col-sm-12 col-md-6">
-                    <!-- Image Field -->
-                    <div class="form-group align-items-start d-flex flex-column flex-md-row">
-                        <label for="image" class="col-md-3 control-label text-md-right mx-1">
-                            @lang("lang.category_image")
-                        </label>
-
-                        <div class="col-md-9">
-                            <!-- Preview existing images -->
-                            <div class="row g-3 mb-2">
-                                @foreach($category->images as $image)
-                                    <div class="col-md-4 col-sm-6 text-center">
-                                        <div class="border rounded p-2 bg-light shadow-sm d-flex flex-column align-items-center">
-                                            <img src="{{ asset($image->path) }}" class="img-fluid rounded mb-2"
-                                                style="width: 75px; height: 75px; object-fit: cover;">
-                                            <button type="button" class="btn btn-danger btn-sm delete-image" 
-                                                data-id="{{ $image->id }}" style="width: 80%; max-width: 100px;">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                            
-                            <!-- Upload new images -->
-                            <div style="width: 100%" class="dropzone image" id="image" data-field="image">
-                                <input type="file" name="images[]" multiple />
-                            </div>
-
-                            <div class="form-text text-muted w-50">
-                                @lang("lang.category_image_help")
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Order Field -->
+                    <!-- Text Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="order" class="col-md-3 control-label text-md-right mx-1">
-                            @lang("lang.category_order")
-                        </label>
-
+                        <label for="text" class="col-md-3 control-label text-md-right mx-1">{{ trans("lang.slide_text")
+                            }}</label>
                         <div class="col-md-9">
-                            <input type="number" name="order" id="name" class="form-control"
-                                value="{{$category->order}}" placeholder="@lang('lang.category_order_placeholder')"
-                                step="1" min="0" required />
-
+                            <input type="text" id="text" name="text" class="form-control" value="{{$pack->text}}"
+                                placeholder="{{ trans('lang.slide_text_placeholder') }}">
                             <div class="form-text text-muted">
-                                @lang("lang.category_order_help")
+                                {{ trans("lang.slide_text_help") }}
                             </div>
                         </div>
                     </div>
 
-                    <!-- Parent Id Field -->
+                    <!-- Text Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="parent_id" class="col-md-3 control-label text-md-right mx-1">
-                            @lang("lang.category_parent_id")
-                        </label>
-
+                        <label for="short_description" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.short_description") }}</label>
                         <div class="col-md-9">
-                            <select name="parent_id" class="select2 not-required form-control"
-                                data-empty="@lang('lang.category_parent_id_placeholder')">
-                                <option value="">@lang('lang.category_parent_id_placeholder')</option>
-                                @foreach ($parentCategory as $value)
-                                <option value="{{ $value->id }}" {{$category->parent_id == $value->id ? 'selected' : ''}}>{{ $value->name }}</option>
-                                @endforeach
+
+                            <input value="{{$pack->short_description}}" type="text" id="short_description"
+                                name="short_description" class="form-control"
+                                placeholder="{{ trans('lang.slide_text_placeholder') }}">
+                            <div class="form-text text-muted">
+                                {{ trans("lang.slide_text_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Number of Months of SubscriptionOld -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="number_of_months" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.number_of_months") }}</label>
+                        <div class="col-md-9">
+                            <input type="number" value="{{$pack->number_of_months}}" id="number_of_months"
+                                name="number_of_months" class="form-control"
+                                placeholder="{{ trans('lang.number_of_months_placeholder') }}">
+                            <div class="form-text text-muted">
+                                {{ trans("lang.number_of_months_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Number of Ads of Service in this Pack -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="number_of_ads" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.number_of_ads") }}</label>
+                        <div class="col-md-9">
+                            <input type="number" value="{{$pack->number_of_ads}}" id="number_of_ads"
+                                name="number_of_ads" class="form-control"
+                                placeholder="{{ trans('lang.number_of_ads_placeholder') }}">
+                            <div class="form-text text-muted">
+                                {{ trans("lang.number_of_ads_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Dropdown List -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="type" class="col-md-3 control-label text-md-right mx-1">{{ trans("lang.type")
+                            }}</label>
+                        <div class="col-md-9">
+                            <select id="type" name="type" class="form-control">
+                                <option value="{{trans('lang.companies') }}" {{$pack->type == trans('lang.companies') ?
+                                    'selected' : ''}} >{{ trans('lang.companies') }}</option>
+                                <option value="{{trans('lang.individuals') }}" {{$pack->type ==
+                                    trans('lang.individuals') ? 'selected' : ''}} >{{ trans('lang.individuals') }}
+                                </option>
                             </select>
-
                             <div class="form-text text-muted">
-                                @lang("lang.category_parent_id_help")
+                                {{ trans("lang.type_text_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row ">
+                        <label for="price" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.e_service_price") }}</label>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <input type="number" value="{{$pack->price}}" name="price" id="price"
+                                    class="form-control" step="any" min="0"
+                                    placeholder="{{ trans('lang.e_service_price_placeholder') }}">
+                                <div class="input-group-append">
+                                    <div class="input-group-text text-bold px-3">{{ setting('default_currency','AED') }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-text text-muted">
+                                {{ trans("lang.e_service_price_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="description" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.e_provider_description") }}</label>
+                        <div class="col-md-9">
+                            <textarea id="description" name="description" class="form-control"
+                                placeholder="{{ trans('lang.e_provider_description_placeholder') }}">
+
+                                {!! $pack->description !!}
+                            </textarea>
+                            <div class="form-text text-muted">
+                                {{ trans("lang.e_provider_description_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex flex-column col-sm-12 col-md-6">
+                    <!-- Number of Subcategories -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="number_of_subcategories" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.number_of_subcategories") }}</label>
+                        <div class="col-md-9">
+                            <input type="number" value="{{$pack->number_of_subcategories}}" id="number_of_subcategories"
+                                name="number_of_subcategories" class="form-control"
+                                placeholder="{{ trans('lang.number_of_subcategories_placeholder') }}">
+                            <div class="form-text text-muted">
+                                {{ trans("lang.number_of_subcategories_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Do not appear in the featured services section -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="not_in_featured_services" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.not_in_featured_services") }}</label>
+                        <div class="col-md-9">
+                            <select id="not_in_featured_services" name="not_in_featured_services" class="form-control">
+                                <option value="1" {{$pack->not_in_featured_services == '1' ? 'selected' : '' }} >{{
+                                    trans('lang.yes') }}</option>
+                                <option value="0" {{$pack->not_in_featured_services == '0' ? 'selected' : '' }} >{{
+                                    trans('lang.no') }}</option>
+                            </select>
+                            <div class="form-text text-muted">
+                                {{ trans("lang.not_in_featured_services_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Do not display images on image slider -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="not_on_image_slider" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.not_on_image_slider") }}</label>
+                        <div class="col-md-9">
+                            <select id="not_on_image_slider" name="not_on_image_slider" class="form-control">
+                                <option value="1" {{$pack->not_on_image_slider == '1' ? 'selected' : ''}}>{{
+                                    trans('lang.yes') }}</option>
+                                <option value="0" {{$pack->not_on_image_slider == '0' ? 'selected' : ''}}>{{
+                                    trans('lang.no') }}</option>
+                            </select>
+                            <div class="form-text text-muted">
+                                {{ trans("lang.not_on_image_slider_help") }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stripe Plan ID field -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="stripe_plan_id" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.stripe_plan_id") }}</label>
+                        <div class="col-md-9">
+                            <input type="text" id="stripe_plan_id" name="stripe_plan_id" class="form-control"
+                                value="{{ old('stripe_plan_id', $pack->stripe_plan_id) }}">
+                            <div class="form-text text-muted">
+                                {{ trans("lang.stripe_plan_id_help") }}
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Submit Field -->
-                <div
-                    class="form-group col-12 d-flex flex-column flex-md-row justify-content-md-end justify-content-sm-center border-top pt-4">
-                    <div class="d-flex flex-row justify-content-between align-items-center">
-                        <label for="featured" class="control-label my-0 mx-3">{!! __('lang.category_featured_help') !!}</label>
-                        <input type="hidden" name="featured" value="0" id="hidden_featured">
-                        <span class="icheck-{{ setting('theme_color') }}">
-                            <input type="checkbox" name="featured" value="1" @if ($category->featured == 1) checked @endif id="featured">
-                            <label for="featured"></label>
-                        </span>
-                    </div>
-                    <button type="submit"
-                        class="btn bg-{{ setting('theme_color') }} mx-md-3 my-lg-0 my-xl-0 my-md-0 my-2">
-                        <i class="fa fa-save"></i> {{ trans('lang.save') }} {{ trans('lang.category') }}
-                    </button>
-                    <a href="{{ route('admin.categories.index') }}" class="btn btn-default">
-                        <i class="fa fa-undo"></i> {{ trans('lang.cancel') }}
-                    </a>
-                </div>
+            <!-- Submit Field -->
+            <div
+                class="form-group col-12 d-flex flex-column flex-md-row justify-content-md-end justify-content-sm-center border-top pt-4">
+                <button type="submit" class="btn bg-{{setting('theme_color')}} mx-md-3 my-lg-0 my-xl-0 my-md-0 my-2">
+                    <i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.pack')}}
+                </button>
+
+                <a href="{!! route('admin.packs.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i>
+                    {{trans('lang.cancel')}}</a>
             </div>
         </form>
     </x-admins.cards.content>
 
-    {{-- LOGIC TO DELETE THE IMAGE --}}
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            $(".delete-image").on("click", function() {
-                let imageId = $(this).data("id");
-                let parentDiv = $(this).closest(".col-md-3");
-    
-                // Dynamically generate the route URL
-                let deleteUrl = "{{ route('admin.category.image.delete', ['id' => '__imageId__']) }}";
-                deleteUrl = deleteUrl.replace('__imageId__', imageId); // Replace placeholder with actual imageId
-    
-                if (confirm("Are you sure you want to delete this image?")) {
-                    $.ajax({
-                    url: deleteUrl,
-                        type: "DELETE",
-                        data: {
-                            _token: $("meta[name='csrf-token']").attr("content")
-                        },
-                        success: function(data) {
-                            if (data.success) {
-                                parentDiv.fadeOut(300, function() {
-                                    $(this).remove();
-                                });
-                            } else {
-                                alert("Error: Could not delete image.");
-                            }
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Error:", error);
-                            alert("An error occurred while trying to delete the image.");
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-    
     @push('scripts_lib')
     <script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>
     <script src="{{asset('vendor/summernote/summernote.min.js')}}"></script>

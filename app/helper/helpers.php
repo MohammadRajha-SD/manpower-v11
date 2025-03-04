@@ -36,7 +36,7 @@ if (!function_exists('appLogo')) {
     function appLogo()
     {
         $logo = setting('app_logo', null);
-        return $logo == null ? asset('images/logo_default.png') : asset($logo);
+        return $logo == null ? asset('images/logo_default.png') : asset('uploads/'.$logo);
     }
 }
 

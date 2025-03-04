@@ -13,7 +13,18 @@ return new class extends Migration
     {
         Schema::create('packs', function (Blueprint $table) {
             $table->id();
+            $table->string('stripe_plan_id');
+            $table->json('type'); 
+            $table->integer('price');
+            $table->json('text');
+            $table->json('short_description');
+            $table->json('description');
             $table->timestamps();
+            $table->integer('number_of_months');
+            $table->integer('number_of_ads');
+            $table->integer('number_of_subcategories');
+            $table->boolean('not_in_featured_services')->default(false);
+            $table->boolean('not_on_image_slider')->default(false);
         });
     }
 

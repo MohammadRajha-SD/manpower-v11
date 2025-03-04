@@ -30,9 +30,9 @@
 <x-admins.sidebar-item :name="__('lang.category_plural')" icon="fas fa-folder-open"
     :activeRoutes="['admin.categories*']" route="categories.index" />
 
-{{--
-<x-admins.sidebar-item :name="__('lang.pack')" icon="fas fa-folder-open" :activeRoutes="['admin.packs*']"
-    route="packs.index" /> --}}
+{{-- PACKS --}}
+<x-admins.sidebar-item :name="__('lang.pack')" icon="fas fa-list-alt" :activeRoutes="['admin.packs*']"
+    route="packs.index" />
 
 {{-- SERVICES --}}
 <x-admins.sidebar-items :name="__('lang.e_service_plural')"
@@ -90,8 +90,8 @@
 <li class="nav-header">{{trans('lang.app_setting')}}</li>
 
 {{-- SETTINGS --}}
-<x-admins.sidebar-items :name="__('lang.app_setting')" :routes="[['admin.currencies*', 'admin.taxes*', 'admin.settings*'], 'menu-open']"
-    icon="fas fa-cogs">
+<x-admins.sidebar-items :name="__('lang.app_setting')"
+    :routes="[['admin.currencies*', 'admin.taxes*', 'admin.settings*'], 'menu-open']" icon="fas fa-cogs">
     <x-admins.sidebar-item :name="__('lang.app_setting_globals')" icon="fas fa-cog" :activeRoutes="['admin.settings*']"
         route="settings.index" />
 
