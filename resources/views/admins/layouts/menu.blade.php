@@ -7,17 +7,23 @@
 <x-admins.sidebar-item :name="__('lang.contact_messages')" icon="fa fa-envelope"
     :activeRoutes="['admin.contact-us.index']" route="contact-us.index" />
 
-
 <li class="nav-header">{{trans('lang.app_management')}}</li>
 
 {{-- PROVIDERS --}}
 <x-admins.sidebar-items :name="__('lang.e_provider_plural')"
-    :routes="[['admin.providers*', 'admin.provider-types*','admin.addresses*', 'provider-schedules*'], 'menu-open']"
+    :routes="[['admin.providers*', 'admin.provider-types*','admin.addresses*', 'admin.provider-schedules*', 'admin.subscriptions.*', 'admin.statistics*'], 'menu-open']"
     icon="fas fa-users-cog">
     <x-admins.sidebar-item :name="__('lang.e_provider_plural')" icon="fas fa-list" :activeRoutes="['admin.providers*']"
         route="providers.index" />
+
     <x-admins.sidebar-item :name="__('lang.e_provider_type_plural')" icon="fas fa-list"
         :activeRoutes="['admin.provider-types*']" route="provider-types.index" />
+
+    <x-admins.sidebar-item :name="trans('lang.provider_subscriptions')" icon="fas fa-address-card"
+        :activeRoutes="['admin.subscriptions*']" route="subscriptions.index" />
+
+    <x-admins.sidebar-item :name="trans('lang.provider_statistique')" icon="fas fa-list-alt"
+        :activeRoutes="['admin.provider-statistics*']" route="provider-statistics.index" />
 
     <x-admins.sidebar-item :name="__('lang.address_plural')" icon="fas fa-map-marked-alt"
         :activeRoutes="['admin.addresses*']" route="addresses.index" />

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\DeleteImageController;
 use App\Http\Controllers\Admin\ProviderScheduleController;
+use App\Http\Controllers\Admin\ProviderStatisticController;
 use App\Http\Controllers\Admin\ServiceReviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
@@ -24,6 +25,7 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\PaymentStatusController;
 use App\Http\Controllers\Admin\ProviderPayoutController;
+use App\Http\Controllers\Admin\SubscriptionController;
 
 Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 Route::resource('notifications', NotificationController::class);
@@ -31,6 +33,7 @@ Route::resource('contact-us', ContactUsController::class);
 
 Route::resource('categories', CategoryController::class);
 Route::resource('packs', PackController::class);
+Route::resource('subscriptions', SubscriptionController::class);
 Route::resource('addresses', AddressController::class);
 Route::resource('taxes', TaxController::class);
 Route::resource('coupons', CouponController::class);
@@ -52,6 +55,7 @@ Route::resource('provider-payouts', ProviderPayoutController::class);
 Route::resource('providers', ProviderController::class);
 Route::resource('provider-types', ProviderTypeController::class);
 Route::resource('provider-schedules', ProviderScheduleController::class);
+Route::resource('provider-statistics', ProviderStatisticController::class);
 
 Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 Route::put('profile/update', [ProfileController::class, 'update'])->name('user.profile.update');

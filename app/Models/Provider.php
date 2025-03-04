@@ -68,5 +68,14 @@ class Provider extends Model
     {
         return $this->morphToMany(Coupon::class, 'discountable');
     }
+
+    public function earnings()
+    {
+        return $this->hasMany(Earning::class, 'provider_id');
+    }
+    public function services()
+    {
+        return $this->hasMany(Service::class, 'provider_id');
+    }
 }
 
