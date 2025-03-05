@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ProviderDataTable extends DataTable
+class ProviderRequestDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -105,7 +105,19 @@ class ProviderDataTable extends DataTable
      */
     public function query(Provider $model): QueryBuilder
     {
-        return $model->newQuery();
+        // TODO:
+        // if (auth()->user()->is_admin == 1) {
+            return $model->newQuery()->where('accepted', '0');
+        // }
+        // else {
+        //     return $model->newQuery()
+        //         ->with("eProviderType")
+        //         ->join("e_provider_users", "e_provider_id", "=", "e_providers.id")
+        //         ->where('e_provider_users.user_id', auth()->id())
+        //         ->where('e_providers.accepted', '0')
+        //         ->groupBy("e_providers.id")
+        //         ->select("$model->table.*");
+        // }
     }
 
     /**
@@ -114,7 +126,7 @@ class ProviderDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('provider-table')
+            ->setTableId('providerrequest-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
@@ -146,7 +158,6 @@ class ProviderDataTable extends DataTable
             Column::make('range')->addClass('text-center'),
             Column::make('taxes')->addClass('text-center'),
             Column::make('available')->addClass('text-center'),
-            Column::make('accepted')->addClass('text-center'),
             Column::make('updated_at')->addClass('text-center'),
             Column::computed('action')
                 ->exportable(false)
@@ -160,6 +171,6 @@ class ProviderDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Provider_' . date('YmdHis');
+        return 'ProviderRequest_' . date('YmdHis');
     }
 }

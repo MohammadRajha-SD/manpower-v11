@@ -25,6 +25,9 @@
     <x-admins.sidebar-item :name="trans('lang.provider_statistique')" icon="fas fa-list-alt"
         :activeRoutes="['admin.provider-statistics*']" route="provider-statistics.index" />
 
+    <x-admins.sidebar-item :name="trans('lang.requested_e_providers_plural')" icon="fas fa-list-alt"
+        :activeRoutes="['admin.provider-requests*']" route="provider-requests.index" />
+
     <x-admins.sidebar-item :name="__('lang.address_plural')" icon="fas fa-map-marked-alt"
         :activeRoutes="['admin.addresses*']" route="addresses.index" />
 

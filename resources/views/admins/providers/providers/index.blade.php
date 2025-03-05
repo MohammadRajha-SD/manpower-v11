@@ -8,8 +8,10 @@
         @include('admins.layouts.datatables_css')
         @endpush
 
-        {!! $dataTable->table(['width' => '100%']) !!}
-
+        <div class="w-full overflow-auto">
+            {!! $dataTable->table(['width' => '100%']) !!}
+        </div>
+        
         @push('scripts_lib')
         @include('admins.layouts.datatables_js')
         {!! $dataTable->scripts() !!}

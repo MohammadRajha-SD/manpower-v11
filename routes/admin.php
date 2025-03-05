@@ -25,6 +25,7 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\PaymentStatusController;
 use App\Http\Controllers\Admin\ProviderPayoutController;
+use App\Http\Controllers\Admin\ProviderRequestController;
 use App\Http\Controllers\Admin\SubscriptionController;
 
 Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -56,6 +57,7 @@ Route::resource('providers', ProviderController::class);
 Route::resource('provider-types', ProviderTypeController::class);
 Route::resource('provider-schedules', ProviderScheduleController::class);
 Route::resource('provider-statistics', ProviderStatisticController::class);
+Route::resource('provider-requests', ProviderRequestController::class);
 
 Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 Route::put('profile/update', [ProfileController::class, 'update'])->name('user.profile.update');
