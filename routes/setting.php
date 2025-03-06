@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\Setting\CurrencyController;
 use App\Http\Controllers\Admin\Setting\LocalisationController;
+use App\Http\Controllers\Admin\Setting\MailConfController;
 use App\Http\Controllers\Admin\Setting\PaymentController;
 use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Setting\SlideController;
@@ -19,5 +20,6 @@ Route::prefix('setting')->group(function () {
     Route::resource('setting-payment', PaymentController::class);
     Route::resource('slides', SlideController::class);
     Route::resource('social-auth', SocialAuthController::class);
+    Route::resource('mails', MailConfController::class);
 });
 //** App Settings --  */

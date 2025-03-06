@@ -9,7 +9,7 @@
     <x-admins.cards.header :name="__('lang.app_setting')" :desc="__('lang.setting_desc')"
         :route="route('admin.settings.index')" />
 
-    <x-admins.cards.content :name1="__('lang.app_setting_payment')" route1="admin.setting-payment.index"
+    <x-admins.cards.content :name1="__('lang.app_setting_social')" route1="admin.social-auth.index"
         :isCreateMode="false">
         <form action="{{route('admin.social-auth.update', 1)}}" method="post">
             @csrf

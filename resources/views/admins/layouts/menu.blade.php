@@ -100,7 +100,7 @@
 
 {{-- SETTINGS --}}
 <x-admins.sidebar-items :name="__('lang.app_setting')"
-    :routes="[['admin.currencies*', 'admin.taxes*', 'admin.settings*'], 'menu-open']" icon="fas fa-cogs">
+    :routes="[['admin.currencies*', 'admin.taxes*', 'admin.settings*', 'admin.users*', 'admin.mails*', 'admin.social-auth*', 'admin.setting-payment*', 'admin.slides*', 'admin.localisation*'], 'menu-open']" icon="fas fa-cogs">
     <x-admins.sidebar-item :name="__('lang.app_setting_globals')" icon="fas fa-cog" :activeRoutes="['admin.settings*']"
         route="settings.index" />
 
@@ -110,8 +110,11 @@
     <x-admins.sidebar-item :name="__('lang.user_plural')" icon="fas fa-users" :activeRoutes="['admin.users*']"
         route="users.index" />
 
-    <x-admins.sidebar-item :name="__('lang.app_setting_social')" icon="fas fa-globe" :activeRoutes="['admin.social-auth*']"
-        route="social-auth.index" />
+    <x-admins.sidebar-item :name="__('lang.app_setting_mail')" icon="fas fa-envelope"
+        :activeRoutes="['admin.mails*']" route="mails.index" />
+
+    <x-admins.sidebar-item :name="__('lang.app_setting_social')" icon="fas fa-globe"
+        :activeRoutes="['admin.social-auth*']" route="social-auth.index" />
 
     <x-admins.sidebar-item :name="__('lang.app_setting_payment')" icon="fas fa-credit-card"
         :activeRoutes="['admin.setting-payment*']" route="setting-payment.index" />
