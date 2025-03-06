@@ -112,7 +112,10 @@
 
     <x-admins.sidebar-item :name="__('lang.app_setting_payment')" icon="fas fa-credit-card"
         :activeRoutes="['admin.setting-payment*']" route="setting-payment.index" />
-        
+
+    <x-admins.sidebar-item :name="__('lang.slide_plural')" icon="fas fa-images" :activeRoutes="['admin.slides*']"
+        route="slides.index" />
+
     <x-admins.sidebar-item :name="__('lang.tax_plural')" icon="fas fa-coins" :activeRoutes="['admin.taxes*']"
         route="taxes.index" />
 

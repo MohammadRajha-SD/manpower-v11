@@ -89,11 +89,11 @@ if (!function_exists('desc_limit')) {
 }
 
 if (!function_exists('image_item')) {
-    function image_item($item)
+    function image_item($item, $w = '75px', $h = '75px', $s='', $c = 'rounded')
     {
         if ($item && $item->image) {
             $path = $item->image->path;
-            return "<img class='rounded' style='height:75px;width:75px;' src='" . asset($path) . "' alt=''>";
+            return "<img class='$c' style='height:$w;width:$h;$s' src='" . asset('uploads/'.$path) . "' alt=''>";
         } else {
             return "<img class='rounded' style='height:50px;width:50px;' src='" . asset('images/image_default.png') . "' alt='default image'>";
         }

@@ -88,7 +88,10 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+        $user->deleteImage('uploads/' . $user->image->path);
+        $user->image()->delete();
         $user->delete();
+
 
         return response()->json([
             'status' => 'success',

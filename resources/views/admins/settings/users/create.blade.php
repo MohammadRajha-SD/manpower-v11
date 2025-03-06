@@ -6,13 +6,13 @@
 <link rel="stylesheet" href="{{asset('vendor/dropzone/min/dropzone.min.css')}}">
 @endpush
 <x-admin-layout>
-    <x-admins.cards.header :name="__('lang.user')" :desc="__('lang.user_table')" :table_name="__('lang.user_table')"
-        :route="route('admin.users.index')" />
+    <x-admins.cards.header :name="__('lang.slide_plural')" :desc="__('lang.slide_desc')" :table_name="__('lang.slide_table')"
+        :route="route('admin.slides.index')" />
 
-    <x-admins.cards.content :name1="__('lang.user_table')" :name2="__('lang.user_create')" route1="admin.users.index"
-        route2="admin.users.create">
+    <x-admins.cards.content :name1="__('lang.slide_table')" :name2="__('lang.slide_create')" route1="admin.slides.index"
+        route2="admin.slides.create">
 
-        <form action="{{route('admin.users.store')}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('admin.slides.store')}}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="d-flex flex-column col-sm-12 col-md-6">

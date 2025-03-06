@@ -100,7 +100,7 @@
                                         <img src="{{ asset($user->image->path) }}" class="img-fluid rounded mb-2"
                                             style="width: 75px; height: 75px; object-fit: cover;">
                                         <button type="button" class="btn btn-danger btn-sm delete-image"
-                                            data-id="{{ $image->id }}" style="width: 80%; max-width: 100px;">
+                                            data-id="{{ $user->image->id }}" style="width: 80%; max-width: 100px;">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
