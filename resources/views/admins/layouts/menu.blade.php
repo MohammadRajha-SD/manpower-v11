@@ -109,8 +109,7 @@
 
     <x-admins.sidebar-item :name="__('lang.tax_plural')" icon="fas fa-coins" :activeRoutes="['admin.taxes*']"
         route="taxes.index" />
-
-    {{--
-    <x-admins.sidebar-item :name="__('lang.user_plural')" icon="fas fa-users" :activeRoutes="['admin.faqs*']"
-        route="faqs.index" /> --}}
+    
+    <x-admins.sidebar-item :name="__('lang.user_plural')" icon="fas fa-users" :activeRoutes="['admin.users*']"
+        route="users.index" />
 </x-admins.sidebar-items>

@@ -1,11 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AddressController;
 use App\Http\Controllers\Admin\DeleteImageController;
 use App\Http\Controllers\Admin\ProviderScheduleController;
 use App\Http\Controllers\Admin\ProviderStatisticController;
 use App\Http\Controllers\Admin\ServiceReviewController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BookingController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -58,6 +59,8 @@ Route::resource('provider-types', ProviderTypeController::class);
 Route::resource('provider-schedules', ProviderScheduleController::class);
 Route::resource('provider-statistics', ProviderStatisticController::class);
 Route::resource('provider-requests', ProviderRequestController::class);
+
+Route::resource('users', UserController::class);
 
 Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 Route::put('profile/update', [ProfileController::class, 'update'])->name('user.profile.update');
