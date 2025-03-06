@@ -110,6 +110,9 @@
     <x-admins.sidebar-item :name="__('lang.user_plural')" icon="fas fa-users" :activeRoutes="['admin.users*']"
         route="users.index" />
 
+    <x-admins.sidebar-item :name="__('lang.app_setting_social')" icon="fas fa-globe" :activeRoutes="['admin.social-auth*']"
+        route="social-auth.index" />
+
     <x-admins.sidebar-item :name="__('lang.app_setting_payment')" icon="fas fa-credit-card"
         :activeRoutes="['admin.setting-payment*']" route="setting-payment.index" />
 
