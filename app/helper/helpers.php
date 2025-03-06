@@ -36,7 +36,7 @@ if (!function_exists('appLogo')) {
     function appLogo()
     {
         $logo = setting('app_logo', null);
-        return $logo == null ? asset('images/logo_default.png') : asset('uploads/'.$logo);
+        return $logo == null ? asset('images/logo_default.png') : asset('uploads/' . $logo);
     }
 }
 
@@ -89,11 +89,11 @@ if (!function_exists('desc_limit')) {
 }
 
 if (!function_exists('image_item')) {
-    function image_item($item, $w = '75px', $h = '75px', $s='', $c = 'rounded')
+    function image_item($item, $w = '75px', $h = '75px', $s = '', $c = 'rounded')
     {
         if ($item && $item->image) {
             $path = $item->image->path;
-            return "<img class='$c' style='height:$w;width:$h;$s' src='" . asset('uploads/'.$path) . "' alt=''>";
+            return "<img class='$c' style='height:$w;width:$h;$s' src='" . asset('uploads/' . $path) . "' alt=''>";
         } else {
             return "<img class='rounded' style='height:50px;width:50px;' src='" . asset('images/image_default.png') . "' alt='default image'>";
         }
@@ -142,3 +142,13 @@ if (!function_exists('getDays')) {
     }
 }
 
+if (!function_exists('getActiveMailDriver')) {
+
+    function getActiveMailDriver($driver = 'smtp')
+    {
+        if (setting('mail_driver') === $driver) {
+            return '<span class="badge ml-2 badge-success">' . __('lang.active') . '</span>';
+        }
+        return null;
+    }
+}

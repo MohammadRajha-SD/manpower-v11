@@ -111,7 +111,7 @@
         route="users.index" />
 
     <x-admins.sidebar-item :name="__('lang.app_setting_mail')" icon="fas fa-envelope"
-        :activeRoutes="['admin.mails*']" route="mails.index" />
+        :activeRoutes="['admin.mails*']" route="mails.smtp" />
 
     <x-admins.sidebar-item :name="__('lang.app_setting_social')" icon="fas fa-globe"
         :activeRoutes="['admin.social-auth*']" route="social-auth.index" />

@@ -20,6 +20,17 @@ Route::prefix('setting')->group(function () {
     Route::resource('setting-payment', PaymentController::class);
     Route::resource('slides', SlideController::class);
     Route::resource('social-auth', SocialAuthController::class);
-    Route::resource('mails', MailConfController::class);
+
+
+    //** mails : [smtp - mailgun - sparkpost] */
+    Route::get('mails/smtp', [MailConfController::class, 'smtp'])->name('mails.smtp');
+    Route::put('mails/smtp/{id}', [MailConfController::class, 'update_smtp'])->name('mails.smtp.update');
+
+    Route::get('mails/mailgun', [MailConfController::class, 'mailgun'])->name('mails.mailgun');
+    Route::put('mails/mailgun/{id}', [MailConfController::class, 'update_mailgun'])->name('mails.mailgun.update');
+
+    Route::get('mails/sparkpost', [MailConfController::class, 'sparkpost'])->name('mails.sparkpost');
+    Route::put('mails/sparkpost/{id}', [MailConfController::class, 'update_sparkpost'])->name('mails.sparkpost.update');
+    //** mails : [smtp - mailgun - sparkpost] -- */
 });
 //** App Settings --  */

@@ -9,9 +9,12 @@
     <x-admins.cards.header :name="__('lang.app_setting')" :desc="__('lang.setting_desc')"
         :route="route('admin.settings.index')" />
 
-    <x-admins.cards.content :name1="__('lang.app_setting_smtp')" route1="admin.mails.index"
-        :isCreateMode="false">
-        <form action="{{route('admin.mails.update', 1)}}" method="post">
+    <x-admins.cards.content :name1="(__('lang.app_setting_smtp')) . getActiveMailDriver('smtp')"
+        route1="admin.mails.smtp" :name2="(__('lang.app_setting_mailgun')) .  getActiveMailDriver('mailgun')"
+        route2="admin.mails.mailgun" :isEditMode="true"
+        :name3="(__('lang.app_setting_sparkpost')) .  getActiveMailDriver('sparkpost')"
+        :route3="['admin.mails.sparkpost', 1]">
+        <form action="{{route('admin.mails.smtp.update', 1)}}" method="post">
             @csrf
             @method('PUT')
             <div class="row">
