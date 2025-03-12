@@ -20,11 +20,15 @@ class ServiceDataTable extends DataTable
             ->addColumn('name', function ($query) {
                 return ucwords($query->name);
             })
+            
+            ->addColumn('available', function ($query) {
+                return isActive($query->available);
+            })
             ->addColumn('provider', function ($query) {
-                return ucwords($query->provider->name);
+                return ucwords($query->provider?->name) ?? 'N/A';
             })
             ->addColumn('categories', function ($query) {
-                $categories = $query->categories; // Assuming 'categories' is a relation or an array
+                $categories = $query->categories; 
                 $categoryLinks = '';
 
                 if (empty($categories)) {
@@ -36,9 +40,6 @@ class ServiceDataTable extends DataTable
                 }
 
                 return $categoryLinks;
-            })
-            ->addColumn('available', function ($query) {
-                return isActive($query->available);
             })
             ->addColumn('price', function ($query) {
                 return number_format($query->price, 2);
