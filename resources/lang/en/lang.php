@@ -107,7 +107,7 @@ return [
     'subscription_deleted_successfully' => 'The subscription has been successfully deleted.',
     'subscriptions_plural' => 'Subscriptions',
     'subscription_status' => 'Subscription Status',
-    'subscription_ends_at'=> 'Subscription ends at',
+    'subscription_ends_at' => 'Subscription ends at',
     'subscription_save' => ' Subscription',
     'select' => 'Select',
 
@@ -1766,9 +1766,14 @@ return [
     'contact_us_table' => 'Messages',
     'contact_us_desc' => 'Messages Sent From Customers',
 
-
     'no_data_found' => 'No data found.',
     'cannot_delete_has_children' => 'Cannot delete this item because it has :operator.',
     'is_admin' => 'Is Admin',
-    'username' => 'Username'
+    'username' => 'Username',
+
+    'subscription_not_active' => 'Subscription is not active',
+    'subscription_canceled_cannot_extend' => 'Subscription canceled cannot extend',
+    'create_payment_link' => 'Create payment link',
+    'subscription_activated_successfully' => 'Subscription activated successfully.',
+    'payment_not_completed' => 'Payment not completed or subscription is incomplete.',
 ];

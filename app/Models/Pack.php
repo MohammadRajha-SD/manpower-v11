@@ -24,10 +24,10 @@ class Pack extends Model
         'not_on_image_slider',
     ];
 
-    // public $translatable = [
-    //     'text',
-    //     'short_description',
-    //     'description',
-    //     'type', 
-    // ];
+    public $translatable = [
+        'text',
+        'short_description',
+        'description',
+        'type', 
+    ];
 }

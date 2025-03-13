@@ -11,6 +11,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Carbon\Carbon;
 
 class SubscriptionDataTable extends DataTable
 {
@@ -32,50 +33,18 @@ class SubscriptionDataTable extends DataTable
                 return $query->plan?->text;
             })
             ->addColumn('status', function ($query) {
-                return $query->status == 'active' ?
-                    "<span class='badge badge-success'>" . $query->status . "</span>"
-                    : "<span class='badge badge-danger'>" . $query->status . "</span>";
+            return in_array($query->stripe_status, ['active', 'paid']) ?
+                    "<span class='badge badge-success'>" . $query->stripe_status . "</span>"
+                    : "<span class='badge badge-danger'>" . $query->stripe_status . "</span>";
             })
             ->addColumn('subscribed_at', function ($query) {
                 return $query->updated_at->format('Y-m-d');
             })
             ->addColumn('ends_at', function ($query) {
-                return $query->ends_at;
+                return Carbon::parse($query->ends_at)->format('Y-m-d');
             })
             ->addColumn('action', function ($subscription) {
-                $paymentButton = '';
-                if (in_array($subscription->stripe_status, ['disabled'])) {
-                    $paymentButton = '<form action="' . route('admin.subscriptions.generate-payment-link', $subscription->id) . '" method="POST" style="display: inline;">
-                                <a href="' . route("admin.subscriptions.generate-payment-link", $subscription->id) . '" class="dropdown-item text-warning generate-payment-link"
-                                    data-toggle="tooltip" title="Create payment link">
-                                   <i class="fas fa-credit-card"></i> Create payment link
-                                </a></form>';
-                }
-
-                return '<td class="text-center">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-outline-secondary  btn-sm dropdown-toggle"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-cogs"></i> ' . __('lang.actions') . '
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                  ' . $paymentButton . '
-                                    <a class="dropdown-item text-primary"
-                                        href="' . route('admin.subscriptions.edit', $subscription->id) . '"
-                                        data-toggle="tooltip" title="' . __('lang.edit_subscription') . '">
-                                        <i class="fas fa-edit"></i> ' . __('lang.edit_subscription') . '
-                                    </a>
-                                    
-                                    <form action="' . route('admin.subscriptions.destroy', $subscription->id) . '" method="DELETE" style="display: inline;">
-                                        <a href="' . route('admin.subscriptions.destroy', $subscription->id) . '" class="dropdown-item text-danger delete-item"
-                                            data-toggle="tooltip"
-                                            title="' . __('lang.delete_subscription') . '">
-                                            <i class="fas fa-trash-alt"></i> ' . __('lang.delete_subscription') . '
-                                        </a>
-                                    </form>
-                                </div>
-                            </div>
-                        </td>';
+                return view('admins.subscriptions.actions', compact('subscription'))->render();
             })
             ->rawColumns(['action', 'status',])
             ->setRowId('id');

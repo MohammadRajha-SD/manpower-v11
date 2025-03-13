@@ -58,6 +58,9 @@ Route::post('/subscriptions/generate-payment-link/{id}', [SubscriptionController
 Route::post('/subscriptions/create-payment-link/{id}', [SubscriptionController::class, 'createPaymentLink'])->name('subscriptions.create-payment-link');
 Route::get('/subscriptions/success/{subscription}', [SubscriptionController::class, 'paymentSuccess'])->name('subscriptions.success');
 Route::get('/subscriptions/cancel/{subscription}', [SubscriptionController::class, 'paymentCancel'])->name('subscriptions.cancel');
+Route::get('/subscriptions/disable/{id}', [SubscriptionController::class, 'disable'])->name('subscriptions.disable');
+Route::post('/subscriptions/extends', [SubscriptionController::class, 'extendSubscriptionByMonths'])->name('subscriptions.extends');
+
 Route::resource('subscriptions', SubscriptionController::class);
 /** Subscriptions // */
 
