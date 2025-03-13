@@ -10,13 +10,84 @@
         :route="route('admin.subscriptions.index')" />
 
     <x-admins.cards.content :name1="__('lang.subscription_list')" route1="admin.subscriptions.index"
-        :isCreateMode="false" :isEditMode="true" :name3="__('lang.edit_subscription')"
-        :route3="['admin.subscriptions.edit', $subscription->id]">
-        <form action="{{route('admin.subscriptions.update', $subscription->id)}}" method="post">
+        route2="admin.subscriptions.create" :name2="__('lang.create_subscription')"  >
+        <form action="{{route('admin.subscriptions.store')}}" method="post">
             @csrf
-            @method('PUT')
             <div class="row">
+                <div class="d-flex flex-column col-sm-12 col-md-6">
+                    <!-- Pack Id -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="pack_id" class="col-md-3 control-label text-md-right mx-1">
+                            {{ trans("lang.pack") }}
+                        </label>
+                        <div class="col-md-9">
+                            <select name="pack_id" id="pack_id" class="select2 form-control">
+                                @foreach($packs as $pack)
+                                <option value="{{ $pack->id }}" {{ old('pack_id')==$pack->id ? 'selected' : '' }}>
+                                    {{ ucwords($pack->text) }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="form-text text-muted">{{ trans("lang.pack") }}</div>
+                        </div>
+                    </div>
 
+                    <!-- Provider Id -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="provider_id" class="col-md-3 control-label text-md-right mx-1">
+                            {{ trans("lang.e_provider") }}
+                        </label>
+                        <div class="col-md-9">
+                            <select name="provider_id" id="provider_id" class="select2 form-control">
+                                <option value="" selected> {{ __('lang.provider_name') }} </option>
+                                @foreach($providers as $provider)
+                                <option value="{{ $provider->id }}" {{ old('provider_id')==$provider->id ? 'selected' :
+                                    ''
+                                    }}>
+                                    {{ ucwords($provider->name) }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="form-text text-muted">{{ trans("lang.provider_name") }}</div>
+                        </div>
+                    </div>
+
+                    <!-- User Id -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="user_id" class="col-md-3 control-label text-md-right mx-1">
+                            {{ trans("lang.user") }}
+                        </label>
+                        <div class="col-md-9">
+                            <select name="user_id" id="user_id" class="select2 form-control">
+                                <option value="" selected> {{ __('lang.user') }} </option>
+                                @foreach($users as $user)
+                                <option value="{{ $user->id }}" {{ old('user_id')==$user->id ? 'selected' : '' }}>
+                                    {{ ucwords($user->name) }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="form-text text-muted">{{ trans("lang.user") }}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column col-sm-12 col-md-6">
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="status" class="col-md-3 control-label text-md-right mx-1">
+                            {{ trans("lang.stripe_status") }}
+                        </label>
+                        <div class="col-md-9">
+                            <select name="status" id="status" class="select2 form-control">
+                                @foreach(['disabled','active', 'incomplete'] as $status)
+                                <option value="{{ $status }}" {{ old('status')==$status ? 'selected' : '' }}>
+                                    {{ ucwords($status) }}
+                                </option>
+                                @endforeach
+                            </select>
+                            <div class="form-text text-muted">{{ trans("lang.status") }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Submit Field -->

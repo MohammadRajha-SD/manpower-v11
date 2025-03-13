@@ -34,7 +34,6 @@ Route::resource('contact-us', ContactUsController::class);
 
 Route::resource('categories', CategoryController::class);
 Route::resource('packs', PackController::class);
-Route::resource('subscriptions', SubscriptionController::class);
 Route::resource('addresses', AddressController::class);
 Route::resource('taxes', TaxController::class);
 Route::resource('coupons', CouponController::class);
@@ -52,6 +51,15 @@ Route::resource('payments', PaymentController::class);
 Route::resource('payment-statuses', PaymentStatusController::class);
 Route::resource('payment-methods', PaymentMethodController::class);
 Route::resource('provider-payouts', ProviderPayoutController::class);
+
+/** Subscriptions  */
+Route::post('/subscriptions/send-payment-email', [SubscriptionController::class, 'sendPaymentEmail'])->name('subscriptions.send-payment-email');
+Route::post('/subscriptions/generate-payment-link/{id}', [SubscriptionController::class, 'generatePaymentLink'])->name('subscriptions.generate-payment-link');
+Route::post('/subscriptions/create-payment-link/{id}', [SubscriptionController::class, 'createPaymentLink'])->name('subscriptions.create-payment-link');
+Route::get('/subscriptions/success/{subscription}', [SubscriptionController::class, 'paymentSuccess'])->name('subscriptions.success');
+Route::get('/subscriptions/cancel/{subscription}', [SubscriptionController::class, 'paymentCancel'])->name('subscriptions.cancel');
+Route::resource('subscriptions', SubscriptionController::class);
+/** Subscriptions // */
 
 Route::resource('providers', ProviderController::class);
 Route::resource('provider-types', ProviderTypeController::class);

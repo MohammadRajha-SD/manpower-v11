@@ -43,19 +43,23 @@ class SubscriptionDataTable extends DataTable
                 return $query->ends_at;
             })
             ->addColumn('action', function ($subscription) {
+                $paymentButton = '';
+                if (in_array($subscription->stripe_status, ['disabled'])) {
+                    $paymentButton = '<form action="' . route('admin.subscriptions.generate-payment-link', $subscription->id) . '" method="POST" style="display: inline;">
+                                <a href="' . route("admin.subscriptions.generate-payment-link", $subscription->id) . '" class="dropdown-item text-warning generate-payment-link"
+                                    data-toggle="tooltip" title="Create payment link">
+                                   <i class="fas fa-credit-card"></i> Create payment link
+                                </a></form>';
+                }
+
                 return '<td class="text-center">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                                <button type="button" class="btn btn-outline-secondary  btn-sm dropdown-toggle"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-cogs"></i> ' . __('lang.actions') . '
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-right">
-                                    <a class="dropdown-item text-success"
-                                        href="' . route('admin.subscriptions.create') . '" data-toggle="tooltip"
-                                        title="' . __('lang.create_subscription') . '">
-                                        <i class="fas fa-plus"></i> ' . __('lang.create_subscription') . '
-                                    </a>
-            
+                                  ' . $paymentButton . '
                                     <a class="dropdown-item text-primary"
                                         href="' . route('admin.subscriptions.edit', $subscription->id) . '"
                                         data-toggle="tooltip" title="' . __('lang.edit_subscription') . '">
@@ -63,7 +67,7 @@ class SubscriptionDataTable extends DataTable
                                     </a>
                                     
                                     <form action="' . route('admin.subscriptions.destroy', $subscription->id) . '" method="DELETE" style="display: inline;">
-                                        <a href="'.route('admin.subscriptions.destroy', $subscription->id).'" class="dropdown-item text-danger delete-item"
+                                        <a href="' . route('admin.subscriptions.destroy', $subscription->id) . '" class="dropdown-item text-danger delete-item"
                                             data-toggle="tooltip"
                                             title="' . __('lang.delete_subscription') . '">
                                             <i class="fas fa-trash-alt"></i> ' . __('lang.delete_subscription') . '

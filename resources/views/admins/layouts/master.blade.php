@@ -38,24 +38,16 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                @if(env('APP_CONSTRUCTION', false))
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="#"><i class="fas fa-info-circle"></i>
-                        {{env('APP_CONSTRUCTION','') }}</a>
-                </li>
-                @endif
-                @can('favorites.index')
+                {{-- @can('favorites.index')
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('favorites*') ? 'active' : '' }}"
                         href="{{route('favorites.index')}}"><i class="fas fa-heart"></i></a>
                 </li>
-                @endcan
-                @can('notifications.index')
+                @endcan --}}
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}"
-                        href="{!! route('notifications.index') !!}"><i class="fas fa-bell"></i></a>
+                        href="{!! route('admin.notifications.index') !!}"><i class="fas fa-bell"></i></a>
                 </li>
-                @endcan
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#"> <i class="fa fas fa-angle-down"></i> {!!
                         Str::upper(app()->getLocale()) !!}
@@ -76,7 +68,9 @@
                         <i class="fa fas fa-angle-down"></i> {!! auth()->user()->username !!}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a href="{{route('admin.user.profile')}}" class="dropdown-item {{setActive(['admin.user.profile'])}}"> <i class="fas fa-user mr-2"></i>
+                        <a href="{{route('admin.user.profile')}}"
+                            class="dropdown-item {{setActive(['admin.user.profile'])}}"> <i
+                                class="fas fa-user mr-2"></i>
                             {{trans('lang.user_profile')}} </a>
                         <div class="dropdown-divider"></div>
 
@@ -127,7 +121,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-    
+
+            // delete item
             $('body').on('click', '.delete-item', function(event) {
                 event.preventDefault();
                 let deleteUrl = $(this).attr('href');
@@ -175,7 +170,77 @@
                     }
                 });
             });
-        });
+        
+            // provider subscription
+            $('body').on('click', '.generate-payment-link', function(event) {
+                event.preventDefault();
+                let paymentLink  = $(this).attr('href');
+
+                $.ajax({
+                    url: paymentLink,
+                    type: 'post',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data)
+                        if (data.url != '') {
+                            Swal.fire({
+                                title: "Payment Link",
+                                html: `
+                                    <p>Copy the link or send it via email.</p>
+                                    <input type="text" id="swal-payment-link" class="swal2-input" value="${data.url}" readonly>
+                                `,
+                                icon: "info",
+                                showCancelButton: true,
+                                cancelButtonText: "Close",
+                                showDenyButton: true,
+                                denyButtonText: "Send by Email",
+                                confirmButtonText: "Copy to Clipboard",
+                                allowOutsideClick: false,
+                                preConfirm: () => {
+                                    let input = document.getElementById("swal-payment-link");
+                                    input.select();
+                                    document.execCommand("copy");
+                                    Swal.fire("Copied!", "The payment link has been copied.", "success");
+                                }
+                            }).then((result) => {
+                                  if (result.isDenied) {
+                                    // Send email if "Send by Email" button is clicked
+                                    $.ajax({
+                                        url: '{{ route("admin.subscriptions.send-payment-email") }}',
+                                        type: 'POST',
+                                        data: {
+                                            email: data.email,
+                                            price: data.price,
+                                            name: data.name,
+                                            link: data.url,
+                                            _token: '{{ csrf_token() }}' 
+                                        },
+                                        success: function(response) {
+                                            if (response.success) {
+                                                Swal.fire("Sent!", "The payment link has been sent via email.", "success");
+                                            } else {
+                                                Swal.fire("Error!", "Failed to send the email.", "error");
+                                            }
+                                        },
+                                        error: function(xhr) {
+                                            Swal.fire("Error!", "Something went wrong.", "error");
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            Swal.fire("Error", "Could not generate the payment link.", "error");
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire("Error", "Something went wrong!", "error");
+                    }
+                });
+            });
+        });  
     </script>
 
     <!-- SWEET ALERT // --->
