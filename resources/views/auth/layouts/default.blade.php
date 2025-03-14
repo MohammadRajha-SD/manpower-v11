@@ -7,7 +7,7 @@
     <title>
         {{setting('app_name')}} | {{setting('app_short_description')}}
     </title>
-    <link rel="icon" type="image/png" href="{{appLogo()}}" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,600&display=fallback">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/icheck-bootstrap/icheck-bootstrap.min.css')}}">

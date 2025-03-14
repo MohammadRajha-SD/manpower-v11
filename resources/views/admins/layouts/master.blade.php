@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>{{setting('app_name')}} | {{setting('app_short_description')}}</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-    <link rel="icon" type="image/png" href="{{ setting('app_logo', 'images/logo_default.png') ?? ''}}" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/all.min.css')}}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -38,12 +38,6 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-                {{-- @can('favorites.index')
-                <li class="nav-item">
-                    <a class="nav-link {{ Request::is('favorites*') ? 'active' : '' }}"
-                        href="{{route('favorites.index')}}"><i class="fas fa-heart"></i></a>
-                </li>
-                @endcan --}}
                 <li class="nav-item">
                     <a class="nav-link {{ Request::is('notifications*') ? 'active' : '' }}"
                         href="{!! route('admin.notifications.index') !!}"><i class="fas fa-bell"></i></a>
