@@ -352,7 +352,8 @@ class SubscriptionController extends Controller
         $price = $request->price;
         $link = $request->link;
 
-        Mail::to($email)->send(new ProviderSubscriptionMail($link, $name, $email, $price));
+        // TODO:
+        Mail::to($email)->cc('info@manpowerforu.com')->send(new ProviderSubscriptionMail($link, $name, $email, $price));
 
         return response()->json(['success' => 'Email sent successfully']);
     }
