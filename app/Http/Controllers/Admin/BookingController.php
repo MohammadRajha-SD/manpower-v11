@@ -23,11 +23,16 @@ class BookingController extends Controller
         $addresses = Address::all();
         $payment_statuses = [];
 
+        dd($booking);
+
         return view('admins.bookings.edit', compact('booking', 'booking_statuses','addresses'));
     }
 
+    // TODO:
     public function update(Request $request, $id)
     {
+
+        dd($request->all());
         $data = $this->validate($request, [
             'order' => 'required',
             'status' => 'required',

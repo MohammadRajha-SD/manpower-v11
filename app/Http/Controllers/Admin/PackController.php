@@ -104,13 +104,12 @@ class PackController extends Controller
     {
         $pack = Pack::findOrFail($id);
 
-        // TODO:
-        // if ($pack->faqs()->exists()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.faq')]),
-        //     ]);
-        // }
+        if ($pack->subscriptions()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.subscription')]),
+            ]);
+        }
 
         $pack->delete();
 

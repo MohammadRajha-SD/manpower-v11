@@ -16,7 +16,6 @@ class ProviderScheduleController extends Controller
     }
     public function create()
     {
-        // todo:
         $providers = Provider::all();
         return view('admins.providers.provider-schedules.create', compact('providers'));
     }
@@ -31,7 +30,6 @@ class ProviderScheduleController extends Controller
             'provider_id' => 'required|exists:providers,id',
         ]);
 
-        // Create the record
         ProviderSchedule::create($validatedData);
 
         return redirect()->route('admin.provider-schedules.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.availability_hour')]));
@@ -54,7 +52,6 @@ class ProviderScheduleController extends Controller
             'provider_id' => 'required|exists:providers,id',
         ]);
 
-        // Update the record
         $schedule->update($validatedData);
 
         return redirect()->route('admin.provider-schedules.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.availability_hour')]));

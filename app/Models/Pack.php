@@ -28,6 +28,11 @@ class Pack extends Model
         'text',
         'short_description',
         'description',
-        'type', 
+        'type',
     ];
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class, 'pack_id');
+    }
 }

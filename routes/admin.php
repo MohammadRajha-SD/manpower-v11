@@ -60,7 +60,6 @@ Route::get('/subscriptions/success/{subscription}', [SubscriptionController::cla
 Route::get('/subscriptions/cancel/{subscription}', [SubscriptionController::class, 'paymentCancel'])->name('subscriptions.cancel');
 Route::get('/subscriptions/disable/{id}', [SubscriptionController::class, 'disable'])->name('subscriptions.disable');
 Route::post('/subscriptions/extends', [SubscriptionController::class, 'extendSubscriptionByMonths'])->name('subscriptions.extends');
-
 Route::resource('subscriptions', SubscriptionController::class);
 /** Subscriptions // */
 

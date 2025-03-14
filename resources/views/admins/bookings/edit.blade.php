@@ -12,7 +12,7 @@
     <x-admins.cards.content :name1="__('lang.booking_table')" :name2="__('lang.booking_create')"
         route1="admin.bookings.index" route2="admin.bookings.create" :isEditMode="true" :name3="__('lang.booking_edit')"
         :route3="['admin.bookings.edit', $booking->id]">
-        <form action="{{route('admin.booking-statuses.update', $booking->id)}}" method="post">
+        <form action="{{route('admin.bookings.update', $booking->id)}}" method="post">
             @csrf
             @method('PUT')
             <div class="row">

@@ -88,13 +88,12 @@ class PaymentMethodController extends Controller
     {
         $payment_method = PaymentMethod::findOrFail($id);
         
-        // TODO:
-        // if ($payment_method->faqs()->exists()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.faq')]),
-        //     ]);
-        // }
+        if ($payment_method->payments()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.payment')]),
+            ]);
+        }
 
         $payment_method->delete();
 

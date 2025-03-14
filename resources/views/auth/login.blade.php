@@ -45,22 +45,6 @@
                     <button type="submit" class="btn btn-primary btn-block">{{__('auth.login')}}</button>
                 </div>
             </div>
-
-            {{-- @if (config('installer.demo_app'))--}}
-            {{-- <div class="my-4">--}}
-                {{-- <div class="col-12 card card-outline card-primary">--}}
-                    {{-- <div class="card-body">--}}
-                        {{-- <div class="text-bold">Admin</div>--}}
-                        {{-- <small>User: admin@demo.com | Password: 123456</small>--}}
-                        {{-- <div class="text-bold mt-3">Provider</div>--}}
-                        {{-- <small>User: provider@demo.com | Password: 123456</small>--}}
-                        {{-- <div class="text-bold mt-3">Customer</div>--}}
-                        {{-- <small>User: customer@demo.com | Password: 123456</small>--}}
-                        {{-- </div>--}}
-                    {{-- </div>--}}
-                {{-- </div>--}}
-            {{-- @endif--}}
-
         </form>
 
         {{-- @if(setting('enable_facebook',false) || setting('enable_google',false) ||
@@ -90,8 +74,9 @@
         <p class="mb-1 text-center">
             <a href="{{ url('/password/reset') }}">{{__('auth.forgot_password')}}</a>
         </p>
-        {{-- <p class="mb-0 text-center">--}}
-            {{-- <a href="{{ url('/register') }}" class="text-center">{{__('auth.register_new_member')}}</a>--}}
-            {{-- </p>--}}
+
+        <p class="mb-0 text-center">
+            <a href="{{ url('/register') }}" class="text-center">{{__('auth.register_new_member')}}</a>
+        </p>
     </div>
 </x-layout>

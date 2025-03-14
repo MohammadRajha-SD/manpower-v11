@@ -96,20 +96,7 @@ return [
     'disable_confirmation' => 'Are you sure you want to disable this subscription?',
     'subscription_details' => 'Subscription Details',
 
-    // todo:
-    'create_subscription' => 'Create Subscription',
-    'edit_subscription' => 'Edit Subscription',
-    'delete_subscription' => 'Delete Subscription',
-    'edit_confirmation' => 'Are you sure you want to edit this subscription?',
-    'delete_confirmation' => 'Are you sure you want to delete this subscription?',
-    'subscription_created_successfully' => 'Subscription created successfully.',
-    'subscription_updated_successfully' => 'Subscription updated successfully.',
-    'subscription_deleted_successfully' => 'The subscription has been successfully deleted.',
-    'subscriptions_plural' => 'Subscriptions',
-    'subscription_status' => 'Subscription Status',
-    'subscription_ends_at' => 'Subscription ends at',
-    'subscription_save' => ' Subscription',
-    'select' => 'Select',
+
 
     'back_to_list' => 'Back to List',
 
@@ -1771,6 +1758,17 @@ return [
     'is_admin' => 'Is Admin',
     'username' => 'Username',
 
+    // todo:
+    'subscription' => 'Subscription',
+    'create_subscription' => 'Create Subscription',
+    'edit_subscription' => 'Edit Subscription',
+    'delete_subscription' => 'Delete Subscription',
+    'edit_confirmation' => 'Are you sure you want to edit this subscription?',
+    'delete_confirmation' => 'Are you sure you want to delete this subscription?',
+    'subscriptions_plural' => 'Subscriptions',
+    'subscription_status' => 'Subscription Status',
+    'subscription_ends_at' => 'Subscription ends at',
+    'subscription_save' => ' Subscription',
     'subscription_not_active' => 'Subscription is not active',
     'subscription_canceled_cannot_extend' => 'Subscription canceled cannot extend',
     'create_payment_link' => 'Create payment link',

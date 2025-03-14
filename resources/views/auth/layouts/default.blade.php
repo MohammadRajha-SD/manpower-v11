@@ -4,9 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- {{setting('app_name')}} | {{setting('app_short_description')}} --}}
-    <title></title>
-    {{-- <link rel="icon" type="image/png" href="{{$app_logo ?? ''}}" /> --}}
+    <title>
+        {{setting('app_name')}} | {{setting('app_short_description')}}
+    </title>
+    <link rel="icon" type="image/png" href="{{appLogo()}}" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,600&display=fallback">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/icheck-bootstrap/icheck-bootstrap.min.css')}}">
@@ -19,11 +20,9 @@
     <div class="login-box" @if(isset($width)) style="width:{{$width}}" @endif>
         <div class="login-logo">
             <a href="{{ url('/') }}">
-                {{-- <img src="{{$app_logo}}" alt="{{setting('app_name')}}"> --}}
-                LOGO
+                <img src="{{appLogo()}}" alt="{{setting('app_name', 'HPower')}}">
             </a>
         </div>
-        <!-- /.login-logo -->
         <div class="card shadow-sm">
             {{$slot}}
         </div>
@@ -33,5 +32,4 @@
     <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
     @stack('scripts')
 </body>
-
 </html>

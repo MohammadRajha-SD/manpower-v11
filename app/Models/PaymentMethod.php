@@ -19,4 +19,8 @@ class PaymentMethod extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
+
+    public function payments() {
+        return $this->hasMany(Payment::class);
+    }
 }

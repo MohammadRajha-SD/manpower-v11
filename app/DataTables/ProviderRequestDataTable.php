@@ -105,19 +105,7 @@ class ProviderRequestDataTable extends DataTable
      */
     public function query(Provider $model): QueryBuilder
     {
-        // TODO:
-        // if (auth()->user()->is_admin == 1) {
-            return $model->newQuery()->where('accepted', '0');
-        // }
-        // else {
-        //     return $model->newQuery()
-        //         ->with("eProviderType")
-        //         ->join("e_provider_users", "e_provider_id", "=", "e_providers.id")
-        //         ->where('e_provider_users.user_id', auth()->id())
-        //         ->where('e_providers.accepted', '0')
-        //         ->groupBy("e_providers.id")
-        //         ->select("$model->table.*");
-        // }
+        return $model->newQuery()->where('accepted', '0');
     }
 
     /**

@@ -17,9 +17,7 @@ if (!function_exists('setActive')) {
     }
 }
 
-/** TODO: when create database && settings table */
 if (!function_exists('setting')) {
-
     function setting($key = null, $default = null)
     {
         $setting = Setting::firstWhere('key', $key);
@@ -74,8 +72,6 @@ if (!function_exists('avaiableLanguages')) {
     }
 }
 
-
-
 if (!function_exists('desc_limit')) {
     function desc_limit($desc, $limit = 40)
     {
@@ -97,15 +93,6 @@ if (!function_exists('image_item')) {
         } else {
             return "<img class='rounded' style='height:50px;width:50px;' src='" . asset('images/image_default.png') . "' alt='default image'>";
         }
-        // if ($item && count($item->images) > 0) {
-        //     $path = $item->images->first()->path;
-        //     return "<img class='rounded' style='height:50px;width:50px;' src='" . asset($path) . "' alt=''>";
-        // }elseif ($item && $item->image()->exists()) {
-        //     $path = $item->image->path;
-        //     return "<img class='rounded' style='height:50px;width:50px;' src='" . asset($path) . "' alt=''>";
-        // } else {
-        //     return "<img class='rounded' style='height:50px;width:50px;' src='" . asset('images/image_default.png') . "' alt='default image'>";
-        // }
     }
 }
 

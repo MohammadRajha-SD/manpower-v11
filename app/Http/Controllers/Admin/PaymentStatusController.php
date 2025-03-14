@@ -54,14 +54,12 @@ class PaymentStatusController extends Controller
     {
         $payment_status = PaymentStatus::findOrFail($id);
 
-        // Check if the address is linked to any providers
-        // if ($booking_status->bookings()->exists()) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => __('lang.cannot_delete_has_children' ,['operator' => __('lang.payment')]),
-        //     ]);
-        // }
-
+        if ($payment_status->payments()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.payment')]),
+            ]);
+        }
         $payment_status->delete();
 
         return response()->json([
