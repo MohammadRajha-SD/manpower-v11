@@ -8,7 +8,6 @@ use App\Mail\ProviderSubscriptionMail;
 use App\Models\Pack;
 use App\Models\Provider;
 use App\Models\Subscription;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Stripe\Stripe;
@@ -30,41 +29,38 @@ class SubscriptionController extends Controller
     {
         $packs = Pack::all();
         $providers = Provider::all();
-        $users = User::all();
 
-        return view('admins.subscriptions.create', compact('packs', 'users', 'providers'));
+        return view('admins.subscriptions.create', compact('packs', 'providers'));
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
-            'user_id' => 'required|exists:users,id',
-            'provider_id' => 'nullable|exists:providers,id',
+            'provider_id' => 'required|exists:providers,id',
             'pack_id' => 'required|exists:packs,id',
-            // 'status' => 'required',
         ]);
 
         DB::beginTransaction();
 
         try {
             $pack = Pack::findOrFail($request->pack_id);
-            $user = User::findOrFail($request->user_id);
+            $provider = Provider::findOrFail($request->provider_id);
 
             Stripe::setApiKey(env('STRIPE_SECRET'));
 
             // Create or Retrieve Stripe Customer
-            if (!$user->stripe_id) {
+            if (!$provider->stripe_id) {
                 $customer = Customer::create([
-                    'email' => $user->email,
-                    'name' => $user->name,
+                    'email' => $provider->email,
+                    'name' => $provider->name,
                 ]);
-                $user->stripe_id = $customer->id;
-                $user->save();
+                $provider->stripe_id = $customer->id;
+                $provider->save();
             } else {
-                $customer = Customer::retrieve($user->stripe_id);
+                $customer = Customer::retrieve($provider->stripe_id);
             }
 
-            // Create a Stripe subscription for the user
+            // Create a Stripe subscription for the provider
             $subscriptionStripe = StripeSubscription::create([
                 'customer' => $customer->id,
                 'items' => [['price' => $pack->stripe_plan_id]],
@@ -74,8 +70,7 @@ class SubscriptionController extends Controller
 
             $subscription = new Subscription();
             $subscription->pack_id = $pack->id;
-            $subscription->user_id = $user->id;
-            $subscription->provider_id = $request->provider_id;
+            $subscription->provider_id = $provider->id;
             $subscription->quantity = 1;
             $subscription->price = $pack->price;
             $subscription->name = $pack->text;
@@ -103,26 +98,22 @@ class SubscriptionController extends Controller
         $subscription = Subscription::findOrFail($id);
         $packs = Pack::all();
         $providers = Provider::all();
-        $users = User::all();
 
-        return view('admins.subscriptions.edit', compact('subscription', 'packs', 'providers', 'users'));
+        return view('admins.subscriptions.edit', compact('subscription', 'packs', 'providers'));
     }
-
 
     public function update(Request $request, Subscription $subscription)
     {
         $this->validate($request, [
-            'user_id' => 'required|exists:users,id',
             'provider_id' => 'nullable|exists:providers,id',
             'pack_id' => 'required|exists:packs,id',
-            'status' => 'nullable|string'
         ]);
 
         DB::beginTransaction();
 
         try {
             $pack = Pack::findOrFail($request->pack_id);
-            $user = User::findOrFail($request->user_id);
+            $provider = Provider::findOrFail($request->provider_id);
 
             Stripe::setApiKey(env('STRIPE_SECRET'));
 
@@ -138,8 +129,7 @@ class SubscriptionController extends Controller
             }
 
             $subscription->pack_id = $pack->id;
-            $subscription->user_id = $user->id;
-            $subscription->provider_id = $request->provider_id;
+            $subscription->provider_id = $provider->id;
             $subscription->name = $pack->text;
             $subscription->status = $request->status ?? 'active';
             $subscription->save();
@@ -178,7 +168,7 @@ class SubscriptionController extends Controller
 
             return redirect()->route('admin.subscriptions.index')->with('success', __('lang.subscription_disabled'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', __('lang.something_went_wrong') . ' ' . $e->getMessage());
+            return redirect()->back()->with('error',  $e->getMessage());
         }
     }
 
@@ -289,7 +279,7 @@ class SubscriptionController extends Controller
 
     public function generatePaymentLink($subscriptionId)
     {
-        $subscription = Subscription::with('plan', 'provider', 'user')->findOrFail($subscriptionId);
+        $subscription = Subscription::with('plan', 'provider')->findOrFail($subscriptionId);
 
         // Check if the subscription status is pending or ended
         if (in_array($subscription->stripe_status, ['active', 'paid'])) {
@@ -339,8 +329,8 @@ class SubscriptionController extends Controller
 
         return response()->json([
             'url' => $checkoutSession->url,
-            'email' => $subscription->user->email,
-            'name' => $subscription->user->name,
+            'email' => $subscription->provider->email,
+            'name' => $subscription->provider->name,
             'price' => $subscription->price
         ]);
     }
@@ -352,8 +342,8 @@ class SubscriptionController extends Controller
         $price = $request->price;
         $link = $request->link;
 
-        // TODO:
-        Mail::to($email)->cc('info@manpowerforu.com')->send(new ProviderSubscriptionMail($link, $name, $email, $price));
+        $cc_email = env('CC_EMAIL') ?? 'info@hpower.ae';
+        Mail::to($email)->cc($cc_email)->send(new ProviderSubscriptionMail($link, $name, $email, $price));
 
         return response()->json(['success' => 'Email sent successfully']);
     }

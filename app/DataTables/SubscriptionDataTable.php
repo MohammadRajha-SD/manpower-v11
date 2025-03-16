@@ -24,10 +24,10 @@ class SubscriptionDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('name', function ($query) {
-                return ucwords($query->user?->name);
+                return ucwords($query->provider?->name);
             })
             ->addColumn('email', function ($query) {
-                return $query->user?->email;
+                return $query->provider?->email;
             })
             ->addColumn('plan', function ($query) {
                 return $query->plan?->text;

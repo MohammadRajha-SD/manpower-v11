@@ -28,14 +28,15 @@
                                 @foreach($packs as $pack)
                                 <option value="{{ $pack->id }}" {{ old('pack_id', $subscription->pack_id)==$pack->id ?
                                     'selected' : '' }}>
-                                    {{ ucwords($pack->text) }}
+                                    {{ ucwords($pack->text) }} - {{ $pack->price }}{{ setting('default_currency_code', '$') }}
                                 </option>
                                 @endforeach
                             </select>
                             <div class="form-text text-muted">{{ trans("lang.pack") }}</div>
                         </div>
                     </div>
-
+                </div>
+                <div class="d-flex flex-column col-sm-12 col-md-6">
                     <!-- Provider Id -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="provider_id" class="col-md-3 control-label text-md-right mx-1">
@@ -49,54 +50,14 @@
                                     provider_id)==$provider->id ? 'selected' :
                                     ''
                                     }}>
-                                    {{ ucwords($provider->name) }}
+                                    {{ ucwords($provider->name) }} - {{ $provider->email }}
                                 </option>
                                 @endforeach
                             </select>
                             <div class="form-text text-muted">{{ trans("lang.provider_name") }}</div>
                         </div>
                     </div>
-
-
                 </div>
-
-                <div class="d-flex flex-column col-sm-12 col-md-6">
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="status" class="col-md-3 control-label text-md-right mx-1">
-                            {{ trans("lang.stripe_status") }}
-                        </label>
-                        <div class="col-md-9">
-                            <select name="status" id="status" class="select2 form-control">
-                                @foreach(['disabled','active', 'incomplete'] as $status)
-                                <option value="{{ $status }}" {{ old('status', $subscription->status)==$status ?
-                                    'selected' : '' }}>
-                                    {{ ucwords($status) }}
-                                </option>
-                                @endforeach
-                            </select>
-                            <div class="form-text text-muted">{{ trans("lang.status") }}</div>
-                        </div>
-                    </div>
-                    <!-- User Id -->
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="user_id" class="col-md-3 control-label text-md-right mx-1">
-                            {{ trans("lang.user") }}
-                        </label>
-                        <div class="col-md-9">
-                            <select name="user_id" id="user_id" class="select2 form-control">
-                                <option value="" selected> {{ __('lang.select') }} </option>
-                                @foreach($users as $user)
-                                <option value="{{ $user->id }}" {{ old('user_id', $subscription->user_id)==$user->id ?
-                                    'selected' : '' }}>
-                                    {{ ucwords($user->name) }} - {{ $user->email }}
-                                </option>
-                                @endforeach
-                            </select>
-                            <div class="form-text text-muted">{{ trans("lang.user") }}</div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
             <!-- Submit Field -->
