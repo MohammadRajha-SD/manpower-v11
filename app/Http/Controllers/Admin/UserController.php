@@ -26,7 +26,7 @@ class UserController extends Controller
             'email' => 'required|unique:users,email',
             'username' => 'required|unique:users,username',
             'phone_number' => 'required',
-            'password' => 'required',
+            'password' => 'required|min:6',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -59,10 +59,10 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required|unique:users,email',
-            'username' => 'required|unique:users,username',
+            'email' => 'required|unique:users,email,' . $user->id,
+            'username' => 'required|unique:users,username,' . $user->id,
             'phone_number' => 'required',
-            'password' => 'nullable',
+            'password' => 'nullable|min:6',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -88,10 +88,13 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->deleteImage('uploads/' . $user->image->path);
-        $user->image()->delete();
+        
+        if ($user->image()->exists()) {
+            $user->deleteImage('uploads/' . $user->image->path);
+            $user->image()->delete();
+        }
+        
         $user->delete();
-
 
         return response()->json([
             'status' => 'success',

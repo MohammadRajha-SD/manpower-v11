@@ -40,7 +40,7 @@
                         <div class="col-md-9">
                             <input type="text" name="username" id="username" class="form-control"
                                 placeholder="{{ trans('lang.tax_name_placeholder') }}"
-                                value="{{ old('username',$user->usernam) }}">
+                                value="{{ old('username',$user->username) }}">
                             <div class="form-text text-muted">
                                 {{ trans("lang.user_name_help") }}
                             </div>
