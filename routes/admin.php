@@ -74,4 +74,9 @@ Route::put('profile/update', [ProfileController::class, 'update'])->name('user.p
 
 Route::delete('image/{id}/delete', [DeleteImageController::class, 'deleteImageFunc'])->name('image.delete');
 
+/* Route Livewire */
+\Livewire\Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/livewire/update', $handle);
+});
+
 require __DIR__ . '/setting.php';

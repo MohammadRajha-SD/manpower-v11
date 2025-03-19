@@ -11,15 +11,7 @@ class ProviderSchedule extends Model
     use HasFactory;
     use HasTranslations;
 
-    protected $fillable = [
-        'day',
-        'start_at',
-        'end_at',
-        'data',
-        'provider_id',
-    ];
-    
-    public $translatable = ['data'];
+    protected $fillable = ['data', 'timezone', 'provider_id'];
 
     public function provider()
     {

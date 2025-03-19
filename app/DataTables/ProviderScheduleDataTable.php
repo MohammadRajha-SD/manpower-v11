@@ -23,28 +23,78 @@ class ProviderScheduleDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('day', function ($query) {
-                return ucwords($query->day);
+            ->addColumn('SUN', function ($query) {
+                $data = json_decode($query->data, true);
+                if (isset($data['SUN']['start'], $data['SUN']['end'])) {
+                    $start = Carbon::createFromFormat('H:i', $data['SUN']['start'])->format('g:i A');
+                    $end = Carbon::createFromFormat('H:i', $data['SUN']['end'])->format('g:i A');
+                    return $start . ' - ' . $end;
+                }
+                return 'N/A';
             })
-
-            ->addColumn('start_at', function ($query) {
-                return $query->start_at;
+            ->addColumn('MON', function ($query) {
+                $data = json_decode($query->data, true);
+                if (isset($data['MON']['start'], $data['MON']['end'])) {
+                    $start = Carbon::createFromFormat('H:i', $data['MON']['start'])->format('g:i A');
+                    $end = Carbon::createFromFormat('H:i', $data['MON']['end'])->format('g:i A');
+                    return $start . ' - ' . $end;
+                }
+                return 'N/A';
             })
-            ->addColumn('end_at', function ($query) {
-                return $query->end_at;
+            ->addColumn('TUE', function ($query) {
+                $data = json_decode($query->data, true);
+                if (isset($data['TUE']['start'], $data['TUE']['end'])) {
+                    $start = Carbon::createFromFormat('H:i', $data['TUE']['start'])->format('g:i A');
+                    $end = Carbon::createFromFormat('H:i', $data['TUE']['end'])->format('g:i A');
+                    return $start . ' - ' . $end;
+                }
+                return 'N/A';
             })
-            ->addColumn('data', function ($query) {
-                return ucwords($query->data ?? 'N/A') ;
+            ->addColumn('WED', function ($query) {
+                $data = json_decode($query->data, true);
+                if (isset($data['WED']['start'], $data['WED']['end'])) {
+                    $start = Carbon::createFromFormat('H:i', $data['WED']['start'])->format('g:i A');
+                    $end = Carbon::createFromFormat('H:i', $data['WED']['end'])->format('g:i A');
+                    return $start . ' - ' . $end;
+                }
+                return 'N/A';
+            })
+            ->addColumn('THU', function ($query) {
+                $data = json_decode($query->data, true);
+                if (isset($data['THU']['start'], $data['THU']['end'])) {
+                    $start = Carbon::createFromFormat('H:i', $data['THU']['start'])->format('g:i A');
+                    $end = Carbon::createFromFormat('H:i', $data['THU']['end'])->format('g:i A');
+                    return $start . ' - ' . $end;
+                }
+                return 'N/A';
+            })
+            ->addColumn('FRI', function ($query) {
+                $data = json_decode($query->data, true);
+                if (isset($data['FRI']['start'], $data['FRI']['end'])) {
+                    $start = Carbon::createFromFormat('H:i', $data['FRI']['start'])->format('g:i A');
+                    $end = Carbon::createFromFormat('H:i', $data['FRI']['end'])->format('g:i A');
+                    return $start . ' - ' . $end;
+                }
+                return 'N/A';
+            })
+            ->addColumn('SAT', function ($query) {
+                $data = json_decode($query->data, true);
+                if (isset($data['SAT']['start'], $data['SAT']['end'])) {
+                    $start = Carbon::createFromFormat('H:i', $data['SAT']['start'])->format('g:i A');
+                    $end = Carbon::createFromFormat('H:i', $data['SAT']['end'])->format('g:i A');
+                    return $start . ' - ' . $end;
+                }
+                return 'N/A';
             })
             ->addColumn('provider', function ($query) {
-            return ucwords($query->provider?->name);
+                return ucwords($query->provider?->name);
             })
             ->addColumn('action', function ($query) {
                 $editBtn = "<a href='" . route('admin.provider-schedules.edit', $query->id) . "' class='btn btn-success btn-sm'><i class='far fa-edit'></i></a>";
                 $deleteBtn = "<a href='" . route('admin.provider-schedules.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
                 return $editBtn . $deleteBtn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'data'])
             ->setRowId('id');
     }
 
@@ -84,11 +134,14 @@ class ProviderScheduleDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('day')->addClass('text-center'),
-            Column::make('start_at')->addClass('text-center'),
-            Column::make('end_at')->addClass('text-center'),
-            Column::make('data')->addClass('text-center'),
-            Column::make('provider')->addClass('text-center'),
+            Column::make('provider'),
+            Column::make('SUN'),
+            Column::make('MON'),
+            Column::make('TUE'),
+            Column::make('WED'),
+            Column::make('THU'),
+            Column::make('FRI'),
+            Column::make('SAT'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

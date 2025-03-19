@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Provider;
 use App\Models\ProviderSchedule;
 use Illuminate\Http\Request;
+use DateTimeZone;
 
 class ProviderScheduleController extends Controller
 {
@@ -16,45 +17,13 @@ class ProviderScheduleController extends Controller
     }
     public function create()
     {
-        $providers = Provider::all();
-        return view('admins.providers.provider-schedules.create', compact('providers'));
+        return view('admins.providers.provider-schedules.create');
     }
 
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'day' => 'required|string|in:sunday,monday,tuesday,wednesday,thursday,friday,saturday',
-            'start_at' => 'required',
-            'end_at' => 'required|after:start_at',
-            'data' => 'nullable',
-            'provider_id' => 'required|exists:providers,id',
-        ]);
-
-        ProviderSchedule::create($validatedData);
-
-        return redirect()->route('admin.provider-schedules.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.availability_hour')]));
-    }
 
     public function edit($id)
     {
-        $providers = Provider::all();
-        $schedule = ProviderSchedule::findOrFail($id);
-        return view('admins.providers.provider-schedules.edit', compact('providers', 'schedule'));
-    }
-
-    public function update(Request $request, ProviderSchedule $schedule)
-    {
-        $validatedData = $request->validate([
-            'day' => 'required|string|in:sunday,monday,tuesday,wednesday,thursday,friday,saturday',
-            'start_at' => 'required',
-            'end_at' => 'required|after:start_at',
-            'data' => 'nullable',
-            'provider_id' => 'required|exists:providers,id',
-        ]);
-
-        $schedule->update($validatedData);
-
-        return redirect()->route('admin.provider-schedules.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.availability_hour')]));
+        return view('admins.providers.provider-schedules.edit', compact('id'));
     }
 
 
