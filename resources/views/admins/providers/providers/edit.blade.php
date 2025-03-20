@@ -33,6 +33,21 @@
                         </div>
                     </div>
 
+                    <!-- EMAIL Field -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="email" class="col-md-3 control-label text-md-right mx-1">
+                            @lang("lang.email")</label>
+
+                        <div class="col-md-9">
+                            <input type="text" name="email" id="email" class="form-control" value="{{old('email', $provider->email)}}"
+                                placeholder="@lang('lang.email')" required />
+
+                            <div class="form-text text-muted">
+                                @lang("lang.email")
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Provider Type Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="provider_type_id" class="col-md-3 control-label text-md-right mx-1">

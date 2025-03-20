@@ -22,6 +22,9 @@ class AddressDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->addColumn('address', function ($query) {
+                return ucwords($query->address);
+            })
             ->addColumn('description', function ($query) {
                 return $query->description;
             })
@@ -36,7 +39,7 @@ class AddressDataTable extends DataTable
                 $deleteBtn = "<a href='" . route('admin.addresses.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
                 return $editBtn . $deleteBtn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','description'])
             ->setRowId('id');
     }
 
@@ -76,8 +79,8 @@ class AddressDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('description'),
             Column::make('address')->addClass('text-center'),
+            Column::make('description'),
             Column::make('user')->addClass('text-center'),
             Column::make('updated_at')->addClass('text-center'),
             Column::computed('action')

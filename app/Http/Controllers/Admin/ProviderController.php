@@ -33,6 +33,7 @@ class ProviderController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'email' => 'required|unique:providers,email',
             'description' => 'required|string',
 
             'phone_number' => 'required|string|max:20',
@@ -61,6 +62,7 @@ class ProviderController extends Controller
             // Store provider
             $provider = Provider::create([
                 'name' => $request->input('name'),
+                'email' => $request->input('email'),
                 'provider_type_id' => $request->input('provider_type_id'),
                 'description' => $request->input('description'),
                 'phone_number' => $request->input('phone_number'),
@@ -119,6 +121,7 @@ class ProviderController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'email' => 'required|unique:providers,email,' . $provider->id,
 
             'phone_number' => 'required|string|max:20',
             'mobile_number' => 'required|string|max:20',
@@ -146,6 +149,7 @@ class ProviderController extends Controller
             // Update provider details
             $provider->update([
                 'name' => $request->input('name'),
+                'email' => $request->input('email'),
                 'provider_type_id' => $request->input('provider_type_id'),
                 'description' => $request->input('description'),
                 'phone_number' => $request->input('phone_number'),

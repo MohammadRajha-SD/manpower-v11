@@ -24,9 +24,6 @@ class AddressController extends Controller
         $data = $this->validate($request, [
             'address' => 'required',
             'description' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'default' => 'required',
         ]);
 
         $data['user_id'] = Auth::id();
@@ -47,9 +44,6 @@ class AddressController extends Controller
         $data = $this->validate($request, [
             'address' => 'required',
             'description' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'default' => 'required',
         ]);
 
         $data['user_id'] = Auth::id();

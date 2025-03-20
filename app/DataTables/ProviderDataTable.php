@@ -28,6 +28,9 @@ class ProviderDataTable extends DataTable
 
                 return ucwords($query->name) . $featured;
             })
+            ->addColumn('email', function ($query) {
+                return $query->email;
+            })
             ->addColumn('provider_type', function ($query) {
                 return ucwords($query->providerType->name);
             })
@@ -105,7 +108,7 @@ class ProviderDataTable extends DataTable
      */
     public function query(Provider $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('updated_at','desc');
     }
 
     /**
@@ -138,6 +141,7 @@ class ProviderDataTable extends DataTable
         return [
             // Column::make('image'),
             Column::make('name'),
+            Column::make('email'),
             Column::make('provider_type')->addClass('text-center'),
             Column::make('employees')->addClass('text-center'),
             Column::make('phone')->addClass('text-center'),

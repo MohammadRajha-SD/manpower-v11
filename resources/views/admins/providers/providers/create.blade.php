@@ -28,6 +28,20 @@
                                 @lang("lang.e_provider_name_help")
                             </div>
                         </div>
+                    </div> 
+                    <!-- EMAIL Field -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="email" class="col-md-3 control-label text-md-right mx-1">
+                            @lang("lang.email")</label>
+
+                        <div class="col-md-9">
+                            <input type="text" name="email" id="email" class="form-control" value="{{old('email')}}"
+                                placeholder="@lang('lang.email')" required />
+
+                            <div class="form-text text-muted">
+                                @lang("lang.email")
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Provider Type Field -->
@@ -103,9 +117,8 @@
                             {{ trans("lang.e_provider_phone_number") }}
                         </label>
                         <div class="col-md-9">
-                            <input type="text" 
-                            value="{{old('phone_number')}}"
-                            name="phone_number" id="phone_number" class="form-control"
+                            <input type="text" value="{{old('phone_number')}}" name="phone_number" id="phone_number"
+                                class="form-control"
                                 placeholder="{{ trans('lang.e_provider_phone_number_placeholder') }}">
                             <div class="form-text text-muted">
                                 {{ trans("lang.e_provider_phone_number_help") }}
@@ -119,9 +132,8 @@
                             {{ trans("lang.e_provider_mobile_number") }}
                         </label>
                         <div class="col-md-9">
-                            <input type="text" 
-                            value="{{old('mobile_number')}}"
-                            name="mobile_number" id="mobile_number" class="form-control"
+                            <input type="text" value="{{old('mobile_number')}}" name="mobile_number" id="mobile_number"
+                                class="form-control"
                                 placeholder="{{ trans('lang.e_provider_mobile_number_placeholder') }}">
                             <div class="form-text text-muted">
                                 {{ trans("lang.e_provider_mobile_number_help") }}
@@ -179,8 +191,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <input type="number" name="availability_range" id="availability_range"
-                                    class="form-control" step="any" min="0"
-                                    value="{{old('availability_range')}}" 
+                                    class="form-control" step="any" min="0" value="{{old('availability_range')}}"
                                     placeholder="{{ trans('lang.e_provider_availability_range_placeholder') }}">
                                 <div class="input-group-append">
                                     <div class="input-group-text text-bold px-3">

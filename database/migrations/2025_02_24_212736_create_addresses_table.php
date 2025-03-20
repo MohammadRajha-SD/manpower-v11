@@ -14,10 +14,7 @@ return new class extends Migration
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->text('address');
-            $table->decimal('latitude', 17, 14);
-            $table->decimal('longitude', 17, 14);
-            $table->boolean('default')->default(0);
+            $table->string('address');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
