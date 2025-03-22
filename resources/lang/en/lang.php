@@ -1774,4 +1774,15 @@ return [
     'create_payment_link' => 'Create payment link',
     'subscription_activated_successfully' => 'Subscription activated successfully.',
     'payment_not_completed' => 'Payment not completed or subscription is incomplete.',
+
+    // refunding subscription
+    'refund' => 'Refund',
+    'refund_success' => 'Refund processed successfully.',
+    'refund_subscription' => 'Refund Subscription',
+    'refund_amount' => 'Refund Amount',
+    "full_refund_processed_and_subscription_canceled" => "Full refund processed and subscription canceled.",
+    'refund_amount_exceeds_remaining_balance' => 'Refund amount exceeds the remaining balance.',
+    'partial_refund_processed' => 'Partial refund processed.',
+    'no_charge_found_for_subscription' => 'No charge found for this subscription.',
+    'no_invoice_found_for_subscription' => 'No invoice found for this subscription.',
 ];

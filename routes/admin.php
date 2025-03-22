@@ -54,6 +54,7 @@ Route::resource('provider-payouts', ProviderPayoutController::class);
 
 /** Subscriptions  */
 Route::post('/subscriptions/send-payment-email', [SubscriptionController::class, 'sendPaymentEmail'])->name('subscriptions.send-payment-email');
+Route::post('/subscriptions/refund-payment', [SubscriptionController::class, 'refund'])->name('subscriptions.refund-payment');
 Route::post('/subscriptions/generate-payment-link/{id}', [SubscriptionController::class, 'generatePaymentLink'])->name('subscriptions.generate-payment-link');
 Route::post('/subscriptions/create-payment-link/{id}', [SubscriptionController::class, 'createPaymentLink'])->name('subscriptions.create-payment-link');
 Route::get('/subscriptions/success/{subscription}', [SubscriptionController::class, 'paymentSuccess'])->name('subscriptions.success');

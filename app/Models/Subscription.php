@@ -21,4 +21,7 @@ class Subscription extends Model
     public function provider(){
         return $this->belongsTo(Provider::class, 'provider_id');
     }
+    public function scopeRemainingAmount() {
+        return $this->price - $this->amount_refunded;
+    }
 }

@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\DB;
 use Stripe\Subscription as StripeSubscription;
 use Stripe\Customer;
 use Illuminate\Support\Facades\Validator;
+use Stripe\Refund;
+use Stripe\Invoice;
 
 class SubscriptionController extends Controller
 {
@@ -91,8 +93,6 @@ class SubscriptionController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
-
     public function edit($id)
     {
         $subscription = Subscription::findOrFail($id);
@@ -168,7 +168,7 @@ class SubscriptionController extends Controller
 
             return redirect()->route('admin.subscriptions.index')->with('success', __('lang.subscription_disabled'));
         } catch (\Exception $e) {
-            return redirect()->back()->with('error',  $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -263,6 +263,7 @@ class SubscriptionController extends Controller
                 'stripe_id' => $stripeSubscription->id,
                 'stripe_status' => 'paid',
                 'status' => 'active',
+                'amount_refunded' => 0,
                 'ends_at' => $endsAt,
             ]);
 
@@ -346,5 +347,89 @@ class SubscriptionController extends Controller
         Mail::to($email)->cc($cc_email)->send(new ProviderSubscriptionMail($link, $name, $email, $price));
 
         return response()->json(['success' => 'Email sent successfully']);
+    }
+
+    public function refund(Request $request)
+    {
+        $request->validate([
+            'subscription_id' => 'required|exists:subscriptions,id',
+            'amount' => 'required|numeric|min:0.1',
+        ]);
+
+        $subscription = Subscription::findOrFail($request->subscription_id);
+
+        Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        try {
+            // ✅ Get Stripe Subscription directly (without using Session)
+            $stripeSubscription = StripeSubscription::retrieve($subscription->stripe_id);
+
+            // ✅ Get the latest invoice
+            if (!$stripeSubscription->latest_invoice) {
+                return redirect()->back()->with('error', __('lang.no_invoice_found_for_subscription'));
+            }
+
+            $invoice = Invoice::retrieve($stripeSubscription->latest_invoice);
+
+            // ✅ Get Charge ID from invoice
+            $chargeId = $invoice->charge ?? null;
+
+            if (!$chargeId) {
+                return redirect()->back()->with('error', __('lang.no_charge_found_for_subscription'));
+            }
+
+            // ✅ Check if full refund or partial refund
+            $price = $subscription->price;
+            $refunded = $subscription->amount_refunded;
+            $amount = $request->amount;
+
+            $remaining = $price - $refunded;
+
+
+            // Calculate refund type (full or partial)
+            if ($amount >= $remaining) {
+                // Update subscription status to refunded (full refund)
+                if ($amount == $remaining) {
+                    $subscription->update([
+                        'stripe_status' => 'refunded',
+                        'status' => 'refunded',
+                        'ends_at' => now(),
+                        'amount_refunded' => $price,
+                    ]);
+
+                    $stripeSubscription->cancel();
+
+                    $refund = Refund::create([
+                        'charge' => $chargeId,
+                        'amount' => $remaining * 100,
+                    ]);
+
+                    return redirect()->back()->with('success', __('lang.full_refund_processed_and_subscription_canceled'));
+                }else{
+                    return redirect()->back()->with('error', __('lang.refund_amount_exceeds_remaining_balance'));
+                }
+            } else {
+                // Partial refund
+                if ($amount > $remaining) {
+                    return redirect()->back()->with('error', __('lang.refund_amount_exceeds_remaining_balance'));
+                }
+
+                // Create partial refund on Stripe
+                $refund = Refund::create([
+                    'charge' => $chargeId,
+                    'amount' => $amount * 100,
+                ]);
+
+                // Update the amount refunded in the subscription record
+                $subscription->update([
+                    'amount_refunded' => $refunded + $amount,
+                ]);
+
+                return redirect()->back()->with('success', __('lang.partial_refund_processed'));
+            }
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }
