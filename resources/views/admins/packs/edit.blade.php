@@ -182,7 +182,8 @@
                     </div>
 
                     <!-- Stripe Plan ID field -->
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row"
+                        style="display:none !important;">
                         <label for="stripe_plan_id" class="col-md-3 control-label text-md-right mx-1">{{
                             trans("lang.stripe_plan_id") }}</label>
                         <div class="col-md-9">

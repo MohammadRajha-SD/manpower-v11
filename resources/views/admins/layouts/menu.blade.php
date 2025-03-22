@@ -24,9 +24,9 @@
 
     <x-admins.sidebar-item :name="trans('lang.provider_statistique')" icon="fas fa-list-alt"
         :activeRoutes="['admin.provider-statistics*']" route="provider-statistics.index" />
-
+{{-- 
     <x-admins.sidebar-item :name="trans('lang.requested_e_providers_plural')" icon="fas fa-list-alt"
-        :activeRoutes="['admin.provider-requests*']" route="provider-requests.index" />
+        :activeRoutes="['admin.provider-requests*']" route="provider-requests.index" /> --}}
 
     <x-admins.sidebar-item :name="__('lang.address_plural')" icon="fas fa-map-marked-alt"
         :activeRoutes="['admin.addresses*']" route="addresses.index" />
@@ -56,8 +56,8 @@
 {{-- BOOKINGS --}}
 <x-admins.sidebar-items :name="__('lang.booking_plural')"
     :routes="[['admin.booking-statuses*', 'admin.bookings*'], 'menu-open']" icon="fas fa-calendar-check">
-    <x-admins.sidebar-item :name="__('lang.booking_status_plural')" icon="fas fa-server"
-        :activeRoutes="['admin.booking-statuses*']" route="booking-statuses.index" />
+    {{-- <x-admins.sidebar-item :name="__('lang.booking_status_plural')" icon="fas fa-server"
+        :activeRoutes="['admin.booking-statuses*']" route="booking-statuses.index" /> --}}
 
     <x-admins.sidebar-item :name="__('lang.booking_plural')" icon="fas fa-calendar-check"
         :activeRoutes="['admin.bookings*']" route="bookings.index" />
