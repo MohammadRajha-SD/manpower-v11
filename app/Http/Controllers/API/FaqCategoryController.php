@@ -13,13 +13,13 @@ class FaqCategoryController extends Controller
             $faq_categories = FaqCategory::all();
 
             return response()->json([
-                'success' => true,
+                'status' => 'success',
                 'data' => $faq_categories->toArray(),
                 'message' => 'FAQ categories retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'data' => [],
                 'message' => 'Something went wrong. Please try again.',
             ], 500);

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
-use Illuminate\Http\Request;
 
 class FaqController extends Controller
 {
@@ -14,15 +13,15 @@ class FaqController extends Controller
             $faqs = Faq::with('category')->get();
 
             return response()->json([
-                'success' => true,
-                'data' => $faqs->toArray(),
+                'status' => 'success',
+                'faqs' => $faqs,
                 'message' => 'FAQS retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Something went wrong. Please try again.',
-                'data' => [],
+                'faqs' => [],
             ], 500);
         }
     }

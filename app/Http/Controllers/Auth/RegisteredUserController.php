@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -48,4 +48,25 @@ class RegisteredUserController extends Controller
 
         return redirect(RouteServiceProvider::HOME);
     }
+
+    public function confirmEmail($confirmation_code)
+    {
+        $user = User::where('confirmation_code', $confirmation_code)->first();
+
+        if (!$user) {
+            return redirect()->route('login')->with('error', 'Invalid confirmation code!');
+        }
+
+        if ($user->email_verified_at) {
+            return redirect()->route('login')->with('success', __('lang.confirmation.confirmation_already_confirmed'));
+        }
+
+        $user->email_verified_at = now();
+        $user->save();
+
+        // Redirect to a custom page (dashboard, success page, etc.)
+        return redirect()->route('login')->with('success', __('lang.confirmation.confirmation_successful'));
+    }
+
+
 }

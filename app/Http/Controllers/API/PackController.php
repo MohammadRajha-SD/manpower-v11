@@ -14,15 +14,15 @@ class PackController extends Controller
             $packs = Pack::all();
 
             return response()->json([
-                'success' => true,
-                'data' => $packs->toArray(),
+                'status' => 'success',
+                'packs' => $packs,
                 'message' => 'Packs retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Something went wrong. Please try again.',
-                'data' => [],
+                'packs' => [],
             ], 500);
         }
     }

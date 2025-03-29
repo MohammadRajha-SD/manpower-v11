@@ -4,27 +4,19 @@ namespace App\Models;
 
 use App\Traits\ImageHandler;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Provider extends Model
+class Provider extends Authenticatable
 {
     use HasFactory, HasTranslations;
+    use HasApiTokens, Notifiable;
     use ImageHandler;
-
-    protected $fillable = [
-        'name',
-        'email',
-        'category_id',
-        'provider_type_id',
-        'description',
-        'phone_number',
-        'mobile_number',
-        'availability_range',
-        'available',
-        'featured',
-        'accepted'
-    ];
+    
+    protected $guarded = [];
+    protected $guard = 'provider';
 
     public $translatable = ['name', 'description'];
 

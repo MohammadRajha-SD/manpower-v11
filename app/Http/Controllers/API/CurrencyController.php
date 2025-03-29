@@ -14,15 +14,15 @@ class CurrencyController extends Controller
             $currencies = Currency::all();
 
             return response()->json([
-                'success' => true,
-                'data' => $currencies->toArray(),
+                'status' => 'success',
+                'currencies' => $currencies,
                 'message' => 'Currencies retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Something went wrong. Please try again.',
-                'data' => [],
+                'currencies' => [],
             ], 500);
         }
     }

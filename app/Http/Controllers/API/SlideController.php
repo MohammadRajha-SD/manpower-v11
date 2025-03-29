@@ -11,18 +11,18 @@ class SlideController extends Controller
     public function index()
     {
         try {
-            $slides = Slide::all();
+            $slides = Slide::where('status', 1)->get();
 
             return response()->json([
-                'success' => true,
-                'data' => $slides->toArray(),
+                'status' => 'success',
+                'slides' => $slides,
                 'message' => 'Slides retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'status' => 'error',
                 'message' => 'Something went wrong. Please try again.',
-                'data' => [],
+                'slides' => [],
             ], 500);
         }
     }

@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('providers', function (Blueprint $table) {
-            $table->string('stripe_id')->nullable();
-            $table->string('email')->unique();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('confirmation_code')->nullable()->unique();
         });
     }
 
@@ -22,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('providers', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

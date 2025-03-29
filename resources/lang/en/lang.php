@@ -1785,4 +1785,7 @@ return [
     'partial_refund_processed' => 'Partial refund processed.',
     'no_charge_found_for_subscription' => 'No charge found for this subscription.',
     'no_invoice_found_for_subscription' => 'No invoice found for this subscription.',
+
+    'confirmation.confirmation_already_confirmed' => 'Confirmation already completed.',
+    'confirmation.confirmation_successful' => "Confirmation successful.",
 ];
