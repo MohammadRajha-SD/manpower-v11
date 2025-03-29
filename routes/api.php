@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\API\EmirateController;
 use App\Http\Controllers\API\AuthProviderController;
 use App\Http\Controllers\API\AuthUserController;
 use App\Http\Controllers\API\CategoryController;
@@ -78,3 +79,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::get('currencies', [CurrencyController::class, 'index']);
 Route::get('slides', [SlideController::class, 'index']);
+Route::get('emirates', [EmirateController::class, 'index']);
