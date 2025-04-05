@@ -35,7 +35,7 @@ class ProviderController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|unique:providers,email',
             'description' => 'required|string',
-
+            'password' => 'required|min:6',
             'phone_number' => 'required|string|max:20',
             'mobile_number' => 'required|string|max:20',
 
@@ -62,6 +62,7 @@ class ProviderController extends Controller
             // Store provider
             $provider = Provider::create([
                 'name' => $request->input('name'),
+                'password' => bcrypt($request->input('password')),
                 'email' => $request->input('email'),
                 'provider_type_id' => $request->input('provider_type_id'),
                 'description' => $request->input('description'),
@@ -95,6 +96,7 @@ class ProviderController extends Controller
                     $provider->images()->create(['path' => $path]);
                 }
             }
+            
             DB::commit();
 
             return redirect()->route('admin.providers.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.e_provider')]));

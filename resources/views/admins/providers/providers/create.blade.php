@@ -44,6 +44,21 @@
                         </div>
                     </div>
 
+                    {{-- Password Field --}}
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="password" class="col-md-3 control-label text-md-right mx-1">
+                            @lang("lang.password")</label>
+
+                        <div class="col-md-9">
+                            <input type="text" name="password" id="password" class="form-control" value="{{old('password')}}"
+                                placeholder="@lang('lang.password')" required />
+
+                            <div class="form-text text-muted">
+                                @lang("lang.password")
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Provider Type Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="provider_type_id" class="col-md-3 control-label text-md-right mx-1">
