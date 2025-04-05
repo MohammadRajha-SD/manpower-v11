@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\Auth\MultiLoginController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\EmirateController;
@@ -14,6 +15,11 @@ use App\Http\Controllers\API\PackController;
 use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\SlideController;
 use App\Http\Controllers\API\UserController;
+
+
+/** Mutli Login [user-admin-provider] */
+Route::post('login', [MultiLoginController::class, 'login']);
+/** Mutli Login [user-admin-provider] // */
 
 /** USER STARTED HERE */
 Route::prefix('user')
