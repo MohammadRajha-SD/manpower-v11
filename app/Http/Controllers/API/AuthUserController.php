@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Mail\HelloMail;
+use App\Mail\HelloMailArabic;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ use Illuminate\Support\Str;
 
 class AuthUserController extends Controller
 {
-    public function register(Request $request)
+    public function registerOld(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -47,6 +48,49 @@ class AuthUserController extends Controller
         return response()->json([
             'message' => 'User registered successfully!',
             'user' => $user,
+        ], 201);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'email' => 'required|email|unique:users',
+            'phone_number' => 'required|string|max:15',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Create a new user
+        $user = User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->email,
+            'phone_number' => $request->phone_number,
+            'password' => bcrypt($request->password),
+            'confirmation_code' => Str::random(25),
+        ]);
+
+        // Log the user in after registration
+        Auth::login($user);
+
+        // Generate a custom confirmation URL
+        $confirmationUrl = url('register/confirm/' . $user->confirmation_code);
+
+        Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
+        Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
+
+        // Create a token for the logged-in user
+        $token = $user->createToken('main')->plainTextToken;
+
+        return response()->json([
+            'message' => 'User registered and logged in successfully!',
+            'user' => $user,
+            'token' => $token,
         ], 201);
     }
 
