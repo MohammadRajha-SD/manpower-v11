@@ -47,4 +47,10 @@ class Category extends Model
     {
         return $this->morphToMany(Coupon::class, 'discountable');
     }
+
+
+    public function services()
+    {
+        return $this->belongsToMany(Service::class, 'service_category', 'category_id', 'service_id');
+    }
 }

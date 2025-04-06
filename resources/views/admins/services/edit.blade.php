@@ -11,8 +11,8 @@
         :table_name="__('lang.e_service_edit')" :route="route('admin.services.index')" />
 
     <x-admins.cards.content :name1="__('lang.e_service_table')" :name2="__('lang.e_service_create')"
-        route1="admin.services.index" route2="admin.services.create" :route3="['admin.services.edit', $service->id]" :isEditMode="true"
-        :name3="__('lang.e_service_edit')">
+        route1="admin.services.index" route2="admin.services.create" :route3="['admin.services.edit', $service->id]"
+        :isEditMode="true" :name3="__('lang.e_service_edit')">
 
         <form action="{{route('admin.services.update', $service->id)}}" method="post" enctype="multipart/form-data">
             @csrf
@@ -41,14 +41,16 @@
                         </label>
                         <div class="col-md-9">
                             <select name="categories[]" class="select2 form-control not-required"
-                                data-empty="{{ trans('lang.e_service_categories_placeholder') }}" multiple="multiple">
+                                data-empty="{{ trans('lang.e_service_categories_placeholder') }}" multiple="multiple"
+                                id="categories">
                                 @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ in_array($category->id, old('categories',
-                                    $service->categories?->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
+                                    $service?->categories?->pluck('id')?->toArray() ?? [])) ? 'selected' : '' }}>
                                     {{ ucwords($category->name) }}
                                 </option>
                                 @endforeach
                             </select>
+
                             <div class="form-text text-muted">{{ trans("lang.e_service_categories_help") }}</div>
                         </div>
                     </div>

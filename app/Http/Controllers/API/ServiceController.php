@@ -25,7 +25,7 @@ class ServiceController extends Controller
         // Load related models
         $query->with([
             'provider',
-            'category',
+            'categories',
             'images',
             'image',
         ]);
@@ -33,10 +33,43 @@ class ServiceController extends Controller
         // Execute the query to get the results
         $services = $query->get();
 
+        $newServices = $services->map(function ($slide) {
+            return [
+                'id' => $slide->id,
+                'category_id' => $slide->category_id,
+                'provider_id' => $slide->provider_id,
+                'name' => $slide->name,
+                'description' => $slide->description,
+                'discount_price' => $slide->discount_price,
+                'price' => $slide->price,
+                'quantity_unit' => $slide->quantity_unit,
+                'duration' => $slide->duration,
+                'featured' => $slide->featured,
+                'enable_booking' => $slide->enable_booking,
+                'available' => $slide->available,
+                'created_at' => $slide->created_at,
+                'provider' => [
+                    'name' => $slide->provider->name,
+                    'email' => $slide->provider->email,
+                    'description' => $slide->provider->description,
+                    'phone_number' => $slide->provider->phone_number,
+                    'mobile_number' => $slide->provider->mobile_number,
+                    'availability_range' => $slide->provider->availability_range,
+                    'available' => $slide->provider->available,
+                    'accepted' => $slide->provider->accepted,
+                    'featured' => $slide->provider->featured,
+                    'created_at' => $slide->provider->created_at,
+                ],
+
+                'images' => $slide->images->map(function ($img) {
+                    return asset($img->path);
+                })->toArray(),
+            ];
+        });
         return response()->json([
             'status' => 'success',
             'message' => 'All Services retrieved successfully.',
-            'services' => $services,
+            'services' => $newServices,
         ], 200);
     }
 }

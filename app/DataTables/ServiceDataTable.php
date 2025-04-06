@@ -22,20 +22,20 @@ class ServiceDataTable extends DataTable
             })
             
             ->addColumn('available', function ($query) {
-                return isActive($query->available);
+                return isActive($query->available,'success', 'danger');
             })
             ->addColumn('provider', function ($query) {
                 return ucwords($query->provider?->name) ?? 'N/A';
             })
             ->addColumn('categories', function ($query) {
-                $categories = $query->categories; 
+                $categories = $query->categories;
                 $categoryLinks = '';
 
-                if (empty($categories)) {
+                if ($categories->isEmpty()) {
                     $categoryLinks = 'N/A';
                 } else {
                     foreach ($categories as $category) {
-                        $categoryLinks .= '<a href="' . route('categories.edit', $category->id) . '"><small>' . $category->name . '</small></a><br>';
+                        $categoryLinks .= '<a href="' . route('admin.categories.edit', $category->id) . '"><small>' . $category->name . '</small></a><br>';
                     }
                 }
 
@@ -55,13 +55,13 @@ class ServiceDataTable extends DataTable
                 $deleteBtn = "<a href='" . route('admin.services.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
                 return $editBtn . $deleteBtn;
             })
-            ->rawColumns(['available', 'action'])
+            ->rawColumns(['available', 'action', 'categories'])
             ->setRowId('id');
     }
 
     public function query(Service $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('updated_at', 'desc');
     }
 
     /**

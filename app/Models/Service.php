@@ -12,28 +12,15 @@ class Service extends Model
     use HasFactory, HasTranslations;
     use ImageHandler;
 
-    protected $fillable = [
-        'category_id',
-        'name',
-        'discount_price',
-        'price',
-        'price_unit',
-        'quantity_unit',
-        'duration',
-        'description',
-        'featured',
-        'enable_booking',
-        'available',
-        'provider_id'
-    ];
+    protected $guarded = [];
 
     public $translatable = ['name', 'description'];
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'service_category', 'service_id', 'category_id');
     }
-
+    
     public function provider()
     {
         return $this->belongsTo(Provider::class, 'provider_id');

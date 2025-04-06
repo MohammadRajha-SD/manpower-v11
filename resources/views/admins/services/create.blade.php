@@ -37,7 +37,7 @@
                         <div class="col-md-9">
                             <select name="categories[]" class="select2 form-control not-required"
                                 data-empty="{{ trans('lang.e_service_categories_placeholder') }}" multiple="multiple">
-                                <option value="" selected disabled>Select</option>
+                                <option value="" disabled>Select</option>
 
                                 @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ?
