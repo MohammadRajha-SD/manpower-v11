@@ -11,11 +11,22 @@ class SlideController extends Controller
     public function index()
     {
         try {
-            $slides = Slide::where('status', 1)->get();
+            $slides = Slide::with('image')->where('status', 1)->get();
+
+            $newSlides = $slides->map(function ($slide) {
+                return [
+                    'id' => $slide->id,
+                    'title' => $slide->title,
+                    'text' => $slide->text,
+                    'desc' => $slide->desc,
+                    'status' => $slide->status,
+                    'image_path' => asset('uploads/' . $slide->image->path) ?? null,
+                ];
+            });
 
             return response()->json([
                 'status' => 'success',
-                'slides' => $slides,
+                'slides' => $newSlides,
                 'message' => 'Slides retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
