@@ -12,6 +12,7 @@ use App\Http\Controllers\API\CurrencyController;
 use App\Http\Controllers\API\FaqCategoryController;
 use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\PackController;
+use App\Http\Controllers\API\ProviderTypeController;
 use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\SlideController;
 use App\Http\Controllers\API\UserController;
@@ -86,3 +87,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::get('currencies', [CurrencyController::class, 'index']);
 Route::get('slides', [SlideController::class, 'index']);
 Route::get('emirates', [EmirateController::class, 'index']);
+Route::get('provider-types', [ProviderTypeController::class, 'index']);

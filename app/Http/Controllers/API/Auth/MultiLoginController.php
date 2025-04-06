@@ -37,6 +37,7 @@ class MultiLoginController extends Controller
                         'data' => $user,
                         'token' => $token,
                         'is_admin' => 1,
+                        'user_type' => 'admin',
                         'to' => env('BACKEND_URL', 'http://127.0.0.1:8000'),
                     ], 200);
                 } else {
@@ -45,6 +46,7 @@ class MultiLoginController extends Controller
                         'data' => $user,
                         'token' => $token,
                         'is_admin' => 0,
+                        'user_type' => 'user',
                         'to' => env('FRONTEND_URL', 'http://localhost:3000'),
                     ], 200);
                 }
@@ -58,6 +60,7 @@ class MultiLoginController extends Controller
                     'message' => 'Provider retrieved successfully',
                     'data' => $provider,
                     'token' => $token,
+                    'user_type' => 'provider',
                     'to' => env('FRONTEND_URL', 'http://localhost:3000'),
                 ], 200);
             }
@@ -66,6 +69,7 @@ class MultiLoginController extends Controller
                 'message' => 'something went wrong...',
                 'data' => [],
                 'token' => null,
+                'user_type' => null,
                 'to' => null,
             ], 200);
         }
@@ -74,6 +78,7 @@ class MultiLoginController extends Controller
             'message' => __('auth.failed'),
             'data' => [],
             'token' => null,
+            'user_type' => null,
             'to' => null,
         ], 401);
     }
