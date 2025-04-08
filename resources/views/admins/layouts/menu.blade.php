@@ -101,7 +101,7 @@
 
 {{-- SETTINGS --}}
 <x-admins.sidebar-items :name="__('lang.app_setting')"
-    :routes="[['admin.currencies*', 'admin.taxes*', 'admin.partners*','admin.settings*', 'admin.users*', 'admin.mails*', 'admin.social-auth*', 'admin.setting-payment*', 'admin.slides*', 'admin.localisation*'], 'menu-open']"
+    :routes="[['admin.currencies*', 'admin.taxes*','admin.partners*','admin.settings*', 'admin.users*', 'admin.mails*', 'admin.social-auth*', 'admin.setting-payment*', 'admin.slides*', 'admin.localisation*'], 'menu-open']"
     icon="fas fa-cogs">
     <x-admins.sidebar-item :name="__('lang.app_setting_globals')" icon="fas fa-cog" :activeRoutes="['admin.settings*']"
         route="settings.index" />
@@ -130,6 +130,6 @@
     <x-admins.sidebar-item :name="__('lang.app_setting_localisation')" icon="fas fa-language"
         :activeRoutes="['admin.localisation*']" route="localisation.index" />
 
-    <x-admins.sidebar-item :name="__('lang.partner')" icon="fas fa-image"
-        :activeRoutes="['admin.partners*']" route="partners.index" />
+    <x-admins.sidebar-item :name="__('lang.partner')" icon="fas fa-image" :activeRoutes="['admin.partners*']"
+        route="partners.index" />
 </x-admins.sidebar-items>

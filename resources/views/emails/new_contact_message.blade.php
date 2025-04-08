@@ -9,7 +9,7 @@
 <body>
     <h3 style="text-align: center">New Contact Message Arrived</h3>
     <p>
-        You have received a new contact message from HPower client, click <a href="{{ env('FRONTEND_URL', 'http://localhost:3000') }}">here</a> to review the message
+        You have received a new contact message from HPower client, click <a href="{{ asset('admin/contact-us') }}">here</a> to review the message
     </p>
 </body>
 </html>
