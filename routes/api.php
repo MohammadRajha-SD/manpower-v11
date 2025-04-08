@@ -12,6 +12,7 @@ use App\Http\Controllers\API\CurrencyController;
 use App\Http\Controllers\API\FaqCategoryController;
 use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\PackController;
+use App\Http\Controllers\API\PartnerController;
 use App\Http\Controllers\API\ProviderTypeController;
 use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\SlideController;
@@ -63,6 +64,7 @@ Route::prefix('provider')
 
 // packs
 Route::get('packs', [PackController::class, 'index']);
+Route::get('partners', [PartnerController::class, 'index']);
 
 // services
 Route::get('services', [ServiceController::class, 'index']);

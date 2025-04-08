@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\TaxController;
 use App\Http\Controllers\Admin\BookingStatusController;
 use App\Http\Controllers\Admin\ContactUsController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\PaymentStatusController;
@@ -72,6 +73,8 @@ Route::resource('provider-requests', ProviderRequestController::class);
 
 Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 Route::put('profile/update', [ProfileController::class, 'update'])->name('user.profile.update');
+
+Route::resource('partners', PartnerController::class);
 
 Route::delete('image/{id}/delete', [DeleteImageController::class, 'deleteImageFunc'])->name('image.delete');
 

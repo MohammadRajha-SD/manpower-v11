@@ -24,7 +24,7 @@
 
     <x-admins.sidebar-item :name="trans('lang.provider_statistique')" icon="fas fa-list-alt"
         :activeRoutes="['admin.provider-statistics*']" route="provider-statistics.index" />
-{{-- 
+    {{--
     <x-admins.sidebar-item :name="trans('lang.requested_e_providers_plural')" icon="fas fa-list-alt"
         :activeRoutes="['admin.provider-requests*']" route="provider-requests.index" /> --}}
 
@@ -56,7 +56,8 @@
 {{-- BOOKINGS --}}
 <x-admins.sidebar-items :name="__('lang.booking_plural')"
     :routes="[['admin.booking-statuses*', 'admin.bookings*'], 'menu-open']" icon="fas fa-calendar-check">
-    {{-- <x-admins.sidebar-item :name="__('lang.booking_status_plural')" icon="fas fa-server"
+    {{--
+    <x-admins.sidebar-item :name="__('lang.booking_status_plural')" icon="fas fa-server"
         :activeRoutes="['admin.booking-statuses*']" route="booking-statuses.index" /> --}}
 
     <x-admins.sidebar-item :name="__('lang.booking_plural')" icon="fas fa-calendar-check"
@@ -100,7 +101,8 @@
 
 {{-- SETTINGS --}}
 <x-admins.sidebar-items :name="__('lang.app_setting')"
-    :routes="[['admin.currencies*', 'admin.taxes*', 'admin.settings*', 'admin.users*', 'admin.mails*', 'admin.social-auth*', 'admin.setting-payment*', 'admin.slides*', 'admin.localisation*'], 'menu-open']" icon="fas fa-cogs">
+    :routes="[['admin.currencies*', 'admin.taxes*', 'admin.partners*','admin.settings*', 'admin.users*', 'admin.mails*', 'admin.social-auth*', 'admin.setting-payment*', 'admin.slides*', 'admin.localisation*'], 'menu-open']"
+    icon="fas fa-cogs">
     <x-admins.sidebar-item :name="__('lang.app_setting_globals')" icon="fas fa-cog" :activeRoutes="['admin.settings*']"
         route="settings.index" />
 
@@ -110,8 +112,8 @@
     <x-admins.sidebar-item :name="__('lang.user_plural')" icon="fas fa-users" :activeRoutes="['admin.users*']"
         route="users.index" />
 
-    <x-admins.sidebar-item :name="__('lang.app_setting_mail')" icon="fas fa-envelope"
-        :activeRoutes="['admin.mails*']" route="mails.smtp" />
+    <x-admins.sidebar-item :name="__('lang.app_setting_mail')" icon="fas fa-envelope" :activeRoutes="['admin.mails*']"
+        route="mails.smtp" />
 
     <x-admins.sidebar-item :name="__('lang.app_setting_social')" icon="fas fa-globe"
         :activeRoutes="['admin.social-auth*']" route="social-auth.index" />
@@ -127,4 +129,7 @@
 
     <x-admins.sidebar-item :name="__('lang.app_setting_localisation')" icon="fas fa-language"
         :activeRoutes="['admin.localisation*']" route="localisation.index" />
+
+    <x-admins.sidebar-item :name="__('lang.partner')" icon="fas fa-image"
+        :activeRoutes="['admin.partners*']" route="partners.index" />
 </x-admins.sidebar-items>
