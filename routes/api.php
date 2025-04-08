@@ -15,7 +15,9 @@ use App\Http\Controllers\API\PackController;
 use App\Http\Controllers\API\PartnerController;
 use App\Http\Controllers\API\ProviderTypeController;
 use App\Http\Controllers\API\ServiceController;
+use App\Http\Controllers\API\ServiceReviewController;
 use App\Http\Controllers\API\SlideController;
+use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\API\UserController;
 
 
@@ -80,10 +82,15 @@ Route::get('sub-categories/{id}', [CategoryController::class, 'subCategories']);
 Route::get('sub-categories/details/{id}', [CategoryController::class, 'subCategoriesWithDetails']);
 
 // contact-us || service-reviews
-Route::get('contact-us', [ContactUsController::class, 'index']);
+Route::post('contact-us', [ContactUsController::class, 'store']);
+Route::get('service-review', [ServiceReviewController::class, 'index']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('contact-us', [ContactUsController::class, 'store']);
+    Route::post('service-review', [ServiceReviewController::class, 'store']);
+});
+
+Route::middleware(['auth:sanctum', 'auth:provider'])->group(function () {
+    Route::post('new-subscription', [SubscriptionController::class, 'NewSubscription']);
 });
 
 Route::get('currencies', [CurrencyController::class, 'index']);

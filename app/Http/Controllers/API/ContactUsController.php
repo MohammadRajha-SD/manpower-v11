@@ -3,39 +3,21 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Models\ServiceReview;
+use App\Mail\NewContactMessage;
+use App\Models\ContactUs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\Mail;
 
 class ContactUsController extends Controller
 {
-    public function index()
-    {
-        try {
-            $service_reviews = ServiceReview::with('service', 'user')->get();
-
-            return response()->json([
-                'status' => 'success',
-                'data' => $service_reviews->toArray(),
-                'message' => 'Service Reviews retrieved successfully',
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong. Please try again.',
-                'data' => [],
-            ], 500);
-        }
-    }
 
     public function store(Request $request)
     {
-        // Oc71QGnqMLlS6lGBW3eUkTxGMj6wzTXmWzsTYmQS969bdb7f
         $validator = Validator::make($request->all(), [
-            'review' => 'required|string|max:255',
-            'rate' => 'required|integer|between:1,5',
-            'service_id' => 'required|exists:services,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'message' => 'required',
         ]);
 
         // Check if the validation fails
@@ -47,25 +29,27 @@ class ContactUsController extends Controller
             ], 422);
         }
         try {
-            // Create a new ServiceReview
-            $review = ServiceReview::create([
-                'review' => $request->input('review'),
-                'rate' => $request->input('rate'),
-                'user_id' => $request->user()->id,
-                'service_id' => $request->input('service_id'),
+            $contact_us = ContactUs::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'message' => $request->input('message'),
             ]);
+
+            $email = setting('contact_email', 'info@hpower.ae');
+
+            Mail::to($email)->send(new NewContactMessage());
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'Service review successfully created.',
-                'review' => $review,
+                'message' => __('lang.saved_successfully', ['operator' => __('lang.contact_us')]),
+                'data' => $contact_us,
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'An error occurred while saving the review.',
-                'x' => $e->getMessage(),
-                'review' => [],
+                'message' => 'An error occurred while saving the contactus.',
+                'error' => $e->getMessage(),
+                'data' => [],
             ], 500);
         }
     }
