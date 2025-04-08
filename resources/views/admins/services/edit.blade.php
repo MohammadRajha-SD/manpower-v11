@@ -216,10 +216,28 @@
             <!-- Submit Field -->
             <div
                 class="form-group col-12 d-flex flex-column flex-md-row justify-content-md-end justify-content-sm-center border-top pt-4">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <label for="featured" class="control-label my-0 mx-3">{!! __('lang.category_featured_help')
+                        !!}</label>
+                    <input type="hidden" name="featured" value="0" id="hidden_featured">
+                    <span class="icheck-{{ setting('theme_color') }}">
+                        <input type="checkbox" name="featured" value="1" id="featured" {{ $service->featured == 1 ? 'checked' : '' }}>
+                        <label for="featured"></label>
+                    </span>
+                </div>
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <label for="enable_booking" class="control-label my-0 mx-3">{!! __('lang.e_service_enable_booking')
+                        !!}</label>
+                    <input type="hidden" name="enable_booking" value="0" id="hidden_enable_booking">
+                    <span class="icheck-{{ setting('theme_color') }}">
+                        <input type="checkbox" name="enable_booking" value="1" id="enable_booking" {{ $service->enable_booking == 1 ? 'checked' : '' }}>
+                        <label for="enable_booking"></label>
+                    </span>
+                </div>
                 <button type="submit" class="btn bg-{{setting('theme_color')}} mx-md-3 my-lg-0 my-xl-0 my-md-0 my-2">
-                    <i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.e_provider_type')}}
+                    <i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.e_service')}}
                 </button>
-                <a href="{!! route('admin.provider-types.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i>
+                <a href="{!! route('admin.services.index') !!}" class="btn btn-default"><i class="fa fa-undo"></i>
                     {{trans('lang.cancel')}}</a>
             </div>
         </form>

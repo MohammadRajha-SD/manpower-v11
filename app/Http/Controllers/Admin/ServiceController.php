@@ -20,6 +20,7 @@ class ServiceController extends Controller
     {
         $categories = Category::all();
         $providers = Provider::all();
+        
         return view('admins.services.create', compact('categories', 'providers'));
     }
 
@@ -53,6 +54,9 @@ class ServiceController extends Controller
             'price_unit' => $request->price_unit,
             'quantity_unit' => $request->quantity_unit,
             'duration' => $request->duration,
+            'featured' => $request->featured,
+            'enable_booking' => $request->enable_booking,
+            'available' => 1,
         ]);
 
         // Upload images and associate with 'service'
@@ -109,6 +113,8 @@ class ServiceController extends Controller
             'price_unit' => $request->price_unit,
             'quantity_unit' => $request->quantity_unit,
             'duration' => $request->duration,
+            'featured' => $request->featured,
+            'enable_booking' => $request->enable_booking,
         ]);
         
         $service->categories()->sync($categories);  
