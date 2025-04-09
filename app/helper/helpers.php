@@ -96,9 +96,7 @@ if (!function_exists('image_item')) {
     }
 }
 
-
 if (!function_exists('isActive')) {
-
     function isActive($name, $color1 = "danger", $color2 = "success", $returned1 = null, $returned2 = null)
     {
         $returned1 = $returned1 ?? __('lang.yes'); // Default value if not provided
@@ -130,12 +128,22 @@ if (!function_exists('getDays')) {
 }
 
 if (!function_exists('getActiveMailDriver')) {
-
     function getActiveMailDriver($driver = 'smtp')
     {
         if (setting('mail_driver') === $driver) {
             return '<span class="badge ml-2 badge-success">' . __('lang.active') . '</span>';
         }
         return null;
+    }
+}
+
+if (!function_exists('getPrice')) {
+    function getPrice($price = 0)
+    {
+        if (setting('currency_right', false) != false) {
+            return number_format((float) $price, setting('default_currency_decimal_digits', 2), '.', '') . "<span>" . setting('default_currency') . "</span>";
+        } else {
+            return "<span>" . setting('default_currency') . "</span>" . number_format((float) $price, 2, '.', ' ');
+        }
     }
 }

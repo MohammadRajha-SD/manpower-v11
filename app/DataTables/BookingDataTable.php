@@ -26,23 +26,36 @@ class BookingDataTable extends DataTable
             ->addColumn('id', function ($query) {
                 return '#' . $query->id;
             })
-            ->addColumn('provider', function ($query) {
-                return json_decode($query->provider)?->name;
+            ->addColumn('user', function ($query) {
+                return $query->user->name;
             })
-            ->addColumn('services', function ($query) {
-                return json_decode($query->services)?->name;
+            ->addColumn('service', function ($query) {
+                return $query->service->name;
             })
             ->addColumn('address', function ($query) {
-                return ucwords(json_decode($query->address)?->address);
+                return ucwords($query->address);
             })
-            ->addColumn('customer', function ($query) {
-                return ucwords($query->user->name) ?? 'N/A';
+            ->addColumn('total', function ($query) {
+                return "<span class='text-bold text-success'>" . getPrice($query->getTotal()) . "</span>";
             })
-            ->addColumn('coupen', function ($query) {
-                return $query->coupen ?? 'N/A';
+            ->addColumn('coupon', function ($query) {
+                $coupon = $query->couponx;
+                $value = 0;
+                if ($coupon->discount_type === 'fixed') {
+                    $value = $coupon->discount . setting('default_currency', 'AED');
+                } elseif ($coupon->discount_type === 'percent') {
+                    $value = $coupon->discount . '%';
+                }
+                return $query->coupon . " <span class='text-bold'>(" . $value . ")</span>";
+            })
+            ->addColumn('tax', function ($query) {
+                return "<span class='text-bold'>" . getPrice($query->getTax()) . "</span>";
             })
             ->addColumn('booking_status', function ($query) {
-                return ucwords($query->booking_status?->status);
+                return ($query->booking_status?->status);
+            })
+            ->addColumn('payment_status', function ($query) {
+                return ($query->payment?->payment_status?->status);
             })
             ->addColumn('booking_at', function ($query) {
                 return Carbon::parse($query->booking_at)->diffForHumans();
@@ -52,7 +65,7 @@ class BookingDataTable extends DataTable
                 $deleteBtn = "<a href='" . route('admin.bookings.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
                 return $editBtn . $deleteBtn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'total', 'booking_status', 'payment_status', 'coupon', 'tax'])
             ->setRowId('id');
     }
 
@@ -92,14 +105,15 @@ class BookingDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            // TODO: total-taxes && fees-payment statut
             Column::make('id'),
-            Column::make('provider'),
-            Column::make('services'),
+            Column::make('user'),
+            Column::make('service'),
             Column::make('address'),
-            Column::make('coupen'),
-            Column::make('customer'),
+            Column::make('coupon'),
             Column::make('booking_status'),
+            Column::make('payment_status'),
+            Column::make('total'),
+            Column::make('tax')->title('Taxes & Fees'),
             Column::make('booking_at'),
             Column::computed('action')
                 ->exportable(false)

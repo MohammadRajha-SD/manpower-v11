@@ -20,7 +20,7 @@ class Service extends Model
     {
         return $this->belongsToMany(Category::class, 'service_category', 'service_id', 'category_id');
     }
-    
+
     public function provider()
     {
         return $this->belongsTo(Provider::class, 'provider_id');
@@ -50,5 +50,11 @@ class Service extends Model
     public function discountables()
     {
         return $this->morphMany('App\Models\Discountable', 'discountable');
+    }
+
+
+    public function getPrice(): float
+    {
+        return $this->discount_price > 0 ? $this->discount_price : $this->price;
     }
 }

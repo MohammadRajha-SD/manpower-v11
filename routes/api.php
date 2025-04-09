@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\EmirateController;
 use App\Http\Controllers\API\AuthProviderController;
 use App\Http\Controllers\API\AuthUserController;
+use App\Http\Controllers\API\BookingController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ContactUsController;
 use App\Http\Controllers\API\CurrencyController;
@@ -87,6 +88,9 @@ Route::get('service-review', [ServiceReviewController::class, 'index']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('service-review', [ServiceReviewController::class, 'store']);
+
+    Route::post('new-booking', [BookingController::class, 'store']);
+    Route::post('check-coupon', [BookingController::class, 'checkCoupon']);
 });
 
 Route::middleware(['auth:sanctum', 'auth:provider'])->group(function () {
