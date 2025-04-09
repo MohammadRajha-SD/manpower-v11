@@ -89,8 +89,8 @@ Route::get('service-review', [ServiceReviewController::class, 'index']);
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('service-review', [ServiceReviewController::class, 'store']);
 
-    Route::post('new-booking', [BookingController::class, 'store']);
     Route::post('check-coupon', [BookingController::class, 'checkCoupon']);
+    Route::post('new-booking', [BookingController::class, 'store']);
 });
 
 Route::middleware(['auth:sanctum', 'auth:provider'])->group(function () {

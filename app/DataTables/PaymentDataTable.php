@@ -49,7 +49,7 @@ class PaymentDataTable extends DataTable
      */
     public function query(Payment $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('updated_at', 'desc');
     }
 
     /**

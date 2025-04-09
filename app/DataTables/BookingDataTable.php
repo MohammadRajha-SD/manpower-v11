@@ -41,12 +41,15 @@ class BookingDataTable extends DataTable
             ->addColumn('coupon', function ($query) {
                 $coupon = $query->couponx;
                 $value = 0;
-                if ($coupon->discount_type === 'fixed') {
-                    $value = $coupon->discount . setting('default_currency', 'AED');
-                } elseif ($coupon->discount_type === 'percent') {
-                    $value = $coupon->discount . '%';
+                if($coupon) {
+
+                    if ($coupon->discount_type === 'fixed') {
+                        $value = $coupon->discount . setting('default_currency', 'AED');
+                    } elseif ($coupon->discount_type === 'percent') {
+                        $value = $coupon->discount . '%';
+                    }
                 }
-                return $query->coupon . " <span class='text-bold'>(" . $value . ")</span>";
+                return $query->coupon ? $query->coupon . " <span class='text-bold'>(" . $value . ")</span>" : 'N/A';
             })
             ->addColumn('tax', function ($query) {
                 return "<span class='text-bold'>" . getPrice($query->getTax()) . "</span>";
@@ -74,7 +77,7 @@ class BookingDataTable extends DataTable
      */
     public function query(Booking $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->orderBy('updated_at', 'desc');
     }
 
     /**
