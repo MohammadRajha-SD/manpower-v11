@@ -120,8 +120,31 @@ class AuthProviderController extends Controller
 
     public function me(Request $request)
     {
+        $user = $request->user();
         return response()->json([
-            'provider' => $request->user(),
+            'user_type' => 'provider',
+            'data' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'category_id' => $user->category_id,
+                'provider_type_id' => $user->provider_type_id,
+                'description' => $user->description,
+                'phone_number' => $user->phone_number,
+                'mobile_number' => $user->mobile_number,
+                'email_verified_at' => $user->email_verified_at,
+                'available' => $user->available,
+                'featured' => $user->featured,
+                'accepted' => $user->accepted,
+                'availability_range' => $user->availability_range,
+                'subscriptions' => $user->subscriptions?->map(function($s){
+                    return [
+                        'id' => $s->id,
+                        'provider_id' => $s->provider_id,
+                        'pack_id' => $s->pack_id,
+                    ];
+                }),
+            ]
         ]);
     }
 }

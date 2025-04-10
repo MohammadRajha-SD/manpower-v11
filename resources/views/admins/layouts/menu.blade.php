@@ -89,12 +89,12 @@
 
     <x-admins.sidebar-item :name="__('lang.payment_status_plural')" icon="fas fa-file-invoice-dollar"
         :activeRoutes="['admin.payment-statuses*']" route="payment-statuses.index" />
-
+    {{--
     <x-admins.sidebar-item :name="__('lang.payment_method_plural')" icon="fas fa-credit-card"
         :activeRoutes="['admin.payment-methods*']" route="payment-methods.index" />
 
     <x-admins.sidebar-item :name="__('lang.e_provider_payout_plural')" icon="fas fa-money-bill-wave"
-        :activeRoutes="['admin.provider-payouts*']" route="provider-payouts.index" />
+        :activeRoutes="['admin.provider-payouts*']" route="provider-payouts.index" /> --}}
 </x-admins.sidebar-items>
 
 <li class="nav-header">{{trans('lang.app_setting')}}</li>

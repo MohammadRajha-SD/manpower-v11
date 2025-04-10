@@ -12,7 +12,7 @@ return [
         ],
 
         'provider' => [
-            'driver' => 'session',  
+            'driver' => 'sanctum',  
             'provider' => 'providers',
         ],
     ],

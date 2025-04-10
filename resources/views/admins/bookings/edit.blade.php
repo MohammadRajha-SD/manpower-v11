@@ -58,24 +58,6 @@
                         </div>
                     </div>
 
-                    <!-- Payment Status Id Field -->
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="payment_status_id" class="col-md-3 control-label text-md-right mx-1">
-                            {{ trans("lang.booking_payment_id") }}
-                        </label>
-                        <div class="col-md-9">
-                            <select name="payment_status_id" class="select2 form-control">
-                                @foreach ($payment_statuses as $payment_status)
-                                <option value="{{ $payment_status->id }}" {{ old('payment_status_id', $booking->
-                                    payment_status_id)==$payment_status->
-                                    id ? 'selected' : '' }}>{{
-                                    $payment_status->status }}</option>
-                                @endforeach
-                            </select>
-                            <div class="form-text text-muted">{{ trans("lang.booking_payment_id_help") }}</div>
-                        </div>
-                    </div>
-
                     <!-- Hint Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="hint" class="col-md-3 control-label text-md-right mx-1">
@@ -90,24 +72,6 @@
                 </div>
 
                 <div class="d-flex flex-column col-sm-12 col-md-6">
-                    <!-- Payment Status Id Field -->
-                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="payment_status_id" class="col-md-3 control-label text-md-right mx-1">
-                            {{ trans("lang.booking_payment_id") }}
-                        </label>
-                        <div class="col-md-9">
-                            <select name="payment_status_id" class="select2 form-control">
-                                @foreach ($payment_statuses as $payment_status)
-                                <option value="{{ $payment_status->id }}" {{ old('payment_status_id', $booking->
-                                    payment_status_id)==$payment_status->
-                                    id ? 'selected' : '' }}>{{
-                                    $payment_status->status }}</option>
-                                @endforeach
-                            </select>
-                            <div class="form-text text-muted">{{ trans("lang.booking_payment_id_help") }}</div>
-                        </div>
-                    </div>
-                    
                     <!-- Booking At Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="booking_at" class="col-md-3 control-label text-md-right mx-1">

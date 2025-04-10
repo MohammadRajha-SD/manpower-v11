@@ -42,7 +42,6 @@ class BookingDataTable extends DataTable
                 $coupon = $query->couponx;
                 $value = 0;
                 if($coupon) {
-
                     if ($coupon->discount_type === 'fixed') {
                         $value = $coupon->discount . setting('default_currency', 'AED');
                     } elseif ($coupon->discount_type === 'percent') {

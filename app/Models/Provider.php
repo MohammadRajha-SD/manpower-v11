@@ -14,12 +14,17 @@ class Provider extends Authenticatable
     use HasFactory, HasTranslations;
     use HasApiTokens, Notifiable;
     use ImageHandler;
-    
+
     protected $guarded = [];
     protected $guard = 'provider';
 
     public $translatable = ['name', 'description'];
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+    
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
@@ -71,4 +76,3 @@ class Provider extends Authenticatable
         return $this->hasMany(Service::class, 'provider_id');
     }
 }
-

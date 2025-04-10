@@ -25,15 +25,13 @@ class BookingController extends Controller
 
         $addresses = config('emirates');
 
-        return view('admins.bookings.edit', compact('booking', 'booking_statuses','addresses','payment_statuses'));
+        return view('admins.bookings.edit', compact('booking', 'booking_statuses', 'addresses', 'payment_statuses'));
     }
 
-    // TODO:
     public function update(Request $request, $id)
     {
         $data = $this->validate($request, [
             'booking_status_id' => 'required',
-            'payment_status_id' => 'required',
             'address' => 'required',
             'hint' => 'required',
             'booking_at' => 'required|date',
@@ -42,10 +40,17 @@ class BookingController extends Controller
             'cancel' => 'required',
         ]);
 
+        Booking::findOrFail($id)->update([
+            'booking_status_id' => $request->booking_status_id,
+            'address' => $request->address,
+            'hint' => $request->hint,
+            'booking_at' => $request->booking_at,
+            'start_at' => $request->start_at,
+            'ends_at' => $request->ends_at,
+            'cancel' => $request->cancel,
+        ]);
 
-        BookingStatus::findOrFail($id)->update($data);
-
-        return redirect()->route('admin.booking-statuses.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.booking_status')]));
+        return redirect()->route('admin.bookings.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.booking')]));
     }
 
     public function destroy($id)

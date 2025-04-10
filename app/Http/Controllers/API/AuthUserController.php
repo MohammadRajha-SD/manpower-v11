@@ -90,6 +90,7 @@ class AuthUserController extends Controller
         return response()->json([
             'message' => 'User registered and logged in successfully!',
             'user' => $user,
+            'user_type' => 'user',
             'token' => $token,
         ], 201);
     }

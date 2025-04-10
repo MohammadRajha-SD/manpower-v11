@@ -35,9 +35,8 @@ class Booking extends Model
 
     public function getTotal(): float
     {
-        // $total = $this->getSubtotal();
         $total = $this->getCouponValue();
-        // $total += $this->getTax();
+        $total += $this->getTax();
 
         return $total;
     }
@@ -64,7 +63,8 @@ class Booking extends Model
 
         return $taxValue;
     }
-    public function couponx(){
+    public function couponx()
+    {
         return $this->belongsTo(Coupon::class, 'coupon', 'code');
     }
 
@@ -72,7 +72,7 @@ class Booking extends Model
     {
         $finalPrice = $this->getSubtotal();
         $coupon = $this->couponx;
-        
+
         if ($coupon) {
             if ($coupon->discount_type === 'fixed') {
                 return $finalPrice - $coupon->discount;
