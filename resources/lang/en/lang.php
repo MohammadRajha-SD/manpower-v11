@@ -1775,6 +1775,8 @@ return [
     'subscription_activated_successfully' => 'Subscription activated successfully.',
     'payment_not_completed' => 'Payment not completed or subscription is incomplete.',
 
+    'edit' => 'Edit',
+    
     // refunding subscription
     'refund' => 'Refund',
     'refund_success' => 'Refund processed successfully.',

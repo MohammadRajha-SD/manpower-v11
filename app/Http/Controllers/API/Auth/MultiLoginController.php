@@ -7,6 +7,7 @@ use App\Models\Provider;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class MultiLoginController extends Controller
 {
@@ -52,10 +53,9 @@ class MultiLoginController extends Controller
                 }
             }
         } else if ($provider && !$user) {
-            if (Auth::guard('provider')->attempt($request->only('email', 'password'))) {
-                $provider = Auth::guard('provider')->user();
+            if ($provider && Hash::check($request->password, $provider->password)) {
                 $token = $provider->createToken('main')->plainTextToken;
-
+                // Return the response with the token
                 return response()->json([
                     'message' => 'Provider retrieved successfully',
                     'data' => $provider,

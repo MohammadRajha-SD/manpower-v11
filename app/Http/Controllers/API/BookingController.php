@@ -100,7 +100,7 @@ class BookingController extends Controller
 
         $service = Service::findOrFail($request->service_id);
 
-        $price = $service->price;
+        $price = $service->discount_price > 0  ? $service->discount_price : $service->price;
 
         if (!empty($request->coupon)) {
             $coupon = Coupon::where('code', $request->coupon)
@@ -159,10 +159,9 @@ class BookingController extends Controller
             'payment_method_id' => $payment_method->id,
         ]);
 
-        $booking->payment_id = $payment->id;
-        $booking->save();
-
         Stripe::setApiKey(config('services.stripe.secret'));
+
+        $booking->save();
 
         $checkoutSession = StripeSession::create([
             'payment_method_types' => ['card'],
@@ -183,6 +182,13 @@ class BookingController extends Controller
             'cancel_url' => route('booking.payment.cancel', ['booking_id' => $booking->id]),
         ]);
 
+        $payment->stripe_payment_id = $checkoutSession->id;
+        $payment->save();
+
+        $booking->update([
+            'payment_id' => $payment->id,
+        ]);
+
         $user = User::find($request->user_id);
 
         $cc_email = env('CC_EMAIL') ?? 'info@hpower.ae';
@@ -195,18 +201,45 @@ class BookingController extends Controller
             'status' => 'success',
             'message' => 'Booking created and payment email sent.',
             'booking' => $booking,
-            'payment_url' => $checkoutSession->url
+            'payment_url' => $checkoutSession->url,
+            'xx' => $checkoutSession,
         ]);
     }
-
-
     public function success(Request $request)
     {
         $booking = Booking::findOrFail($request->booking_id);
 
-        $payment = $booking->payment->update([
-            'payment_status_id' => 2,
-        ]);
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $payment = $booking->payment;
+
+        $session = StripeSession::retrieve($payment->stripe_payment_id);
+
+        if ($session->payment_status == 'paid') {
+            $payment->update([
+                'payment_status_id' => 2,
+                'stripe_payment_id' => $session->payment_intent,
+            ]);
+      
+            return redirect(env('FRONTEND_URL'));
+        } else {
+            return redirect(env('FRONTEND_URL'));
+        }
+    }
+
+    public function successx(Request $request)
+    {
+        $booking = Booking::findOrFail($request->booking_id);
+
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        $payment = $booking->payment;
+      
+
+        $session = StripeSession::retrieve($payment->stripe_payment_id);
+        dd($session->payment_intent);
+
+      
 
         return redirect(env('FRONTEND_URL'));
     }

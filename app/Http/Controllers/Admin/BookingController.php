@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\BookingDataTable;
 use App\Http\Controllers\Controller;
-use App\Models\Address;
 use App\Models\Booking;
 use App\Models\BookingStatus;
 use App\Models\PaymentStatus;
 use Illuminate\Http\Request;
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use Stripe\Refund;
 
 class BookingController extends Controller
 {
@@ -56,11 +58,56 @@ class BookingController extends Controller
     public function destroy($id)
     {
         $booking = Booking::findOrFail($id);
+        $booking->payment->delete();
         $booking->delete();
 
         return response()->json([
             'status' => 'success',
             'message' => trans('lang.deleted_successfully', ['operator' => trans('lang.booking')])
         ], 200);
+    }
+    public function cancelBooking(Request $request)
+    {
+        // Validate that payment_id is provided
+        $request->validate([
+            'booking_id' => 'required|exists:bookings,id',
+        ]);
+
+        $booking = Booking::findOrFail($request->booking_id);
+        $payment = $booking->payment;
+
+        // Check if the booking is already cancelled or completed
+        if ($booking->booking_status->status == 'Cancelled' || $booking->payment->payment_status->status == 'Refunded') {
+            return redirect()->route('admin.bookings.index')->with('warning', 'The booking is already cancelled or completed');
+        }
+
+        // Set your Stripe secret key
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        try {
+
+            // Create the refund
+            $refund = Refund::create([
+                'payment_intent' => $payment->stripe_payment_id,
+            ]);
+
+
+            $paymentStatus = PaymentStatus::where('status', 'Refunded')->first();
+            if ($paymentStatus) {
+                $booking->payment->update([
+                    'payment_status_id' => $paymentStatus->id,
+                ]);
+            }
+
+            $bookingStatus = BookingStatus::where('status', 'Cancelled')->first();
+
+            $booking->update([
+                'booking_status_id' => $bookingStatus->id, // Ensure 'Refunded' status exists
+            ]);
+
+            return redirect()->route('admin.bookings.index')->with('success', 'Booking has been cancelled successfully.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.bookings.index')->with('error', $e->getMessage());
+        }
     }
 }

@@ -44,6 +44,7 @@ Route::resource('faq-categories', FaqCategoryController::class);
 Route::resource('services', ServiceController::class);
 Route::resource('service-reviews', ServiceReviewController::class);
 
+Route::post('cancel-booking', [BookingController::class, 'cancelBooking'])->name('bookings.cancel');
 Route::resource('bookings', BookingController::class);
 Route::resource('booking-statuses', BookingStatusController::class);
 

@@ -62,10 +62,8 @@ class BookingDataTable extends DataTable
             ->addColumn('booking_at', function ($query) {
                 return Carbon::parse($query->booking_at)->diffForHumans();
             })
-            ->addColumn('action', function ($query) {
-                $editBtn = "<a href='" . route('admin.bookings.edit', $query->id) . "' class='btn btn-success btn-sm'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='" . route('admin.bookings.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
-                return $editBtn . $deleteBtn;
+            ->addColumn('action', function ($booking) {
+                return view('admins.bookings.actions', compact('booking'))->render();
             })
             ->rawColumns(['action', 'total', 'booking_status', 'payment_status', 'coupon', 'tax'])
             ->setRowId('id');
