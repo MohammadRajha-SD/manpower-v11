@@ -136,8 +136,29 @@ class AuthUserController extends Controller
 
     public function me(Request $request)
     {
+        $user = $request->user();
+
         return response()->json([
-            'user' => $request->user(),
+            'user_type' => 'user',
+            'data' => [
+                'user_type' => 'user',
+                'id' => $user->id,
+                'name' => $user->name,
+                'username' => $user->username,
+                'email' => $user->email,
+                'phone_number' => $user->phone_number,
+                'is_admin' => $user->is_admin,
+                'email_verified_at' => $user->email_verified_at,
+                'image_path' => user_image($user),
+                'bookings' => $user->bookings?->map(function ($b) {
+                    return [
+                        'id' => $b->id,
+                        'service_id' => $b->service_id,
+                        'booking_status' => $b->booking_status->status,
+                        'payment_status' => $b->payment?->payment_status?->status,
+                    ];
+                }),
+            ],
         ]);
     }
 
@@ -247,7 +268,6 @@ class AuthUserController extends Controller
                 'status' => 'success',
                 'message' => 'Password updated successfully',
             ], 201);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',

@@ -102,7 +102,8 @@ class BookingController extends Controller
             $bookingStatus = BookingStatus::where('status', 'Cancelled')->first();
 
             $booking->update([
-                'booking_status_id' => $bookingStatus->id, // Ensure 'Refunded' status exists
+                'booking_status_id' => $bookingStatus->id, 
+                'cancel' => 1,
             ]);
 
             return redirect()->route('admin.bookings.index')->with('success', 'Booking has been cancelled successfully.');

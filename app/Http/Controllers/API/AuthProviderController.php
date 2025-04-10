@@ -42,7 +42,7 @@ class AuthProviderController extends Controller
         ]);
 
         $confirmationUrl = route('provider.register.confirm', ['confirmation_code', $provider->confirmation_code]);
-        
+
         if ($request->language === 'ar') {
             Mail::to($provider->email)->send(new HelloMailArabic($provider, $confirmationUrl));
         } else {
@@ -120,10 +120,13 @@ class AuthProviderController extends Controller
 
     public function me(Request $request)
     {
-        $user = $request->user();
+        $user = Auth::guard('provider')->user();
+
         return response()->json([
             'user_type' => 'provider',
             'data' => [
+                'user_type' => 'provider',
+                'image_path' => user_image($user),
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
@@ -137,7 +140,7 @@ class AuthProviderController extends Controller
                 'featured' => $user->featured,
                 'accepted' => $user->accepted,
                 'availability_range' => $user->availability_range,
-                'subscriptions' => $user->subscriptions?->map(function($s){
+                'subscriptions' => $user->subscriptions?->map(function ($s) {
                     return [
                         'id' => $s->id,
                         'provider_id' => $s->provider_id,

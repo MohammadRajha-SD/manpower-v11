@@ -202,7 +202,6 @@ class BookingController extends Controller
             'message' => 'Booking created and payment email sent.',
             'booking' => $booking,
             'payment_url' => $checkoutSession->url,
-            'xx' => $checkoutSession,
         ]);
     }
     public function success(Request $request)
