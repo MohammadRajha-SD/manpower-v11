@@ -20,14 +20,15 @@ class ServiceController extends Controller
     {
         $categories = Category::all();
         $providers = Provider::all();
-
+        
         return view('admins.services.create', compact('categories', 'providers'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
             'provider_id' => 'required|exists:providers,id',
             'name' => 'required',
             'description' => 'required',
@@ -42,6 +43,8 @@ class ServiceController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $categories = $validatedData['categories'];
+
         $service = Service::create([
             'provider_id' => $request->provider_id,
             'name' => $request->name,
@@ -54,11 +57,10 @@ class ServiceController extends Controller
             'featured' => $request->featured,
             'enable_booking' => $request->enable_booking,
             'available' => 1,
-            'category_id' => $request->category_id
         ]);
 
         // Upload images and associate with 'service'
-        if ($request->hasFile('images')) {
+        if ($request->hasFile('images')) {  
             $paths = $service->uploadMultiImage($request->images, 'uploads');
 
             foreach ($paths as $path) {
@@ -66,15 +68,17 @@ class ServiceController extends Controller
             }
         }
 
+        $service->categories()->attach($categories);
+
         return redirect()->route('admin.services.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.e_service')]));
     }
 
     public function edit($id)
     {
-        $service = Service::with('category')->findOrFail($id);
+        $service = Service::with('categories')->findOrFail($id);
         $categories = Category::all();
         $providers = Provider::all();
-
+        
         return view('admins.services.edit', compact('service', 'categories', 'providers'));
     }
     public function update(Request $request, $id)
@@ -82,7 +86,8 @@ class ServiceController extends Controller
         $service = Service::findOrFail($id);
 
         $validatedData = $request->validate([
-            'category_id' => 'required|exists:categories,id',
+            'categories' => 'required|array',
+            'categories.*' => 'exists:categories,id',
             'provider_id' => 'required|exists:providers,id',
             'name' => 'required',
             'description' => 'required',
@@ -97,6 +102,8 @@ class ServiceController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $categories = $validatedData['categories'];
+
         $service->update([
             'provider_id' => $request->provider_id,
             'name' => $request->name,
@@ -108,8 +115,9 @@ class ServiceController extends Controller
             'duration' => $request->duration,
             'featured' => $request->featured,
             'enable_booking' => $request->enable_booking,
-            'category_id' => $request->category_id,
         ]);
+        
+        $service->categories()->sync($categories);  
 
         // Handle image uploads
         if ($request->hasFile('images')) {
@@ -125,6 +133,7 @@ class ServiceController extends Controller
 
     public function destroy($id)
     {
+
         $service = Service::findOrFail($id);
 
         if ($service->reviews()->exists()) {

@@ -8,12 +8,16 @@
 @endpush
 <x-admin-layout>
     <x-admins.cards.header :name="__('lang.e_service_plural')" :desc="__('lang.e_service_desc')"
-        :table_name="__('lang.e_service_table')" :route="route('admin.services.index')" />
+        :table_name="__('lang.e_service_edit')" :route="route('admin.services.index')" />
 
     <x-admins.cards.content :name1="__('lang.e_service_table')" :name2="__('lang.e_service_create')"
-        route1="admin.services.index" route2="admin.services.create">
-        <form action="{{route('admin.services.store')}}" method="post" enctype="multipart/form-data">
+        route1="admin.services.index" route2="admin.services.create" :route3="['admin.services.edit', $service->id]"
+        :isEditMode="true" :name3="__('lang.e_service_edit')">
+
+        <form action="{{route('admin.services.update', $service->id)}}" method="post" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
+
             <div class="row">
                 <div class="d-flex flex-column col-sm-12 col-md-6">
                     <!-- Name Field -->
@@ -22,8 +26,8 @@
                             trans("lang.e_service_name") }}</label>
                         <div class="col-md-9">
                             <input type="text" name="name" class="form-control"
-                                placeholder="{{ trans('lang.e_service_name_placeholder') }}" value="{{ old('name') }}"
-                                required>
+                                placeholder="{{ trans('lang.e_service_name_placeholder') }}"
+                                value="{{ old('name',$service->name) }}" required>
                             <div class="form-text text-muted">
                                 {{ trans("lang.e_service_name_help") }}
                             </div>
@@ -32,17 +36,21 @@
 
                     <!-- Categories Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="category_id" class="col-md-3 control-label text-md-right mx-1">{{
-                            trans("lang.e_service_categories") }}</label>
+                        <label for="categories[]" class="col-md-3 control-label text-md-right mx-1">
+                            {{ trans("lang.e_service_categories") }}
+                        </label>
                         <div class="col-md-9">
-                            <select name="category_id" class="select2 form-control not-required"
-                                data-empty="{{ trans('lang.e_service_categories_placeholder') }}" multiple="multiple">
-                                <option value="" disabled>Select</option>
-
+                            <select name="categories[]" class="select2 form-control not-required"
+                                data-empty="{{ trans('lang.e_service_categories_placeholder') }}" multiple="multiple"
+                                id="categories">
                                 @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ $category->id== old('category_id')? 'selected' : '' }}>{{ ucwords($category->name) }}</option>
+                                <option value="{{ $category->id }}" {{ in_array($category->id, old('categories',
+                                    $service?->categories?->pluck('id')?->toArray() ?? [])) ? 'selected' : '' }}>
+                                    {{ ucwords($category->name) }}
+                                </option>
                                 @endforeach
                             </select>
+
                             <div class="form-text text-muted">{{ trans("lang.e_service_categories_help") }}</div>
                         </div>
                     </div>
@@ -55,7 +63,7 @@
                             <div class="input-group">
                                 <input type="number" name="price" class="form-control" step="any" min="0"
                                     placeholder="{{ trans('lang.e_service_price_placeholder') }}"
-                                    value="{{ old('price') }}" required>
+                                    value="{{ old('price', $service->price) }}" required>
                                 <div class="input-group-append">
                                     <div class="input-group-text text-bold px-3">{{ setting('default_currency', '$') }}
                                     </div>
@@ -73,7 +81,7 @@
                             <div class="input-group">
                                 <input type="number" name="discount_price" class="form-control" step="any" min="0"
                                     placeholder="{{ trans('lang.e_service_discount_price_placeholder') }}"
-                                    value="{{ old('discount_price',0) }}">
+                                    value="{{ old('discount_price',$service->discount_price) }}">
                                 <div class="input-group-append">
                                     <div class="input-group-text text-bold px-3">{{ setting('default_currency', '$') }}
                                     </div>
@@ -89,9 +97,11 @@
                             trans("lang.e_service_price_unit") }}</label>
                         <div class="col-md-9">
                             <select name="price_unit" class="select2 form-control">
-                                <option value="hourly" {{ old('price_unit')=='hourly' ? 'selected' : '' }}>{{
+                                <option value="hourly" {{ old('price_unit', $service->price_unit)=='hourly' ? 'selected'
+                                    : '' }}>{{
                                     trans('lang.e_service_price_unit_hourly') }}</option>
-                                <option value="fixed" {{ old('price_unit')=='fixed' ? 'selected' : '' }}>{{
+                                <option value="fixed" {{ old('price_unit',$service->price_unit)=='fixed' ? 'selected' :
+                                    '' }}>{{
                                     trans('lang.e_service_price_unit_fixed') }}</option>
                             </select>
                             <div class="form-text text-muted">{{ trans("lang.e_service_price_unit_help") }}</div>
@@ -105,7 +115,7 @@
                         <div class="col-md-9">
                             <input type="text" name="quantity_unit" class="form-control"
                                 placeholder="{{ trans('lang.e_service_quantity_unit_placeholder') }}"
-                                value="{{ old('quantity_unit') }}">
+                                value="{{ old('quantity_unit', $service->quantity_unit) }}">
                             <div class="form-text text-muted">{{ trans("lang.e_service_quantity_unit_help") }}</div>
                         </div>
                     </div>
@@ -119,7 +129,7 @@
                                 <input type="text" name="duration" class="form-control datetimepicker-input"
                                     placeholder="{{ trans('lang.e_service_duration_placeholder') }}"
                                     data-target=".timepicker.duration" data-toggle="datetimepicker" autocomplete="off"
-                                    value="{{ old('duration') }}">
+                                    value="{{ old('duration', $service->duration) }}">
                                 <div id="widgetParentId"></div>
                                 <div class="input-group-append" data-target=".timepicker.duration"
                                     data-toggle="datetimepicker">
@@ -136,9 +146,10 @@
                             trans("lang.e_service_e_provider_id") }}</label>
                         <div class="col-md-9">
                             <select name="provider_id" id="provider_id" class="select2 form-control" required>
-                                <option value="" selected disabled>------</option>
+                                <option value="" selected disabled>Select</option>
                                 @foreach($providers as $provider)
-                                <option value="{{ $provider->id }}" {{ old('provider_id')==$provider->id ? 'selected'
+                                <option value="{{ $provider->id }}" {{ old('provider_id', $service->
+                                    provider_id)==$provider->id ? 'selected'
                                     : '' }}>{{ ucwords($provider->name) }}</option>
                                 @endforeach
                             </select>
@@ -156,6 +167,24 @@
                         </label>
 
                         <div class="col-md-9">
+                            <!-- Preview existing images -->
+                            <div class="row g-3 mb-2">
+                                @foreach($service->images as $image)
+                                <div class="col-md-4 col-sm-6 text-center">
+                                    <div
+                                        class="border rounded p-2 bg-light shadow-sm d-flex flex-column align-items-center">
+                                        <img src="{{ asset($image->path) }}" class="img-fluid rounded mb-2"
+                                            style="width: 75px; height: 75px; object-fit: cover;">
+                                        <button type="button" class="btn btn-danger btn-sm delete-image"
+                                            data-id="{{ $image->id }}" style="width: 80%; max-width: 100px;">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Upload new images -->
                             <div style="width: 100%" class="dropzone image" id="image" data-field="image">
                                 <input type="file" name="images[]" multiple />
                             </div>
@@ -164,6 +193,7 @@
                                 @lang("lang.category_image_help")
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Description Field -->
@@ -174,6 +204,7 @@
                         <div class="col-md-9">
                             <textarea name="description" id="description" class="form-control"
                                 placeholder="@lang('lang.e_service_description_placeholder')" required>
+                                {!! $service->description !!}
                             </textarea>
 
                             <div class="form-text text-muted">@lang("lang.e_service_description_help")</div>
@@ -190,7 +221,7 @@
                         !!}</label>
                     <input type="hidden" name="featured" value="0" id="hidden_featured">
                     <span class="icheck-{{ setting('theme_color') }}">
-                        <input type="checkbox" name="featured" value="1" id="featured">
+                        <input type="checkbox" name="featured" value="1" id="featured" {{ $service->featured == 1 ? 'checked' : '' }}>
                         <label for="featured"></label>
                     </span>
                 </div>
@@ -199,7 +230,7 @@
                         !!}</label>
                     <input type="hidden" name="enable_booking" value="0" id="hidden_enable_booking">
                     <span class="icheck-{{ setting('theme_color') }}">
-                        <input type="checkbox" name="enable_booking" value="1" id="enable_booking">
+                        <input type="checkbox" name="enable_booking" value="1" id="enable_booking" {{ $service->enable_booking == 1 ? 'checked' : '' }}>
                         <label for="enable_booking"></label>
                     </span>
                 </div>
@@ -211,6 +242,70 @@
             </div>
         </form>
     </x-admins.cards.content>
+
+    {{-- LOGIC TO DELETE THE IMAGE --}}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $(".delete-image").on("click", function() {
+                let imageId = $(this).data("id");
+    
+                // Dynamically generate the route URL
+                let deleteUrl = "{{ route('admin.image.delete', ['id' => '__imageId__']) }}";
+                deleteUrl = deleteUrl.replace('__imageId__', imageId); // Replace placeholder with actual imageId
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                })
+                .then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: deleteUrl,
+                            type: "DELETE",
+                            data: {
+                                _token: $("meta[name='csrf-token']").attr("content")
+                            },
+                            success: function(data) {
+                                if (data.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Success!',
+                                        text: data.message,
+                                        confirmButtonText: 'OK'
+                                    }).then(()=>{
+                                        window.location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'danger',
+                                        title: 'Error!',
+                                        text: "Could not delete image.",
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                Swal.fire({
+                                    icon: 'danger',
+                                    title: 'Error!',
+                                    text: "An error occurred while trying to delete the image.",
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+
+        });
+    </script>
 
     @push('scripts_lib')
     <script src="{{asset('vendor/select2/js/select2.full.min.js')}}"></script>

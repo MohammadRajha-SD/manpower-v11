@@ -32,15 +32,17 @@
 
                     <!-- Categories Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="category_id" class="col-md-3 control-label text-md-right mx-1">{{
+                        <label for="categories[]" class="col-md-3 control-label text-md-right mx-1">{{
                             trans("lang.e_service_categories") }}</label>
                         <div class="col-md-9">
-                            <select name="category_id" class="select2 form-control not-required"
+                            <select name="categories[]" class="select2 form-control not-required"
                                 data-empty="{{ trans('lang.e_service_categories_placeholder') }}" multiple="multiple">
                                 <option value="" disabled>Select</option>
 
                                 @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ $category->id== old('category_id')? 'selected' : '' }}>{{ ucwords($category->name) }}</option>
+                                <option value="{{ $category->id }}" {{ in_array($category->id, old('categories', [])) ?
+                                    'selected' : ''
+                                    }}>{{ ucwords($category->name) }}</option>
                                 @endforeach
                             </select>
                             <div class="form-text text-muted">{{ trans("lang.e_service_categories_help") }}</div>
