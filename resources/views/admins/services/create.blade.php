@@ -16,6 +16,28 @@
             @csrf
             <div class="row">
                 <div class="d-flex flex-column col-sm-12 col-md-6">
+                    <!-- Address Field -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="address" class="col-md-3 control-label text-md-right mx-1">
+                            {{ trans("lang.address_address") }}
+                        </label>
+                        <div class="col-md-9">
+                            <select name="address" class="form-control select2">
+                                @foreach (config('emirates') as $emirate => $cities)
+                                <optgroup label="{{ $emirate }}">
+                                    @foreach ($cities as $city)
+                                    <option value="{{ $city['slug'] }}">{{ $city['name'] }}</option>
+                                    @endforeach
+                                </optgroup>
+                                @endforeach
+                            </select>
+
+                            <div class="form-text text-muted">
+                                {{ trans("lang.address_address_help") }}
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Name Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="name" class="col-md-3 control-label text-md-right mx-1">{{
@@ -40,7 +62,8 @@
                                 <option value="" disabled>Select</option>
 
                                 @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ $category->id== old('category_id')? 'selected' : '' }}>{{ ucwords($category->name) }}</option>
+                                <option value="{{ $category->id }}" {{ $category->id== old('category_id')? 'selected' :
+                                    '' }}>{{ ucwords($category->name) }}</option>
                                 @endforeach
                             </select>
                             <div class="form-text text-muted">{{ trans("lang.e_service_categories_help") }}</div>

@@ -28,6 +28,7 @@ class ServiceController extends Controller
     {
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'address' => 'required',
             'provider_id' => 'required|exists:providers,id',
             'name' => 'required',
             'description' => 'required',
@@ -44,6 +45,7 @@ class ServiceController extends Controller
 
         $service = Service::create([
             'provider_id' => $request->provider_id,
+            'address' => $request->address,
             'name' => $request->name,
             'description' => $request->description,
             'discount_price' => $request->discount_price,
@@ -83,6 +85,7 @@ class ServiceController extends Controller
 
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'address' => $request->address,
             'provider_id' => 'required|exists:providers,id',
             'name' => 'required',
             'description' => 'required',
