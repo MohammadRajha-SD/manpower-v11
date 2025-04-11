@@ -62,7 +62,7 @@ class ServiceController extends Controller
                 ],
 
                 'images' => $slide->images->map(function ($img) {
-                    return asset($img->path);
+                    return asset('uploads/' .$img->path);
                 })->toArray(),
             ];
         });

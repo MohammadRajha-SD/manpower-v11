@@ -25,9 +25,9 @@ class CategoryController extends Controller
                 'color' => $category->color,
                 'order' => $category->order,
                 'featured' => $category->featured,
-                'image_path' => $category->image ? asset($category->image?->path) : null,
+                'image_path' => $category->image ? asset('uploads/' . $category->image?->path) : null,
                 'images' => $category->images?->map(function ($img) {
-                    return asset($img->path);
+                    return asset('uploads/' . $img->path);
                 }),
                 'has_parent' =>  $category->parent ? true : false,
                 'has_services' =>  $category->services->isEmpty() ? false : true,
