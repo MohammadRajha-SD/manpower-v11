@@ -21,7 +21,7 @@ class CategoryController extends Controller
 
     public function create()
     {
-        $parentCategory = Category::whereNull('parent_id')->get();
+        $parentCategory = Category::all();
         return view('admins.categories.create', compact('parentCategory'));
     }
 
@@ -59,7 +59,7 @@ class CategoryController extends Controller
     public function edit($id)
     {
         $category = Category::findOrFail($id);
-        $parentCategory = Category::whereNull('parent_id')->where('id', '!=', $category->id)->get();
+        $parentCategory = Category::where('id', '!=', $category->id)->get();
 
         return view('admins.categories.edit', compact('category', 'parentCategory'));
     }

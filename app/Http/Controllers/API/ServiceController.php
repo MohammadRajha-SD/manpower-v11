@@ -36,6 +36,7 @@ class ServiceController extends Controller
         $newServices = $services->map(function ($slide) {
             return [
                 'id' => $slide->id,
+                'address' => $slide->address,
                 'category_id' => $slide->category_id,
                 'provider_id' => $slide->provider_id,
                 'name' => $slide->name,
@@ -72,4 +73,5 @@ class ServiceController extends Controller
             'services' => $newServices,
         ], 200);
     }
+
 }

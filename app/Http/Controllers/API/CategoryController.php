@@ -35,6 +35,7 @@ class CategoryController extends Controller
                     return [
                         'id' => $srv->id,
                         'name' => $srv->name,
+                        'address' => $srv->address,
                         'category' => $srv->category,
                         'provider' => $srv->provider ? [
                             'id' => $srv->provider->id,
@@ -68,6 +69,7 @@ class CategoryController extends Controller
                     'images' => $category->parent->images?->map(function ($img) {
                         return asset('uploads/' . $img->path);
                     }),
+
                 ] : null,
 
                 'has_children' =>  $category->children->isEmpty() ? false : true,
@@ -95,6 +97,33 @@ class CategoryController extends Controller
                                 return asset('uploads/' . $img->path);
                             }),
                         ] : null,
+                        'has_services' =>  $chld->services->isEmpty() ? false : true,
+                        'services' =>  $chld->services?->map(function ($srv) {
+                            return [
+                                'id' => $srv->id,
+                                'name' => $srv->name,
+                                'category' => $srv->category,
+                                'address' => $srv->address,
+                                'provider' => $srv->provider ? [
+                                    'id' => $srv->provider->id,
+                                    'name' => $srv->provider->name,
+                                    'email' => $srv->provider->email,
+                                ] : null,
+                                'description' => $srv->description,
+                                'discount_price' => $srv->discount_price,
+                                'price' => $srv->price,
+                                'price_unit' => $srv->price_unit,
+                                'quantity_unit' => $srv->quantity_unit,
+                                'duration' => $srv->duration,
+                                'featured' => $srv->featured,
+                                'enable_booking' => $srv->enable_booking,
+                                'available' => $srv->available,
+                                'image_path' => $srv?->image ? asset('uploads/' . $srv?->image?->path) : null,
+                                'images' => $srv?->images?->map(function ($img) {
+                                    return asset('uploads/' . $img->path);
+                                }),
+                            ];
+                        }),
                     ];
                 }),
             ];

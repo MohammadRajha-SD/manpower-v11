@@ -51,6 +51,6 @@ class Category extends Model
 
     public function services()
     {
-        return $this->belongsToMany(Service::class, 'service_category', 'category_id', 'service_id');
+        return $this->hasMany(Service::class);
     }
 }

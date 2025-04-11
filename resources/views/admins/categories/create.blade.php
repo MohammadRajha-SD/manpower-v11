@@ -107,8 +107,8 @@
                             <select name="parent_id" class="select2 not-required form-control"
                                 data-empty="@lang('lang.category_parent_id_placeholder')">
                                 <option value="">@lang('lang.category_parent_id_placeholder')</option>
-                                @foreach ($parentCategory as $key => $value)
-                                <option value="{{ $key }}">{{ $value }}</option>
+                                @foreach ($parentCategory as $value)
+                                <option value="{{ $value->id }}">{{ $value->name }}</option>
                                 @endforeach
                             </select>
 

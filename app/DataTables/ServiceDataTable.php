@@ -28,18 +28,18 @@ class ServiceDataTable extends DataTable
                 return ucwords($query->provider?->name) ?? 'N/A';
             })
             ->addColumn('categories', function ($query) {
-                $categories = $query->categories;
-                $categoryLinks = '';
+                // $categories = $query->categories;
+                // $categoryLinks = '';
 
-                if ($categories->isEmpty()) {
-                    $categoryLinks = 'N/A';
-                } else {
-                    foreach ($categories as $category) {
-                        $categoryLinks .= '<a href="' . route('admin.categories.edit', $category->id) . '"><small>' . $category->name . '</small></a><br>';
-                    }
-                }
-
-                return $categoryLinks;
+                // if ($categories->isEmpty()) {
+                //     $categoryLinks = 'N/A';
+                // } else {
+                //     foreach ($categories as $category) {
+                //     }
+                // }
+                
+                return '<a href="' . route('admin.categories.edit', $query->id) . '"><small>' . $query->category?->name . '</small></a><br>';
+                // return $categoryLinks;
             })
             ->addColumn('price', function ($query) {
                 return number_format($query->price, 2);
