@@ -29,10 +29,10 @@ trait ImageHandler
 
         if (count($images) > 0) {
             foreach ($images as $key => $image) {
-                $paths[] = $destinationPath . '/' . $this->uploadImage($image, $destinationPath);
+                $paths[] = $this->uploadImage($image, $destinationPath);
             }
         }
-        
+        // $destinationPath . '/' . 
         return $paths;
     }
 

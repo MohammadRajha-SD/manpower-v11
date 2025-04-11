@@ -17,7 +17,94 @@ class CategoryController extends Controller
             'children',
         ])->get();
 
-        return response()->json($categories, 200);
+        $newCategories = $categories->map(function ($category) {
+            return [
+                'id' => $category->id,
+                'name' => $category->name,
+                'desc' => $category->desc,
+                'color' => $category->color,
+                'order' => $category->order,
+                'featured' => $category->featured,
+                'image_path' => $category->image ? asset($category->image?->path) : null,
+                'images' => $category->images?->map(function ($img) {
+                    return asset($img->path);
+                }),
+                'has_parent' =>  $category->parent ? true : false,
+                'has_services' =>  $category->services->isEmpty() ? false : true,
+                'services' =>  $category->services?->map(function ($srv) {
+                    return [
+                        'id' => $srv->id,
+                        'name' => $srv->name,
+                        'category' => $srv->category,
+                        'provider' => $srv->provider ? [
+                            'id' => $srv->provider->id,
+                            'name' => $srv->provider->name,
+                            'email' => $srv->provider->email,
+                        ] : null,
+                        'description' => $srv->description,
+                        'discount_price' => $srv->discount_price,
+                        'price' => $srv->price,
+                        'price_unit' => $srv->price_unit,
+                        'quantity_unit' => $srv->quantity_unit,
+                        'duration' => $srv->duration,
+                        'featured' => $srv->featured,
+                        'enable_booking' => $srv->enable_booking,
+                        'available' => $srv->available,
+                        'image_path' => $srv?->image ? asset('uploads/' . $srv?->image?->path) : null,
+                        'images' => $srv?->images?->map(function ($img) {
+                            return asset('uploads/' . $img->path);
+                        }),
+                    ];
+                }),
+
+                'parent' =>  $category->parent ? [
+                    'id' => $category->parent->id,
+                    'name' => $category->parent->name,
+                    'desc' => $category->parent->desc,
+                    'color' => $category->parent->color,
+                    'order' => $category->parent->order,
+                    'featured' => $category->parent->featured,
+                    'image_path' => $category->parent->image ? asset('uploads/' . $category->parent->image?->path) : null,
+                    'images' => $category->parent->images?->map(function ($img) {
+                        return asset('uploads/' . $img->path);
+                    }),
+                ] : null,
+
+                'has_children' =>  $category->children->isEmpty() ? false : true,
+                'children' =>  $category->children?->map(function ($chld) {
+                    return [
+                        'id' => $chld->id,
+                        'name' => $chld->name,
+                        'desc' => $chld->desc,
+                        'color' => $chld->color,
+                        'order' => $chld->order,
+                        'featured' => $chld->featured,
+                        'image_path' => $chld?->image ? asset('uploads/' . $chld?->image?->path) : null,
+                        'images' => $chld?->images?->map(function ($img) {
+                            return asset('uploads/' . $img->path);
+                        }),
+                        'parent' =>  $chld->parent ? [
+                            'id' => $chld->parent->id,
+                            'name' => $chld->parent->name,
+                            'desc' => $chld->parent->desc,
+                            'color' => $chld->parent->color,
+                            'order' => $chld->parent->order,
+                            'featured' => $chld->parent->featured,
+                            'image_path' => $chld->parent->image ? asset('uploads/' . $chld->parent->image?->path) : null,
+                            'images' => $chld->parent->images?->map(function ($img) {
+                                return asset('uploads/' . $img->path);
+                            }),
+                        ] : null,
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json([
+            'message' => 'All categories retreived successfully',
+            'data' => $newCategories,
+            'status' => 'success',
+        ], 200);
     }
 
     public function parentCategories()
