@@ -71,6 +71,34 @@
                         </div>
                     </div>
 
+                    <!-- whatsapp_link Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="whatsapp_link" class="col-4 text-right">{{ trans("lang.app_setting_whatsapp_link")
+                            }}</label>
+                        <div class="col-8">
+                            <input type="text" name="whatsapp_link" id="whatsapp_link" class="form-control"
+                                value="{{ old('whatsapp_link', setting('whatsapp_link')) }}"
+                                placeholder="{{ trans('lang.app_setting_whatsapp_link_placeholder') }}">
+                            <small class="form-text text-muted">{{ trans("lang.app_setting_whatsapp_link_help")
+                                }}</small>
+                            @error('whatsapp_link') <span class="text-danger">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
+                    <!-- instagram_link Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="instagram_link" class="col-4 text-right">{{ trans("lang.app_setting_instagram_link")
+                            }}</label>
+                        <div class="col-8">
+                            <input type="text" name="instagram_link" id="instagram_link" class="form-control"
+                                value="{{ old('instagram_link', setting('instagram_link')) }}"
+                                placeholder="{{ trans('lang.app_setting_instagram_link_placeholder') }}">
+                            <small class="form-text text-muted">{{ trans("lang.app_setting_instagram_link_help")
+                                }}</small>
+                            @error('instagram_link') <span class="text-danger">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+
                     <!-- Theme Contrast Field -->
                     <div class="form-group d-flex flex-column flex-md-row">
                         <label for="theme_contrast" class="col-4 text-right">{{ trans("lang.app_setting_theme_contrast")

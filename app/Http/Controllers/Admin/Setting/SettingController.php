@@ -86,6 +86,8 @@ class SettingController extends Controller
         $settings = $this->validate($request, [
             'contact_email' => 'required|email',
             'contact_phone' => 'required|string|max:20',
+            'instagram_link' => 'nullable|url',
+            'whatsapp_link' => 'nullable|url',
             'twitter_link' => 'nullable|url',
             'facebook_link' => 'nullable|url',
             'theme_contrast' => 'required|in:light,dark',

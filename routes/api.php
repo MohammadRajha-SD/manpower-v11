@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\MultiLoginController;
 
+use App\Http\Controllers\API\GlobalSettingController;
 use App\Http\Controllers\API\EmirateController;
 use App\Http\Controllers\API\AuthProviderController;
 use App\Http\Controllers\API\AuthUserController;
@@ -106,3 +107,6 @@ Route::get('provider-types', [ProviderTypeController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('profile/update', [ProfileController::class, 'store']);
 });
+
+
+Route::get('global-settings', [GlobalSettingController::class, 'index']);
