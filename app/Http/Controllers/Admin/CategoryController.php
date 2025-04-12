@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DataTables\CategoryDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Image;
@@ -12,11 +13,9 @@ class CategoryController extends Controller
 {
     use ImageHandler;
 
-    public function index()
+    public function index(CategoryDataTable $dataTable)
     {
-        $categories = Category::paginate(10);
-
-        return view('admins.categories.index', compact('categories'));
+        return $dataTable->render('admins.categories.index');
     }
 
     public function create()
@@ -101,7 +100,14 @@ class CategoryController extends Controller
         if ($category->children()->exists()) {
             return response()->json([
                 'status' => 'error',
-                'message' => __('lang.cannot_delete_has_children'),
+                'message' => __('lang.cannot_delete_has_children' , ['operator' => __('lang.category')]),
+            ]);
+        }
+
+        if ($category->services()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children' , ['operator' => __('lang.e_service')]),
             ]);
         }
 

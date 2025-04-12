@@ -81,11 +81,9 @@ class ServiceController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $service = Service::findOrFail($id);
-
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'address' => $request->address,
+            'address' => 'required',
             'provider_id' => 'required|exists:providers,id',
             'name' => 'required',
             'description' => 'required',
@@ -99,7 +97,7 @@ class ServiceController extends Controller
             'available' => 'boolean',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-
+$service = Service::findOrFail($id);
         $service->update([
             'provider_id' => $request->provider_id,
             'name' => $request->name,
@@ -112,6 +110,7 @@ class ServiceController extends Controller
             'featured' => $request->featured,
             'enable_booking' => $request->enable_booking,
             'category_id' => $request->category_id,
+            'address' => $request->address,
         ]);
 
         // Handle image uploads
