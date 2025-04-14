@@ -12,16 +12,26 @@ class FaqController extends Controller
         try {
             $faqs = Faq::with('category')->get();
 
+            $newFaqs = $faqs->map(function ($fq) {
+                return [
+                    'id' => $fq->id,
+                    'question' => $fq->question,
+                    'answer' => $fq->answer,
+                    'faq_category_id' => $fq->faq_category_id,
+                    'faq_category_name' => $fq->category->name,
+                ];
+            });
+            
             return response()->json([
                 'status' => 'success',
-                'faqs' => $faqs,
+                'data' => $newFaqs,
                 'message' => 'FAQS retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong. Please try again.',
-                'faqs' => [],
+                'data' => [],
             ], 500);
         }
     }

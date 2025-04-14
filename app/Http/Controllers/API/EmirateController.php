@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 
 class EmirateController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         try {
-            $emirates = config('emirates');
+            
+            $emirates = $request->lang === 'ar' ? config('emirates_ar') : config('emirates');
 
             return response()->json([
                 'status' => 'success',

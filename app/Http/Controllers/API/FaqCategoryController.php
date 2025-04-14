@@ -12,9 +12,16 @@ class FaqCategoryController extends Controller
         try {
             $faq_categories = FaqCategory::all();
 
+            $newFaqCategories = $faq_categories->map(function ($fq) {
+                return [
+                    'id' => $fq->id,
+                    'name' => $fq->name,
+                ];
+            });
+
             return response()->json([
                 'status' => 'success',
-                'data' => $faq_categories->toArray(),
+                'data' => $newFaqCategories,
                 'message' => 'FAQ categories retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
@@ -33,7 +40,10 @@ class FaqCategoryController extends Controller
         if ($faq_category) {
             return response()->json([
                 'success' => true,
-                'data' => $faq_category->toArray(),
+                'data' =>  [
+                    'id' => $faq_category->id,
+                    'name' => $faq_category->name,
+                ],
                 'message' => 'Faq Category retrieved successfully',
             ]);
         } else {
