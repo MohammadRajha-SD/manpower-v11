@@ -16,8 +16,10 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\SendPaymentLink;
+use App\Mail\BookingCancelledMail;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Stripe;
+use Stripe\Refund;
 
 class BookingController extends Controller
 {
@@ -204,6 +206,7 @@ class BookingController extends Controller
             'payment_url' => $checkoutSession->url,
         ]);
     }
+
     public function success(Request $request)
     {
         $booking = Booking::findOrFail($request->booking_id);
@@ -219,32 +222,77 @@ class BookingController extends Controller
                 'payment_status_id' => 2,
                 'stripe_payment_id' => $session->payment_intent,
             ]);
-      
+
             return redirect(env('FRONTEND_URL'));
         } else {
             return redirect(env('FRONTEND_URL'));
         }
     }
 
-    public function successx(Request $request)
-    {
-        $booking = Booking::findOrFail($request->booking_id);
-
-        Stripe::setApiKey(config('services.stripe.secret'));
-
-        $payment = $booking->payment;
-      
-
-        $session = StripeSession::retrieve($payment->stripe_payment_id);
-        dd($session->payment_intent);
-
-      
-
-        return redirect(env('FRONTEND_URL'));
-    }
-
     public function cancel(Request $request)
     {
         return redirect(env('FRONTEND_URL'));
+    }
+
+    public function cancelBooking(Request $request)
+    {
+        $request->validate([
+            'booking_id' => 'required|exists:bookings,id',
+        ]);
+
+        $booking = Booking::findOrFail($request->booking_id);
+        $payment = $booking->payment;
+
+        // Check if the booking is already cancelled or completed
+        if ($booking->booking_status->status == 'Cancelled' || $booking->payment->payment_status->status == 'Refunded') {
+            return response()->json([
+                'status' => 'error',
+                'message_en' => 'The booking is already cancelled or completed.',
+                'message_ar' => 'تم إلغاء الحجز أو إكماله بالفعل',
+            ], 404);
+        }
+
+        Stripe::setApiKey(config('services.stripe.secret'));
+
+        try {
+            // Check if the booking is already cancelled or completed
+            if ($booking->payment->payment_status->status == 'Paid') {
+                Refund::create([
+                    'payment_intent' => $payment->stripe_payment_id,
+                ]);
+            }
+
+            $paymentStatus = PaymentStatus::where('status', 'Refunded')->first();
+
+            if ($paymentStatus) {
+                $booking->payment->update([
+                    'payment_status_id' => $paymentStatus->id,
+                ]);
+            }
+
+            $bookingStatus = BookingStatus::where('status', 'Cancelled')->first();
+
+            $booking->update([
+                'booking_status_id' => $bookingStatus->id,
+                'cancel' => 1,
+            ]);
+
+            // ✅ Send email to user with CC to provider and admin
+            Mail::to($booking->user?->email)
+                ->cc([$booking->service?->provider?->email, env('CC_EMAIL', 'info@hpower.ae')])
+                ->send(new BookingCancelledMail($booking, $request->reason));
+
+            return response()->json([
+                'status' => 'success',
+                'message_en' => 'Booking has been cancelled successfully.',
+                'message_ar' => 'تم إلغاء الحجز بنجاح.',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message_en' =>  $e->getMessage(),
+                'message_ar' =>  $e->getMessage(),
+            ], 404);
+        }
     }
 }

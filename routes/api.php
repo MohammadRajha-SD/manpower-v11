@@ -93,6 +93,7 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
     Route::post('check-coupon', [BookingController::class, 'checkCoupon']);
     Route::post('new-booking', [BookingController::class, 'store']);
+    Route::post('cancel-booking', [BookingController::class, 'cancelBooking']);
 });
 
 Route::middleware(['auth:sanctum', 'auth:provider'])->group(function () {
