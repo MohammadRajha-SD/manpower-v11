@@ -122,6 +122,27 @@ class AuthProviderController extends Controller
     {
         $user = Auth::guard('provider')->user();
 
+        $schedule = $user?->schedule?->data
+            ? json_decode($user->schedule->data, true)
+            : [];
+        $response = [];
+
+        if (!empty($schedule)) {
+            foreach ($schedule as $day => $times) {
+                if ($times) {
+                    $response[] = [
+                        'day' => $day,
+                        'working_hours' => $times['start'] . ' - ' . $times['end'],
+                    ];
+                } else {
+                    $response[] = [
+                        'day' => $day,
+                        'working_hours' => 'Closed',
+                    ];
+                }
+            }
+        }
+
         return response()->json([
             'user_type' => 'provider',
             'data' => [
@@ -140,6 +161,7 @@ class AuthProviderController extends Controller
                 'featured' => $user->featured,
                 'accepted' => $user->accepted,
                 'availability_range' => $user->availability_range,
+                'schedules' => $schedule ? $response : [],
                 'subscriptions' => $user->subscriptions?->map(function ($s) {
                     return [
                         'id' => $s->id,

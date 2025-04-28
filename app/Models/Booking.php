@@ -42,10 +42,17 @@ class Booking extends Model
     }
 
 
+
+    
     public function getSubtotal(): float
     {
-        return $this->service->getPrice() * ($this->quantity >= 1 ? $this->quantity : 1);
+        $total = 0;
+        if ($this->service) {
+            $total = $this->service?->getPrice() * ($this->quantity >= 1 ? $this->quantity : 1);
+        }
+        return $total;
     }
+
 
     public function getTax(): float
     {
@@ -63,6 +70,7 @@ class Booking extends Model
 
         return $taxValue;
     }
+    
     public function couponx()
     {
         return $this->belongsTo(Coupon::class, 'coupon', 'code');

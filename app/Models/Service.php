@@ -45,6 +45,12 @@ class Service extends Model
         return $this->hasMany(ServiceReview::class, 'service_id');
     }
 
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+
     public function coupons()
     {
         return $this->morphToMany(Coupon::class, 'discountable');

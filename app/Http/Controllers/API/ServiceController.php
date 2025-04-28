@@ -51,6 +51,7 @@ class ServiceController extends Controller
                 'created_at' => $slide->created_at,
                 'provider' => [
                     'name' => $slide->provider->name,
+                    'schedules' => $slide->provider->getSchedules(),
                     'email' => $slide->provider->email,
                     'description' => $slide->provider->description,
                     'phone_number' => $slide->provider->phone_number,
