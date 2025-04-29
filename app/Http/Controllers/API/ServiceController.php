@@ -48,6 +48,13 @@ class ServiceController extends Controller
                 'featured' => $slide->featured,
                 'enable_booking' => $slide->enable_booking,
                 'available' => $slide->available,
+                'bookings' => $slide->bookings?->filter(fn($b) => $b->booking_status_id != 4 ||  $b->booking_status_id != 3)?->map(function ($b) {
+                    return [
+                        'id' => $b->id,
+                        'start_at'=> $b->start_at,
+                        'ends_at'=> $b->ends_at,
+                    ];
+                }),
                 'created_at' => $slide->created_at,
                 'provider' => [
                     'name' => $slide->provider->name,
@@ -74,5 +81,4 @@ class ServiceController extends Controller
             'services' => $newServices,
         ], 200);
     }
-
 }

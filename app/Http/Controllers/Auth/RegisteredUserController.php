@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Mail\HelloMail;
+use App\Mail\HelloMailArabic;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -10,6 +12,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -49,24 +53,59 @@ class RegisteredUserController extends Controller
         return redirect(RouteServiceProvider::HOME);
     }
 
+
     public function confirmEmail($confirmation_code)
     {
         $user = User::where('confirmation_code', $confirmation_code)->first();
 
         if (!$user) {
-            return redirect()->route('login')->with('error', 'Invalid confirmation code!');
+            return redirect(env('FRONTEND_URL', 'https://hpower.ae').'/sign-in')->with('error', 'Invalid confirmation code!');
         }
 
         if ($user->email_verified_at) {
-            return redirect()->route('login')->with('success', __('lang.confirmation.confirmation_already_confirmed'));
+            return redirect(env('FRONTEND_URL', 'https://hpower.ae').'/sign-in')->with('success', __('lang.confirmation.confirmation_already_confirmed'));
         }
 
         $user->email_verified_at = now();
         $user->save();
 
-        // Redirect to a custom page (dashboard, success page, etc.)
-        return redirect()->route('login')->with('success', __('lang.confirmation.confirmation_successful'));
+     
+        return redirect(env('FRONTEND_URL', 'https://hpower.ae'))->with('success', __('lang.confirmation.confirmation_successful'));
     }
+    
 
+    public function verifyEmail(Request $request)
+    {
 
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User with this email does not exist.',
+            ], 404);
+        }
+    
+        if ($user->email_verified_at) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Email is already verified.',
+            ], 200);
+        }
+    
+        if (!$user->confirmation_code) {
+            $user->confirmation_code = Str::random(30);
+            $user->save();
+        }
+    
+        $confirmationUrl = url('register/confirm/' . $user->confirmation_code);
+    
+        Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
+        Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Verification email sent successfully.',
+        ]);
+    }
 }
