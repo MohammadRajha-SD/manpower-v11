@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Provider;
+use App\Models\ProviderRequest;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -22,48 +22,22 @@ class ProviderRequestDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('name', function ($query) {
-                $featured = isFeatured($query->featured);
-                $featured = isFeatured($query->featured);
-
-                return ucwords($query->name) . $featured;
+            ->addColumn('company_name', function ($query) {
+                return ucwords($query->company_name);
             })
-            ->addColumn('provider_type', function ($query) {
-                return ucwords($query->providerType->name);
-            })
-            ->addColumn('employees', function ($query) {
-                $users = $query->users;
-                $userLinks = '';
-
-                if (count($users) > 0) {
-                    foreach ($users as $user) {
-                        $userLinks .= '<a href="#"><small>' . $user->name . '</small></a><br>';
-                    }
-                } else {
-                    $userLinks = 'N/A';
-                }
-
-                return $userLinks;
+            ->addColumn('number_employees', function ($query) {
+                return $query->number_employees;
             })
             ->addColumn('phone', function ($query) {
                 return $query->phone_number ?? 'N/A';
             })
-            ->addColumn('mobile', function ($query) {
-                return $query->mobile_number ?? 'N/A';
-            })
-            ->addColumn('available', function ($query) {
-                return isActive($query->available, 'success', 'danger');
-            })
-            ->addColumn('accepted', function ($query) {
-                return isActive($query->accepted, 'success', 'danger');
-            })
-            ->addColumn('addresses', function ($query) {
-                $addreses = $query->addresses;
+            ->addColumn('services', function ($query) {
+                $services = is_array($query->services) ? $query->services : json_decode($query->services);
                 $addressLinks = '';
 
-                if (count($addreses) > 0) {
-                    foreach ($addreses as $address) {
-                        $addressLinks .= '<a href="' . route('admin.addresses.edit', $address->id) . '"><small>' . $address->address . '</small></a><br>';
+                if (!empty($services)) {
+                    foreach ($services as $address) {
+                        $addressLinks .= '<small>' . $address . '</small></a><br>';
                     }
                 } else {
                     $addressLinks = 'N/A';
@@ -71,46 +45,77 @@ class ProviderRequestDataTable extends DataTable
 
                 return $addressLinks;
             })
-            ->addColumn('taxes', function ($query) {
-                $taxes = $query->taxes;
-                $taxLinks = '';
+            ->addColumn('cities', function ($query) {
+                $cities = is_array($query->cities) ? $query->cities : json_decode($query->cities);
+                $addressLinks = '';
 
-                if (count($taxes) > 0) {
-                    foreach ($taxes as $tax) {
-                        $taxLinks .= '<a href="' . route('admin.taxes.edit', $tax->id) . '"><small>' . $tax->name . '</small></a><br>';
+                if (!empty($cities)) {
+                    foreach ($cities as $address) {
+                        $addressLinks .= '<small>' . $address . '</small></a><br>';
                     }
                 } else {
-                    $taxLinks = 'N/A';
+                    $addressLinks = 'N/A';
                 }
 
-                return $taxLinks;
+                return $addressLinks;
             })
-            ->addColumn('range', function ($query) {
-                return $query->availability_range ?? 'N/A';
+            ->addColumn('plans', function ($query) {
+                $plans = is_array($query->plans) ? $query->plans : json_decode($query->plans);
+                $addressLinks = '';
+
+                if (!empty($plans)) {
+                    foreach ($plans as $address) {
+                        $addressLinks .= '<small>' . $address . '</small></a><br>';
+                    }
+                } else {
+                    $addressLinks = 'N/A';
+                }
+
+                return $addressLinks;
             })
-            ->addColumn('updated_at', function ($query) {
-                return $query->updated_at->diffForHumans();
+            ->addColumn('accepted', function ($query) {
+                $checked = $query->accepted ? 'checked' : '';
+                $route = route('admin.provider-requests.toggleAccepted', $query->id);
+
+                return '
+                    <form method="POST" action="' . $route . '" class="d-inline toggle-accepted-form" title="Toggle accepted status">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <div class="form-check form-switch">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                name="accepted" 
+                                id="switch-accepted-' . $query->id . '"
+                                onchange="this.form.submit()" 
+                                ' . $checked . '>
+                            <label class="form-check-label small" for="switch-accepted-' . $query->id . '">
+                                ' . ($query->accepted ? 'Accepted' : 'Pending') . '
+                            </label>
+                        </div>
+                    </form>';
+            })
+            ->addColumn('licence', function ($query) {
+                return '<a href="' . route('admin.provider-requests.streamLicence', $query->id) . '" 
+                    target="_blank" 
+                    class="btn btn-sm btn-outline-primary" 
+                    title="Preview Licence">
+                        <i class="fas fa-eye"></i>
+                    </a>';
             })
             ->addColumn('action', function ($query) {
-                $editBtn = "<a href='" . route('admin.providers.edit', $query->id) . "' class='btn btn-success btn-sm'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='" . route('admin.providers.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
-                return $editBtn . $deleteBtn;
+                return "<a href='" . route('admin.provider-requests.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
             })
-            ->rawColumns(['available', 'action', 'employees', 'accepted', 'name', 'addresses', 'taxes'])
+            ->rawColumns(['action', 'cities', 'services', 'plans', 'accepted', 'licence'])
             ->setRowId('id');
     }
 
-    /**
-     * Get the query source of dataTable.
-     */
-    public function query(Provider $model): QueryBuilder
+    public function query(ProviderRequest $model): QueryBuilder
     {
-        return $model->newQuery()->where('accepted', '0');
+        return $model->newQuery()
+            ->orderBy('accepted')
+            ->orderBy('updated_at', 'desc');
     }
 
-    /**
-     * Optional method if you want to use the html builder.
-     */
     public function html(): HtmlBuilder
     {
         return $this->builder()
@@ -130,23 +135,20 @@ class ProviderRequestDataTable extends DataTable
             ]);
     }
 
-    /**
-     * Get the dataTable columns definition.
-     */
     public function getColumns(): array
     {
         return [
-            // Column::make('image'),
-            Column::make('name'),
-            Column::make('provider_type')->addClass('text-center'),
-            Column::make('employees')->addClass('text-center'),
-            Column::make('phone')->addClass('text-center'),
-            //  Column::make('mobile')->addClass('text-center'),
-            Column::make('addresses')->addClass('text-center'),
-            Column::make('range')->addClass('text-center'),
-            Column::make('taxes')->addClass('text-center'),
-            Column::make('available')->addClass('text-center'),
-            Column::make('updated_at')->addClass('text-center'),
+            Column::make('company_name'),
+            Column::make('services'),
+            Column::make('cities'),
+            Column::make('plans'),
+            Column::make('notes'),
+            Column::make('contact_person'),
+            Column::make('contact_email'),
+            Column::make('phone'),
+            Column::make('company_website'),
+            Column::make('accepted'),
+            Column::make('licence'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -154,9 +156,6 @@ class ProviderRequestDataTable extends DataTable
         ];
     }
 
-    /**
-     * Get the filename for export.
-     */
     protected function filename(): string
     {
         return 'ProviderRequest_' . date('YmdHis');

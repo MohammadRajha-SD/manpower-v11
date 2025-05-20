@@ -16,6 +16,7 @@ use App\Http\Controllers\API\FaqController;
 use App\Http\Controllers\API\PackController;
 use App\Http\Controllers\API\PartnerController;
 use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\API\ProviderRequestController;
 use App\Http\Controllers\API\ProviderTypeController;
 use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\ServiceReviewController;
@@ -111,3 +112,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 Route::get('global-settings', [GlobalSettingController::class, 'index']);
+
+Route::post('become-partner', [ProviderRequestController::class, 'store']);

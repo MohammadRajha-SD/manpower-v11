@@ -70,8 +70,11 @@ Route::resource('providers', ProviderController::class);
 Route::resource('provider-types', ProviderTypeController::class);
 Route::resource('provider-schedules', ProviderScheduleController::class);
 Route::resource('provider-statistics', ProviderStatisticController::class);
-Route::resource('provider-requests', ProviderRequestController::class);
 
+Route::get('provider-requests/{id}/licence', [ProviderRequestController::class, 'streamLicence'])->name('provider-requests.streamLicence');
+Route::post('provider-requests/{id}/toggle-accepted', [ProviderRequestController::class, 'toggleAccepted'])->name('provider-requests.toggleAccepted');
+Route::resource('provider-requests', ProviderRequestController::class);
+ 
 Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 Route::put('profile/update', [ProfileController::class, 'update'])->name('user.profile.update');
 

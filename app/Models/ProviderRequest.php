@@ -9,5 +9,6 @@ class ProviderRequest extends Model
 {
     use HasFactory;
 
+    protected $table = 'provider_requests';
     protected $guarded = [];
 }
