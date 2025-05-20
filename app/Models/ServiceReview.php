@@ -20,9 +20,4 @@ class ServiceReview extends Model
     {
         return $this->belongsTo(Service::class, 'service_id');
     }
-    
-    public function image()
-    {
-        return $this->morphOne(Image::class, 'imageable');
-    }
 }

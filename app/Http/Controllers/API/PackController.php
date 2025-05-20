@@ -20,6 +20,7 @@ class PackController extends Controller
                     'price' => $p->price,
                     'text' => $p->text,
                     'short_description' => $p->short_description,
+                    'description' => $p->description,              
                     "number_of_months" => $p->number_of_months,
                     "number_of_ads" => $p->number_of_ads,
                     "number_of_subcategories" => $p->number_of_subcategories,
@@ -30,14 +31,14 @@ class PackController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'packs' => $newPacks,
+                'data' => $newPacks,
                 'message' => 'Packs retrieved successfully',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Something went wrong. Please try again.',
-                'packs' => [],
+                'data' => [],
             ], 500);
         }
     }

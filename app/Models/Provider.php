@@ -24,7 +24,7 @@ class Provider extends Authenticatable
     {
         return $this->hasMany(Subscription::class);
     }
-
+    
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
@@ -37,11 +37,40 @@ class Provider extends Authenticatable
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }    public function schedule()
+    {
+        return $this->hasOne(ProviderSchedule::class);
     }
 
     public function providerType()
     {
         return $this->belongsTo(ProviderType::class, 'provider_type_id');
+    }
+    
+    
+    public function getSchedules()
+    {
+        $schedule = $this->schedule ? json_decode($this?->schedule?->data, true) : [];
+        
+        $response = [];
+        if (!empty($schedule)) {
+            foreach ($schedule as $day => $times) {
+                if ($times) {
+                    $response[] = [
+                        'day' => $day,
+                        'working_hours' => $times['start'] . ' - ' . $times['end'],
+                    ];
+                } else {
+                    $response[] = [
+                        'day' => $day,
+                        'working_hours' => 'Closed',
+                    ];
+                }
+            }
+        }
+
+       
+        return $schedule ? $response : [];
     }
 
     public function taxes()
@@ -62,12 +91,6 @@ class Provider extends Authenticatable
     {
         return $this->hasMany(ProviderSchedule::class);
     }
-
-    public function schedule()
-    {
-        return $this->hasOne(ProviderSchedule::class);
-    }
-
     public function coupons()
     {
         return $this->morphToMany(Coupon::class, 'discountable');
@@ -80,31 +103,5 @@ class Provider extends Authenticatable
     public function services()
     {
         return $this->hasMany(Service::class, 'provider_id');
-    }
-
-    public function getSchedules()
-    {
-        $schedule = $this?->schedule?->data
-            ? json_decode($this->schedule->data, true)
-            : [];
-        $response = [];
-
-        if (!empty($schedule)) {
-            foreach ($schedule as $day => $times) {
-                if ($times) {
-                    $response[] = [
-                        'day' => $day,
-                        'working_hours' => $times['start'] . ' - ' . $times['end'],
-                    ];
-                } else {
-                    $response[] = [
-                        'day' => $day,
-                        'working_hours' => 'Closed',
-                    ];
-                }
-            }
-        }
-
-        return $schedule ? $response : [];
     }
 }

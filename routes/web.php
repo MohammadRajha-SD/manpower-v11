@@ -8,6 +8,11 @@ Route::get('/', function (){
     return view('auth.login');
 });
 
+
+Route::get('sign-in', function(){
+      return redirect(env('FRONTEND_URL', 'https://hpower.ae').'/sign-in');
+})->name('home');
+
 Route::middleware(['web'])->group(function () {
     Route::get('/locale/{lang}', [LocaleController::class, 'setLocale']);
 });

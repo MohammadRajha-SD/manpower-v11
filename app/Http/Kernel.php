@@ -39,17 +39,11 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\SetLocale::class,  // This should be here
         ],
 
-        // 'api' => [
-            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            // \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
-            // \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        // ],
-        
         'api' => [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            // \App\Http\Middleware\SetApiLocale::class,
+            \App\Http\Middleware\SetApiLocale::class,
         ],
 
     ];

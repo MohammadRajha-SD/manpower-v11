@@ -16,41 +16,7 @@ use Illuminate\Support\Str;
 
 class AuthUserController extends Controller
 {
-    public function registerOld(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'username' => 'required|string|max:255|unique:users',
-            'email' => 'required|email|unique:users',
-            'phone_number' => 'required|string|max:15',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        // Create a new user
-        $user = User::create([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'password' => bcrypt($request->password),
-            'confirmation_code' => Str::random(25),
-        ]);
-
-        // Generate a custom confirmation URL
-        $confirmationUrl = url('register/confirm/' . $user->confirmation_code);
-
-        Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
-
-        return response()->json([
-            'message' => 'User registered successfully!',
-            'user' => $user,
-        ], 201);
-    }
-
+ 
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -75,14 +41,15 @@ class AuthUserController extends Controller
             'confirmation_code' => Str::random(25),
         ]);
 
-        // Log the user in after registration
-        Auth::login($user);
 
         // Generate a custom confirmation URL
         $confirmationUrl = url('register/confirm/' . $user->confirmation_code);
 
         Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
         Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
+        
+        // Log the user in after registration
+        Auth::login($user);
 
         // Create a token for the logged-in user
         $token = $user->createToken('main')->plainTextToken;
@@ -149,6 +116,7 @@ class AuthUserController extends Controller
                 'phone_number' => $user->phone_number,
                 'is_admin' => $user->is_admin,
                 'email_verified_at' => $user->email_verified_at,
+                'is_verified' => $user->confirmation_code == null,
                 'image_path' => user_image($user),
                 'bookings' => $user->bookings?->map(function ($b) {
                     return [

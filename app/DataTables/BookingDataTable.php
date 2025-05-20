@@ -27,16 +27,16 @@ class BookingDataTable extends DataTable
                 return '#' . $query->id;
             })
             ->addColumn('user', function ($query) {
-                return $query->user->name;
+                return $query?->user?->name  ?? 'N/A';
             })
             ->addColumn('service', function ($query) {
-                return $query->service->name;
+                return $query->service?->name ?? 'N/A';
             })
             ->addColumn('address', function ($query) {
-                return ucwords($query->address);
+                return ucwords($query?->address);
             })
             ->addColumn('total', function ($query) {
-                return "<span class='text-bold text-success'>" . getPrice($query->getTotal()) . "</span>";
+                return "<span class='text-bold text-success'>" . getPrice($query?->getTotal()) . "</span>";
             })
             ->addColumn('coupon', function ($query) {
                 $coupon = $query->couponx;
@@ -54,13 +54,13 @@ class BookingDataTable extends DataTable
                 return "<span class='text-bold'>" . getPrice($query->getTax()) . "</span>";
             })
             ->addColumn('booking_status', function ($query) {
-                return ($query->booking_status?->status);
+                return ($query?->booking_status?->status);
             })
             ->addColumn('payment_status', function ($query) {
                 return ($query->payment?->payment_status?->status);
             })
             ->addColumn('booking_at', function ($query) {
-                return Carbon::parse($query->booking_at)->diffForHumans();
+                return Carbon::parse($query?->booking_at)->diffForHumans();
             })
             ->addColumn('action', function ($booking) {
                 return view('admins.bookings.actions', compact('booking'))->render();
@@ -74,7 +74,7 @@ class BookingDataTable extends DataTable
      */
     public function query(Booking $model): QueryBuilder
     {
-        return $model->newQuery()->orderBy('updated_at', 'desc');
+        return $model->newQuery()->with('user')->orderBy('updated_at', 'desc');
     }
 
     /**

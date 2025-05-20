@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Mail\HelloMail;
-use App\Mail\HelloMailArabic;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -12,10 +10,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+
+use App\Mail\HelloMail;
+use App\Mail\HelloMailArabic;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+
 
 class RegisteredUserController extends Controller
 {
@@ -53,7 +55,6 @@ class RegisteredUserController extends Controller
         return redirect(RouteServiceProvider::HOME);
     }
 
-
     public function confirmEmail($confirmation_code)
     {
         $user = User::where('confirmation_code', $confirmation_code)->first();
@@ -73,7 +74,8 @@ class RegisteredUserController extends Controller
         return redirect(env('FRONTEND_URL', 'https://hpower.ae'))->with('success', __('lang.confirmation.confirmation_successful'));
     }
     
-
+    
+    
     public function verifyEmail(Request $request)
     {
 
@@ -108,4 +110,6 @@ class RegisteredUserController extends Controller
             'message' => 'Verification email sent successfully.',
         ]);
     }
+
+
 }

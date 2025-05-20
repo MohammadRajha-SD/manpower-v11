@@ -9,6 +9,7 @@ use App\Models\Provider;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {

@@ -151,6 +151,8 @@ class BookingController extends Controller
         $booking->booking_status_id = $booking_status->id;
         $booking->hint = $request->hint;
         $booking->coupon = $request->coupon;
+            $booking->start_at = $request->start_at?? null;
+                $booking->ends_at = $request->ends_at ?? null;
         $booking->booking_at = now();
 
         $payment = Payment::create([
@@ -196,7 +198,6 @@ class BookingController extends Controller
         $cc_email = env('CC_EMAIL') ?? 'info@hpower.ae';
 
         Mail::to($user->email)
-            ->cc($cc_email)
             ->send(new SendPaymentLink($user, $checkoutSession->url));
 
         return response()->json([

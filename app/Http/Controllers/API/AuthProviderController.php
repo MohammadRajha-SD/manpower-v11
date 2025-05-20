@@ -42,7 +42,7 @@ class AuthProviderController extends Controller
         ]);
 
         $confirmationUrl = route('provider.register.confirm', ['confirmation_code', $provider->confirmation_code]);
-
+        
         if ($request->language === 'ar') {
             Mail::to($provider->email)->send(new HelloMailArabic($provider, $confirmationUrl));
         } else {
@@ -121,8 +121,7 @@ class AuthProviderController extends Controller
     public function me(Request $request)
     {
         $user = Auth::guard('provider')->user();
-
-        $schedule = $user?->schedule?->data
+   $schedule = $user?->schedule?->data
             ? json_decode($user->schedule->data, true)
             : [];
         $response = [];
@@ -142,12 +141,10 @@ class AuthProviderController extends Controller
                 }
             }
         }
-
+        
         return response()->json([
             'user_type' => 'provider',
             'data' => [
-                'user_type' => 'provider',
-                'image_path' => user_image($user),
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
@@ -160,9 +157,10 @@ class AuthProviderController extends Controller
                 'available' => $user->available,
                 'featured' => $user->featured,
                 'accepted' => $user->accepted,
+                                'schedules' => $schedule ? $response : [],
+
                 'availability_range' => $user->availability_range,
-                'schedules' => $schedule ? $response : [],
-                'subscriptions' => $user->subscriptions?->map(function ($s) {
+                'subscriptions' => $user->subscriptions?->map(function($s){
                     return [
                         'id' => $s->id,
                         'provider_id' => $s->provider_id,

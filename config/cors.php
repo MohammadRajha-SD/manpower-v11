@@ -1,34 +1,37 @@
 <?php
 
+// return [
+
+// 'paths' => ['api/*', 'sanctum/csrf-cookie', 'user/login', 'user/logout', 'provider/login', 'provider/logout'],
+// 'allowed_methods' => ['*'],
+// 'allowed_origins' => ['http://localhost:3000', 'https://staging.manpowerforu.com/'],
+// 'allowed_headers' => ['*'],
+// 'allow_credentials' => true,
+
+// ];
+
 return [
+  'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Cross-Origin Resource Sharing (CORS) Configuration
-    |--------------------------------------------------------------------------
-    |
-    | Here you may configure your settings for cross-origin resource sharing
-    | or "CORS". This determines what cross-origin operations may execute
-    | in web browsers. You are free to adjust these settings as needed.
-    |
-    | To learn more: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
-    |
-    */
+'allowed_methods' => ['*'],
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+'allowed_origins' => ['http://localhost:3000','https://manpowerforu.vercel.app', 'https://new.hpower.ae', 'https://hpower.ae'],
 
-    'allowed_methods' => ['*'],
+// 'allowed_headers' => [
+//     'Content-Type',
+//     'X-Requested-With',
+//     'Authorization', 
+//     'Accept',
+//     'Origin',
+// ],
 
-    'allowed_origins' => ['*'],
+'allowed_headers' => ['*'],
+'allow_credentials' => true,
 
-    'allowed_origins_patterns' => [],
+'exposed_headers' => [],
 
-    'allowed_headers' => ['*'],
+'max_age' => 0,
 
-    'exposed_headers' => [],
-
-    'max_age' => 0,
-
-    'supports_credentials' => false,
-
+'supports_credentials' => true,
+  
 ];

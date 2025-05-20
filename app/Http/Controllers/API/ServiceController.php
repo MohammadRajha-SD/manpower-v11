@@ -14,7 +14,7 @@ class ServiceController extends Controller
 
         // Filter services where available and enable_booking are 1
         $query->where('available', 1);
-        $query->where('enable_booking', 1);
+        //$query->where('enable_booking', 1);
 
         // Add condition to filter services where the provider's 'accepted' field is 1
         $query->whereHas('provider', function ($providerQuery) {
@@ -46,9 +46,11 @@ class ServiceController extends Controller
                 'quantity_unit' => $slide->quantity_unit,
                 'duration' => $slide->duration,
                 'featured' => $slide->featured,
+                 'terms' => $slide->terms,
+                 'qty_limit' => $slide->qty_limit,
                 'enable_booking' => $slide->enable_booking,
                 'available' => $slide->available,
-                'bookings' => $slide->bookings?->filter(fn($b) => $b->booking_status_id != 4 ||  $b->booking_status_id != 3)?->map(function ($b) {
+                 'bookings' => $slide->bookings?->filter(fn($b) => $b->booking_status_id != 4 ||  $b->booking_status_id != 3)?->map(function ($b) {
                     return [
                         'id' => $b->id,
                         'start_at'=> $b->start_at,
@@ -58,9 +60,9 @@ class ServiceController extends Controller
                 'created_at' => $slide->created_at,
                 'provider' => [
                     'name' => $slide->provider->name,
-                    'schedules' => $slide->provider->getSchedules(),
                     'email' => $slide->provider->email,
                     'description' => $slide->provider->description,
+                     'schedules' => $slide->provider->getSchedules(),
                     'phone_number' => $slide->provider->phone_number,
                     'mobile_number' => $slide->provider->mobile_number,
                     'availability_range' => $slide->provider->availability_range,
@@ -81,4 +83,5 @@ class ServiceController extends Controller
             'services' => $newServices,
         ], 200);
     }
+
 }

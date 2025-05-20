@@ -14,10 +14,11 @@ class Service extends Model
 
     protected $guarded = [];
 
-    public $translatable = ['name', 'description'];
+    public $translatable = ['name', 'terms' , 'description'];
 
     public function categories()
     {
+
         return $this->belongsToMany(Category::class, 'service_category', 'service_id', 'category_id');
     }
 

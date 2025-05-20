@@ -40,6 +40,7 @@ class ServiceController extends Controller
             'featured' => 'boolean',
             'enable_booking' => 'boolean',
             'available' => 'boolean',
+            'terms' => 'nullable',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -56,7 +57,9 @@ class ServiceController extends Controller
             'featured' => $request->featured,
             'enable_booking' => $request->enable_booking,
             'available' => 1,
-            'category_id' => $request->category_id
+            'terms' => $request->terms,
+            'category_id' => $request->category_id,
+            'qty_limit' => $request->qty_limit, 
         ]);
 
         // Upload images and associate with 'service'
@@ -92,6 +95,7 @@ class ServiceController extends Controller
             'price_unit' => 'required|in:fixed,hourly',
             'quantity_unit' => 'nullable|integer|min:1',
             'duration' => 'required',
+             'terms' => 'nullable',
             'featured' => 'boolean',
             'enable_booking' => 'boolean',
             'available' => 'boolean',
@@ -111,6 +115,8 @@ $service = Service::findOrFail($id);
             'enable_booking' => $request->enable_booking,
             'category_id' => $request->category_id,
             'address' => $request->address,
+             'terms' => $request->terms,
+             'qty_limit' => $request->qty_limit, 
         ]);
 
         // Handle image uploads
@@ -133,6 +139,13 @@ $service = Service::findOrFail($id);
             return response()->json([
                 'status' => 'error',
                 'message' => __('lang.cannot_delete_has_children'),
+            ]);
+        }
+
+      if ($service->bookings()->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.booking')]),
             ]);
         }
 
