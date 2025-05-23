@@ -27,9 +27,12 @@ class NotificationDataTable extends DataTable
             ->addColumn('title', function ($query) {
                 return json_decode($query->data, true)['title'];
             })
-            ->addColumn('read_at', function ($query) {
-                return $query->read_at ? Carbon::parse($query->read_at)->diffForHumans() : '-';
+            ->addColumn('message', function ($query) {
+                return json_decode($query->data, true)['body'];
             })
+            // ->addColumn('read_at', function ($query) {
+            //     return $query->read_at ? Carbon::parse($query->read_at)->diffForHumans() : '-';
+            // })
             ->addColumn('notified_at', function ($query) {
                 return $query->updated_at?->diffForHumans();
             })
@@ -79,7 +82,7 @@ class NotificationDataTable extends DataTable
     {
         return [
             Column::make('title'),
-            Column::make('read_at'),
+            Column::make('message'),
             Column::make('notified_at'),
             Column::computed('action')
                 ->exportable(false)
