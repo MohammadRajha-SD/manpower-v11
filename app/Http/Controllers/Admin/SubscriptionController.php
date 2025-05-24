@@ -80,8 +80,11 @@ class SubscriptionController extends Controller
             $subscription->stripe_id = $subscriptionStripe->id;
             $subscription->stripe_status = $subscriptionStripe->status;
             $subscription->stripe_plan = $pack->stripe_plan_id;
-            $subscription->ends_at = $pack->number_of_months > 0 ? Carbon::now()->addMonths($pack->number_of_months) : now();
-            $subscription->trial_ends_at = $pack->number_of_months > 0 ? Carbon::now()->addMonths($pack->number_of_months) : now();
+            $subscription->ends_at = $pack->number_of_months > 0 ? Carbon::now()->addMonths($pack->number_of_months) : Carbon::now();
+            $subscription->trial_ends_at = $pack->trial_days > 0
+                ? Carbon::now()->addDays($pack->trial_days)
+                : Carbon::now();
+
             $subscription->save();
 
             DB::commit();
@@ -405,7 +408,7 @@ class SubscriptionController extends Controller
                     ]);
 
                     return redirect()->back()->with('success', __('lang.full_refund_processed_and_subscription_canceled'));
-                }else{
+                } else {
                     return redirect()->back()->with('error', __('lang.refund_amount_exceeds_remaining_balance'));
                 }
             } else {
