@@ -111,6 +111,7 @@ return [
     'stripe_status' => 'حالة ',
     'stripe_plan' => 'خط ',
 
+    'trial_days' => 'أيام المحاكمة',
     'trial_ends_at' => 'ينتهي التجربة في',
     'ends_at' => 'ينتهي في',
 

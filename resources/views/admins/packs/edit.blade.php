@@ -133,6 +133,15 @@
                 </div>
 
                 <div class="d-flex flex-column col-sm-12 col-md-6">
+                    <!-- Number of trial_days -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="trial_days" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.trial_days") }}</label>
+                        <div class="col-md-9">
+                            <input type="number" id="trial_days" name="trial_days" class="form-control"
+                                placeholder="{{ trans('lang.trial_days') }}">
+                        </div>
+                    </div>
                     <!-- Number of Subcategories -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="number_of_subcategories" class="col-md-3 control-label text-md-right mx-1">{{

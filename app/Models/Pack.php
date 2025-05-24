@@ -22,6 +22,7 @@ class Pack extends Model
         'number_of_subcategories',
         'not_in_featured_services',
         'not_on_image_slider',
+        'trial_days'
     ];
 
     public $translatable = [

@@ -106,6 +106,7 @@ return [
     'stripe_plan' => 'Plan',
 
     'trial_ends_at' => 'Trial Ends At',
+    'trial_days' => 'Trial Days',
     'ends_at' => 'Ends At',
 
 

@@ -3,7 +3,7 @@
         :table_name="__('lang.requested_e_providers_table')" :route="route('admin.provider-requests.index')" />
 
     <x-admins.cards.content :name1="__('lang.requested_e_providers_table')" :name2="__('lang.e_provider_create')"
-        route1="admin.provider-requests.index" route2="admin.provider-requests.create">
+        route1="admin.provider-requests.index" route2="admin.providers.create">
         @push('css_lib')
         @include('admins.layouts.datatables_css')
         @endpush

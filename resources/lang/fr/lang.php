@@ -36,6 +36,7 @@ return [
 
     'customer_name' => 'Customer Name',
     'customer_address' => 'Customer Address',
+    'trial_days' => 'Trial Days',
 
     'provider_statistique' => 'Provider Statistic',
     'provider_subscriptions' => 'Abonnements du fournisseur',

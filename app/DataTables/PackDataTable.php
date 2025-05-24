@@ -25,6 +25,9 @@ class PackDataTable extends DataTable
             ->addColumn('type', function ($query) {
                 return ucwords($query->type);
             })
+            ->addColumn('trial_days', function ($query) {
+                return $query->trial_days;
+            })
             ->addColumn('num_of_months', function ($query) {
                 return $query->number_of_months;
             })
@@ -91,6 +94,7 @@ class PackDataTable extends DataTable
     {
         return [
             Column::make('type'),
+            Column::make('trial_days'),
             Column::make('num_of_months'),
             Column::make('num_of_ads'),
             Column::make('num_of_subcategories'),

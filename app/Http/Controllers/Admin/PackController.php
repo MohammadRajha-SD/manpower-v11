@@ -27,6 +27,7 @@ class PackController extends Controller
         $validated = $request->validate([
             'stripe_plan_id' => 'nullable|string',
             'type' => 'required',
+            'trial_days' => 'required',
             'price' => 'required|integer|min:0',
             'text' => 'required',
             'short_description' => 'required|string',
@@ -92,6 +93,7 @@ class PackController extends Controller
             'number_of_subcategories' => 'required|integer|min:0',
             'not_in_featured_services' => 'boolean',
             'not_on_image_slider' => 'boolean',
+            'trial_days' => 'required',
         ]);
 
         $pack = Pack::findOrFail($id);
