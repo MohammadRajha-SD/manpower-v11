@@ -6,41 +6,74 @@ use App\Http\Controllers\Controller;
 use App\Traits\ImageHandler;
 use Illuminate\Http\Request;
 use App\Models\ProviderRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ProviderRequestController extends Controller
 {
     use ImageHandler;
-
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'company_name' => 'required|max:255',
-            'company_website' => 'nullable',
-            'contact_person' => 'required|max:255',
-            'contact_email' => 'required|max:255',
-            'phone_number' => 'required|max:20',
-            'number_employees' => 'nullable|integer',
-            'cities' => 'nullable',
-            'services' => 'nullable',
-            'plans' => 'nullable',
-            'notes' => 'nullable',
-            'licence' => 'nullable|file|mimes:pdf|max:4096',
-        ]);
+        try {
+            Log::info('Incoming Request:', $request->all());
 
-        if ($request->hasFile('licence')) {
-            $path = $this->uploadImage($request->file('licence'), 'uploads');
-            $validated['licence'] = 'uploads/'.$path;
+            $validated = $request->validate([
+                'company_name' => 'required',
+                'company_website' => 'nullable',
+                'contact_person' => 'required',
+                'contact_email' => 'required|email',
+                'phone' => 'required',
+                'number_employees' => 'nullable',
+                'cities' => 'nullable',
+                'services' => 'nullable',
+                'plans' => 'nullable',
+                'notes' => 'nullable',
+                'licence' => 'nullable|mimes:pdf|max:4096',
+            ]);
+
+            // Upload licence file if exists
+            if ($request->hasFile('licence')) {
+                try {
+                    $path = $this->uploadImage($request->file('licence'), 'uploads');
+                    $validated['licence'] = 'uploads/' . $path;
+                    Log::info('Licence uploaded to: ' . 'uploads/' . $validated['licence']);
+                } catch (\Exception $e) {
+                    return response()->json(['error' => 'Failed to upload licence file.'], 500);
+                }
+            }
+
+            // Handle comma-separated string to JSON array
+            $validated['cities'] = isset($validated['cities']) ? json_encode(explode(',', $validated['cities'])) : json_encode([]);
+            $validated['services'] = isset($validated['services']) ? json_encode(explode(',', $validated['services'])) : json_encode([]);
+            $validated['plans'] = isset($validated['plans']) ? json_encode(explode(',', $validated['plans'])) : json_encode([]);
+            $validated['phone_number'] = $request->phone;
+            unset($validated['phone']);
+
+
+            Log::info('Final Payload to DB: ', $validated);
+
+            $providerRequest = ProviderRequest::create($validated);
+
+            Mail::to($providerRequest->email)->send(
+                new \App\Mail\ProviderThankYouMail($validated['contact_person'])
+            );
+
+            Mail::to($providerRequest->email)->send(
+                new \App\Mail\ProviderThankYouMailAR($validated['contact_person'])
+            );
+
+            return response()->json([
+                'message' => 'Provider request submitted successfully.',
+                'data' => $providerRequest,
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $ve) {
+            Log::error('Validation Error:', $ve->errors());
+            return response()->json(['errors' => $ve->errors()], 422);
+
+        } catch (\Exception $e) {
+            Log::error('General Error: ' . $e->getMessage());
+            return response()->json(['error' => 'Something went wrong. Please try again.'], 500);
         }
-
-        $validated['cities'] = json_encode((array) ($validated['cities'] ?? []));
-        $validated['services'] = json_encode((array) ($validated['services'] ?? []));
-        $validated['plans'] = json_encode((array) ($validated['plans'] ?? []));
-
-        $providerRequest = ProviderRequest::create($validated);
-
-        return response()->json([
-            'message' => 'Provider request submitted successfully.',
-            'data' => $providerRequest,
-        ], 201);
     }
 }
