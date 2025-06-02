@@ -3,31 +3,55 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProviderRequest;
+use App\Traits\ImageHandler;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use App\Mail\AgreementSignedMail;
+use App\Mail\AgreementSignedMailAR;
+use Illuminate\Support\Facades\Mail;
 
 class AgreementController extends Controller
 {
+    use ImageHandler;
+
     public function index($uid)
     {
+        $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
+
         return collect([
             'uid' => $uid,
-            'legal_business_name' => 'TechNova LLC',
-            'trade_license_number' => 'TLN-56789-DXB',
-            'company_address' => 'Office 210, Silicon Oasis, Dubai, UAE',
-            'contact_email' => 'info@technova.com',
-            'contact_phone_number' => '971 50 123 4567',
-            'commission_agreed' => '7%',
+            'legal_business_name' => $prequest->agreement?->name ?? $prequest->company_name,
+            'trade_license_number' => $prequest->agreement?->license_number ?? 'N/A',
+            'company_address' => $prequest->agreement?->address ?? 'N/A',
+            'contact_email' => $prequest->agreement?->email ?? $prequest->contact_email,
+            'contact_phone_number' => $prequest->agreement?->phone ?? $prequest->phone_number,
+            'commission_agreed' => $prequest->agreement?->commission . '%' ?? '0%',
         ]);
     }
 
     public function store(Request $request, $uid)
     {
-        Log::info($request->all());
+        $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
 
-        $provider = $uid === '123456';
+        if ($prequest) {
+            $imageData = $request->input('eSignture');
+            $imageData = str_replace('data:image/png;base64,', '', $imageData);
+            $imageData = str_replace(' ', '+', $imageData);
+            $imageName = 'signature_' . time() . '.png';
 
-        if ($provider) {
+            $prequest->agreement->signed = 1;
+            $prequest->agreement->terms = $request->terms == 'true' ? true : false;
+            $prequest->agreement->signture = 'storage/uploads/' . $imageName;
+
+            $prequest->save();
+
+            Storage::disk('public')->put('uploads/' . $imageName, base64_decode($imageData));
+
+            $name = $prequest->agreement?->name ?? $prequest->contact_person;
+            Mail::to($prequest->email)->send(new AgreementSignedMail($name));
+            Mail::to($prequest->email)->send(new AgreementSignedMailAR($name));
+
             return response()->json([
                 'status' => 'success',
             ], 201);
