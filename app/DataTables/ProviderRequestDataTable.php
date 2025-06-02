@@ -17,6 +17,9 @@ class ProviderRequestDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
+            ->editColumn('id', function ($query) {
+                return 'PRR_11' . $query->id;
+            })
             ->editColumn('company_name', function ($query) {
                 return ucwords($query->company_name);
             })
@@ -177,6 +180,8 @@ class ProviderRequestDataTable extends DataTable
     public function getColumns(): array
     {
         return [
+            Column::make('id')->title('#')->orderable(true)
+                ->searchable(true),
             Column::make('company_name')
                 ->orderable(true)
                 ->searchable(true),
