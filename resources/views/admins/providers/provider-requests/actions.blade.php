@@ -14,10 +14,17 @@
             @if (!$request->agreement)
             <livewire:agreement-actions :id="$request->id" />
             @endif
+
             <livewire:agreement-details-action :id="$request->id" />
 
-            <a href="{{ route('admin.provider-requests.send', $request->id) }}" class="btn text-primary btn-sm ml-2">
-                <i class="fa fa-paper-plane"></i> {{ __('lang.send') }}
+            <a href="{{ route('admin.provider-requests.send', ['id' => $request->id, 'lang' => 'en']) }}"
+                class="btn text-primary btn-sm ml-2">
+                <i class="fa fa-paper-plane"></i> {{ __('lang.send') }} - EN
+            </a>
+
+            <a href="{{ route('admin.provider-requests.send', ['id' => $request->id, 'lang' => 'ar']) }}"
+                class="btn text-primary btn-sm ml-2">
+                <i class="fa fa-paper-plane"></i> {{ __('lang.send') }} - AR
             </a>
         </div>
     </div>
