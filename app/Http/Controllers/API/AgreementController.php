@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Mail\AgreementSignedMail;
 use App\Mail\AgreementSignedMailAR;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class AgreementController extends Controller
 {
@@ -18,8 +19,13 @@ class AgreementController extends Controller
     public function index($uid)
     {
         $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
-
-        return collect([
+    
+        if (!$prequest) {
+            return response()->json(['error' => 'Request not found'], 404);
+        }
+    
+        return response()->json([
+            'redirect' => false,
             'uid' => $uid,
             'legal_business_name' => $prequest->agreement?->name ?? $prequest->company_name,
             'trade_license_number' => $prequest->agreement?->license_number ?? 'N/A',
@@ -29,6 +35,8 @@ class AgreementController extends Controller
             'commission_agreed' => $prequest->agreement?->commission . '%' ?? '0%',
         ]);
     }
+
+
 
     public function store(Request $request, $uid)
     {
@@ -42,18 +50,23 @@ class AgreementController extends Controller
 
             $prequest->agreement->signed = 1;
             $prequest->agreement->terms = $request->terms == 'true' ? true : false;
-            $prequest->agreement->signture = 'storage/uploads/' . $imageName;
-
-            $prequest->save();
-
+            $prequest->agreement->signature = 'storage/uploads/' . $imageName;
+            
+            $prequest->agreement->save();
+            
             Storage::disk('public')->put('uploads/' . $imageName, base64_decode($imageData));
 
             $name = $prequest->agreement?->name ?? $prequest->contact_person;
-            Mail::to($prequest->email)->send(new AgreementSignedMail($name));
-            Mail::to($prequest->email)->send(new AgreementSignedMailAR($name));
-
+            $email = $prequest->agreement?->email ?? $prequest->contact_email;
+            
+            if ($email) {
+             Mail::to($email)->send(new AgreementSignedMail($name));
+             Mail::to($email)->send(new AgreementSignedMailAR($name));
+            }
+            
             return response()->json([
                 'status' => 'success',
+                'data' => $prequest,
             ], 201);
         } else {
             return response()->json([
