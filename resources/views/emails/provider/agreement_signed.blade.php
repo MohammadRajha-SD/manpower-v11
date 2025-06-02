@@ -10,7 +10,9 @@
     <p>Dear {{ $name ?? 'User'}},</p>
 
     <p>Thank you for signing the agreement. We appreciate your trust.</p>
-
+    
+    <p><strong>Agreement Tracking Number: AG_11{{ $id }}</strong></p>
+    
     <p>Best regards,<br>Team</p>
 </body>
 

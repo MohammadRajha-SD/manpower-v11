@@ -59,10 +59,12 @@ class AgreementController extends Controller
 
             $name = $prequest->agreement?->name ?? $prequest->contact_person;
             $email = $prequest->agreement?->email ?? $prequest->contact_email;
+            $id = $prequest->agreement?->id;
 
-            if ($email) {
-                Mail::to($email)->send(new AgreementSignedMail($name));
-                Mail::to($email)->send(new AgreementSignedMailAR($name));
+            if ($request->lang == 'ar') {
+                Mail::to($email)->send(new AgreementSignedMailAR($name, $id));
+            } else {
+                Mail::to($email)->send(new AgreementSignedMail($name, $id));
             }
 
             return response()->json([
