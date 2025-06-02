@@ -14,16 +14,14 @@ use Yajra\DataTables\Services\DataTable;
 
 class ProviderRequestDataTable extends DataTable
 {
-    /**
-     * Build the DataTable class.
-     *
-     * @param QueryBuilder $query Results from query() method.
-     */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('company_name', function ($query) {
                 return ucwords($query->company_name);
+            })
+            ->addColumn('company_website', function ($query) {
+                return $query->company_website ?? 'N/A';
             })
             ->addColumn('number_employees', function ($query) {
                 return $query->number_employees;
@@ -94,6 +92,48 @@ class ProviderRequestDataTable extends DataTable
                         </div>
                     </form>';
             })
+            ->addColumn('signed', function ($query) {
+                $checked = $query->signed ? 'checked' : '';
+                $route = route('admin.provider-requests.toggleSigned', $query->id);
+
+                return '
+                    <form method="POST" action="' . $route . '" class="d-inline toggle-signed-form" title="Toggle signed status">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <div class="form-check form-switch">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                name="signed" 
+                                id="switch-signed-' . $query->id . '"
+                                onchange="this.form.submit()" 
+                                ' . $checked . '>
+                            <label class="form-check-label small" for="switch-signed-' . $query->id . '">
+                                ' . ($query->signed ? 'signed' : 'unsigned') . '
+                            </label>
+                        </div>
+                    </form>';
+            })
+            ->addColumn('subscribed', function ($query) {
+                $checked = $query->subscribed ? 'checked' : '';
+                $route = route('admin.provider-requests.toggleSubscribed', $query->id);
+
+                return '
+                    <form method="POST" action="' . $route . '" class="d-inline toggle-subscribed-form" title="Toggle subscribed status">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
+                        <div class="form-check form-switch">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                name="subscribed" 
+                                id="switch-subscribed-' . $query->id . '"
+                                onchange="this.form.submit()" 
+                                ' . $checked . '>
+                            <label class="form-check-label small" for="switch-subscribed-' . $query->id . '">
+                                ' . ($query->subscribed ? 'subscribed' : 'unsubscribed') . '
+                            </label>
+                        </div>
+                    </form>';
+            })
             ->addColumn('licence', function ($query) {
                 return '<a href="' . route('admin.provider-requests.streamLicence', $query->id) . '" 
                     target="_blank" 
@@ -102,10 +142,10 @@ class ProviderRequestDataTable extends DataTable
                         <i class="fas fa-eye"></i>
                     </a>';
             })
-            ->addColumn('action', function ($query) {
-                return "<a href='" . route('admin.provider-requests.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
+            ->addColumn('action', function ($request) {
+                return view('admins.providers.provider-requests.actions', compact('request'))->render();
             })
-            ->rawColumns(['action', 'cities', 'services', 'plans', 'accepted', 'licence'])
+            ->rawColumns(['action', 'cities', 'services', 'plans', 'accepted', 'licence', 'subscribed', 'signed'])
             ->setRowId('id');
     }
 
@@ -148,6 +188,8 @@ class ProviderRequestDataTable extends DataTable
             Column::make('phone'),
             Column::make('company_website'),
             Column::make('accepted'),
+            Column::make('signed'),
+            Column::make('subscribed'),
             Column::make('licence'),
             Column::computed('action')
                 ->exportable(false)

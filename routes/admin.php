@@ -71,7 +71,11 @@ Route::resource('provider-types', ProviderTypeController::class);
 Route::resource('provider-schedules', ProviderScheduleController::class);
 Route::resource('provider-statistics', ProviderStatisticController::class);
 
+Route::get('provider-requests/{id}/send', [ProviderRequestController::class, 'send'])->name('provider-requests.send');
+Route::get('provider-requests/{id}/agreement', [ProviderRequestController::class, 'agreement'])->name('provider-requests.agreement');
 Route::get('provider-requests/{id}/licence', [ProviderRequestController::class, 'streamLicence'])->name('provider-requests.streamLicence');
+Route::post('provider-requests/{id}/toggle-signed', [ProviderRequestController::class, 'toggleSigned'])->name('provider-requests.toggleSigned');
+Route::post('provider-requests/{id}/toggle-subscribed', [ProviderRequestController::class, 'toggleSubscribed'])->name('provider-requests.toggleSubscribed');
 Route::post('provider-requests/{id}/toggle-accepted', [ProviderRequestController::class, 'toggleAccepted'])->name('provider-requests.toggleAccepted');
 Route::resource('provider-requests', ProviderRequestController::class);
  

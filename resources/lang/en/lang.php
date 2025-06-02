@@ -1777,7 +1777,7 @@ return [
     'payment_not_completed' => 'Payment not completed or subscription is incomplete.',
 
     'edit' => 'Edit',
-    
+
     // refunding subscription
     'refund' => 'Refund',
     'refund_success' => 'Refund processed successfully.',
@@ -1791,4 +1791,18 @@ return [
 
     'confirmation.confirmation_already_confirmed' => 'Confirmation already completed.',
     'confirmation.confirmation_successful' => "Confirmation successful.",
+
+    "agreement" => "Agreement",
+    "send" => "Send",
+    "terms" => "Terms",
+    "signed" => "Signed",
+    "license_number" => "License Number",
+    'details' => 'Details',
+    'provider_request' => 'Provider Request',
+    'company_name' => 'Company Name',
+    'phone' => 'Phone',
+    'commission' => 'Commission',
+    'created_at' => 'Created At',
+    'signature' => 'Signature',
+    'no_agreement_details' => 'No agreement details available.',
 ];

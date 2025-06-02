@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
 
@@ -140,20 +140,20 @@ return [
     'app_setting_facebook_link' => 'Facebook Link',
     'app_setting_facebook_link_help' => 'The Facebook Link appear in title',
     'app_setting_facebook_link_placeholder' => 'Enter Facebook Link',
-    
+
     'app_setting_whatsapp_link' => 'Whatsapp Link',
     'app_setting_whatsapp_link_help' => 'The Whatsapp Link appear in title',
     'app_setting_whatsapp_link_placeholder' => 'Enter Whatsapp Link',
-    
+
     'app_setting_instagram_link' => 'Instagram Link',
     'app_setting_instagram_link_help' => 'The Instagram Link appear in title',
-    'app_setting_instagram_link_placeholder' => 'Enter Instagram Link',   
+    'app_setting_instagram_link_placeholder' => 'Enter Instagram Link',
     'app_setting_play_sotre_link' => 'Play Store Link',
     'app_setting_play_sotre_link_help' => 'The Play Store Link appear in title',
     'app_setting_play_sotre_link_placeholder' => 'Enter Play Store Link',
     'app_setting_app_store_link' => 'App Store Link',
     'app_setting_app_store_link_help' => 'The App Store Link appear in title',
-    'app_setting_app_store_link_placeholder' => 'Enter App Store Link', 
+    'app_setting_app_store_link_placeholder' => 'Enter App Store Link',
     'app_setting_currency_right' => 'Currency in the right',
     'app_setting_currency_right_help' => 'Show currency in the right of price',
     'app_setting_custom_field_models' => 'Custom Fields Models',
@@ -1676,5 +1676,10 @@ return [
     'contact_us_phone' => 'Phone',
     'contact_us_message' => 'Message',
     'contact_us_table' => 'Messages',
-    'contact_us_desc' => 'Messages Sent From Customers'
+    'contact_us_desc' => 'Messages Sent From Customers',
+    "agreement" => "Agreement",
+    "send" => "Send",
+     "terms" => "Terms",
+    "signed" => "Signed",
+    "license_number" => "License Number",
 ];

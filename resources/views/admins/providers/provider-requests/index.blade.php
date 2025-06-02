@@ -18,4 +18,7 @@
         @endpush
 
     </x-admins.cards.content>
+
+    <livewire:agreement-form />
+    <livewire:agreement-details />
 </x-admin-layout>

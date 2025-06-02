@@ -28,7 +28,7 @@ class ProviderRequestController extends Controller
                 'services' => 'nullable',
                 'plans' => 'nullable',
                 'notes' => 'nullable',
-                'licence' => 'nullable|mimes:pdf|max:4096',
+                'licence' => 'required',
             ]);
 
             // Upload licence file if exists
@@ -54,13 +54,16 @@ class ProviderRequestController extends Controller
 
             $providerRequest = ProviderRequest::create($validated);
 
-            Mail::to($providerRequest->email)->send(
-                new \App\Mail\ProviderThankYouMail($validated['contact_person'])
-            );
+            if (!empty($validated['contact_email'])) {
+                Mail::to($validated['contact_email'])->send(
+                    new \App\Mail\ProviderThankYouMail($validated['contact_person'])
+                );
 
-            Mail::to($providerRequest->email)->send(
-                new \App\Mail\ProviderThankYouMailAR($validated['contact_person'])
-            );
+                Mail::to($validated['contact_email'])->send(
+                    new \App\Mail\ProviderThankYouMailAR($validated['contact_person'])
+                );
+            }
+
 
             return response()->json([
                 'message' => 'Provider request submitted successfully.',

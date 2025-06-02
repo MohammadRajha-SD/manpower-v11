@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\AgreementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\MultiLoginController;
 
@@ -114,3 +115,6 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('global-settings', [GlobalSettingController::class, 'index']);
 
 Route::post('become-partner', [ProviderRequestController::class, 'store']);
+
+Route::get('agreement/{uid}', [AgreementController::class, 'index']);
+Route::post('agreement/{uid}', [AgreementController::class, 'store']);

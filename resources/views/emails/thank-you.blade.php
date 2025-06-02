@@ -5,7 +5,7 @@
 </head>
 <body>
     <h2>Hello {{ $name }},</h2>
-    <p>Thank you for applying. We have received your provider request and will review it shortly.</p>
+    <p>Thank you for submitting the application. We have received it and will contact you within 1–2 working days.</p>
     <p>Best regards,<br>HPower</p>
 </body>
 </html>

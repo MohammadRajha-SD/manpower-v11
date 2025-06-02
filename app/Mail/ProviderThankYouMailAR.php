@@ -22,7 +22,7 @@ class ProviderThankYouMailAR extends Mailable
 
     public function build()
     {
-        return $this->from('noreply@hpower.com', 'اتش باور')
+        return $this->from('noreply@hpower.ae', 'اتش باور')
                     ->subject('شكرًا لتقديم طلبك')
                     ->view('emails.thank-you-ar');
     }

@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/iziToast.css')}}">
 
     @yield('css_custom')
+    @livewireStyles
 </head>
 
 <body
@@ -284,6 +285,7 @@
     <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
     <script src="{{asset('js/scripts.min.js')}}"></script>
     @stack('scripts')
-</body>
 
+     @livewireScripts
+</body>
 </html>

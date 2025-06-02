@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 return [
     'e_service_enable_booking' => 'تفعيل الحجز <small>(يمكن للعميل إجراء حجز)</small>',
@@ -182,37 +182,37 @@ return [
     'app_setting_app_name_help' => 'يظهر اسم التطبيق في العنوان',
     'app_setting_app_name_placeholder' => 'أدخل اسم التطبيق',
 
-     'app_setting_contact_email' => 'البريد الإلكتروني لجهة الاتصال',
-     'app_setting_contact_email_help' => 'يظهر البريد الإلكتروني لجهة الاتصال في العنوان',
-     'app_setting_contact_email_placeholder' => 'أدخل البريد الإلكتروني لجهة الاتصال',
+    'app_setting_contact_email' => 'البريد الإلكتروني لجهة الاتصال',
+    'app_setting_contact_email_help' => 'يظهر البريد الإلكتروني لجهة الاتصال في العنوان',
+    'app_setting_contact_email_placeholder' => 'أدخل البريد الإلكتروني لجهة الاتصال',
 
-     'app_setting_contact_phone' => 'هاتف الاتصال',
-     'app_setting_contact_phone_help' => 'يظهر هاتف جهة الاتصال في العنوان',
-     'app_setting_contact_phone_placeholder' => 'أدخل هاتف جهة الاتصال',
+    'app_setting_contact_phone' => 'هاتف الاتصال',
+    'app_setting_contact_phone_help' => 'يظهر هاتف جهة الاتصال في العنوان',
+    'app_setting_contact_phone_placeholder' => 'أدخل هاتف جهة الاتصال',
 
-     'app_setting_twitter_link' => 'رابط تويتر',
-     'app_setting_twitter_link_help' => 'يظهر رابط Twitter في العنوان',
-     'app_setting_twitter_link_placeholder' => 'أدخل إلى رابط Twitter',
+    'app_setting_twitter_link' => 'رابط تويتر',
+    'app_setting_twitter_link_help' => 'يظهر رابط Twitter في العنوان',
+    'app_setting_twitter_link_placeholder' => 'أدخل إلى رابط Twitter',
 
-     'app_setting_facebook_link' => 'رابط الفيسبوك',
-     'app_setting_facebook_link_help' => 'يظهر رابط Facebook في العنوان',
-     'app_setting_facebook_link_placeholder' => 'أدخل إلى رابط Facebook',
+    'app_setting_facebook_link' => 'رابط الفيسبوك',
+    'app_setting_facebook_link_help' => 'يظهر رابط Facebook في العنوان',
+    'app_setting_facebook_link_placeholder' => 'أدخل إلى رابط Facebook',
 
-     'app_setting_whatsapp_link' => 'رابط الواتساب',
-     'app_setting_whatsapp_link_help' => 'يظهر رابط Whatsapp في العنوان',
-     'app_setting_whatsapp_link_placeholder' => 'أدخل إلى رابط Whatsapp',
+    'app_setting_whatsapp_link' => 'رابط الواتساب',
+    'app_setting_whatsapp_link_help' => 'يظهر رابط Whatsapp في العنوان',
+    'app_setting_whatsapp_link_placeholder' => 'أدخل إلى رابط Whatsapp',
 
-     'app_setting_instagram_link' => 'رابط Instagram',
-     'app_setting_instagram_link_help' => 'يظهر رابط Instagram في العنوان',
-     'app_setting_instagram_link_placeholder' => 'أدخل إلى رابط Instagram',
+    'app_setting_instagram_link' => 'رابط Instagram',
+    'app_setting_instagram_link_help' => 'يظهر رابط Instagram في العنوان',
+    'app_setting_instagram_link_placeholder' => 'أدخل إلى رابط Instagram',
 
-     'app_setting_play_sotre_link' => 'رابط متجر Play',
-     'app_setting_play_sotre_link_help' => 'يظهر رابط متجر Play في العنوان',
-     'app_setting_play_sotre_link_placeholder' => 'أدخل إلى رابط متجر Play',
+    'app_setting_play_sotre_link' => 'رابط متجر Play',
+    'app_setting_play_sotre_link_help' => 'يظهر رابط متجر Play في العنوان',
+    'app_setting_play_sotre_link_placeholder' => 'أدخل إلى رابط متجر Play',
 
-     'app_setting_app_store_link' => 'رابط متجر التطبيقات',
-     'app_setting_app_store_link_help' => 'يظهر رابط متجر التطبيقات في العنوان',
-     'app_setting_app_store_link_placeholder' => 'أدخل إلى رابط متجر التطبيقات',
+    'app_setting_app_store_link' => 'رابط متجر التطبيقات',
+    'app_setting_app_store_link_help' => 'يظهر رابط متجر التطبيقات في العنوان',
+    'app_setting_app_store_link_placeholder' => 'أدخل إلى رابط متجر التطبيقات',
 
     'app_setting_app_short_description' => 'وصف قصير',
     'app_setting_app_short_description_help' => 'الوصف القصير يظهر في العنوان',
@@ -1682,5 +1682,18 @@ return [
     'contact_us_phone' => 'الهاتف',
     'contact_us_message' => 'الرسالة',
     'contact_us_table' => 'الرسائل',
-    'contact_us_desc' => 'الرسائل المرسلة من قبل العملاء'
+    'contact_us_desc' => 'الرسائل المرسلة من قبل العملاء',
+    "agreement" => "اتفاقية",
+    "send" => "إرسال",
+    "terms" => "الشروط",
+    "signed" => "التوقيع",
+    "license_number" => "رقم الترخيص",
+    'details' => 'تفاصيل',
+    'provider_request' => 'طلب المزود',
+    'company_name' => 'اسم الشركة',
+    'phone' => 'الهاتف',
+    'commission' => 'العمولة',
+    'created_at' => 'تاريخ الإنشاء',
+    'signature' => 'التوقيع',
+    'no_agreement_details' => 'لا توجد تفاصيل للاتفاقية.',
 ];
