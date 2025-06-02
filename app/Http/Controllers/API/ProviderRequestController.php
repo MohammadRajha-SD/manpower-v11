@@ -55,13 +55,15 @@ class ProviderRequestController extends Controller
             $providerRequest = ProviderRequest::create($validated);
 
             if (!empty($validated['contact_email'])) {
-                Mail::to($validated['contact_email'])->send(
-                    new \App\Mail\ProviderThankYouMail($validated['contact_person'])
-                );
-
-                Mail::to($validated['contact_email'])->send(
-                    new \App\Mail\ProviderThankYouMailAR($validated['contact_person'])
-                );
+                if ($request->lang == 'ar') {
+                    Mail::to($validated['contact_email'])->send(
+                        new \App\Mail\ProviderThankYouMailAR($validated['contact_person'])
+                    );
+                } else {
+                    Mail::to($validated['contact_email'])->send(
+                        new \App\Mail\ProviderThankYouMail($validated['contact_person'])
+                    );
+                }
             }
 
             return response()->json([
