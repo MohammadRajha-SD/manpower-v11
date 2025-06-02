@@ -1805,4 +1805,7 @@ return [
     'created_at' => 'Created At',
     'signature' => 'Signature',
     'no_agreement_details' => 'No agreement details available.',
+    "company_website" => "Company Website",
+    "contact_person" => "Contact Person",
+    "no_booking_details" => "No Booking Details Found...",
 ];

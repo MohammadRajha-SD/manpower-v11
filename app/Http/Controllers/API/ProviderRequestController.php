@@ -64,7 +64,6 @@ class ProviderRequestController extends Controller
                 );
             }
 
-
             return response()->json([
                 'message' => 'Provider request submitted successfully.',
                 'data' => $providerRequest,

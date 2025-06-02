@@ -17,4 +17,5 @@
         @endpush
 
     </x-admins.cards.content>
+    <livewire:booking-details />
 </x-admin-layout>

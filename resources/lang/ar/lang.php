@@ -1696,4 +1696,7 @@ return [
     'created_at' => 'تاريخ الإنشاء',
     'signature' => 'التوقيع',
     'no_agreement_details' => 'لا توجد تفاصيل للاتفاقية.',
+    "company_website" => "موقع الشركة",
+    "contact_person" => "الشخص المسؤول",
+    "no_booking_details" => "لم يتم العثور على تفاصيل الحجز...",
 ];

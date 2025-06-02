@@ -23,6 +23,9 @@
                 <i class="fa fa-undo"></i> {{ __('lang.refund') }}
             </button>
             @endif
+
+
+            <livewire:booking-details-action :id="$booking->id"/>
         </div>
     </div>
 
