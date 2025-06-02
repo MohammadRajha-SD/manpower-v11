@@ -17,7 +17,7 @@ class ProviderRequestDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('company_name', function ($query) {
+            ->editColumn('company_name', function ($query) {
                 return ucwords($query->company_name);
             })
             ->addColumn('company_website', function ($query) {
@@ -151,9 +151,9 @@ class ProviderRequestDataTable extends DataTable
 
     public function query(ProviderRequest $model): QueryBuilder
     {
-        return $model->newQuery()
-            ->orderBy('accepted')
-            ->orderBy('updated_at', 'desc');
+        return $model->newQuery();
+        // ->orderBy('accepted')
+        // ->orderBy('updated_at', 'desc')
     }
 
     public function html(): HtmlBuilder
@@ -162,8 +162,7 @@ class ProviderRequestDataTable extends DataTable
             ->setTableId('providerrequest-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
-            //->dom('Bfrtip')
-            ->orderBy(1)
+            ->orderBy(0)
             ->selectStyleSingle()
             ->buttons([
                 Button::make('excel'),
@@ -178,15 +177,25 @@ class ProviderRequestDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('company_name'),
+            Column::make('company_name')
+                ->orderable(true)
+                ->searchable(true),
             Column::make('services'),
             Column::make('cities'),
             Column::make('plans'),
             Column::make('notes'),
-            Column::make('contact_person'),
-            Column::make('contact_email'),
-            Column::make('phone'),
-            Column::make('company_website'),
+            Column::make('contact_person')
+                ->orderable(true)
+                ->searchable(true),
+            Column::make('contact_email')
+                ->orderable(true)
+                ->searchable(true),
+            Column::make('phone')
+                ->orderable(true)
+                ->searchable(true),
+            Column::make('company_website')
+                ->orderable(true)
+                ->searchable(true),
             Column::make('accepted'),
             Column::make('signed'),
             Column::make('subscribed'),
