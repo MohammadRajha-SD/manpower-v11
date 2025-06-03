@@ -23,6 +23,7 @@ use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\ServiceReviewController;
 use App\Http\Controllers\API\SlideController;
 use App\Http\Controllers\API\SubscriptionController;
+use App\Http\Controllers\Api\TermController;
 use App\Http\Controllers\API\UserController;
 
 
@@ -118,3 +119,5 @@ Route::post('become-partner', [ProviderRequestController::class, 'store']);
 
 Route::get('agreement/{uid}', [AgreementController::class, 'index']);
 Route::post('agreement/{uid}', [AgreementController::class, 'store']);
+
+Route::get('terms', [TermController::class, 'index']);

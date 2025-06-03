@@ -8,12 +8,14 @@ use App\Http\Controllers\Admin\Setting\PaymentController;
 use App\Http\Controllers\Admin\Setting\SettingController;
 use App\Http\Controllers\Admin\Setting\SlideController;
 use App\Http\Controllers\Admin\Setting\SocialAuthController;
+use App\Http\Controllers\Admin\Setting\TermController;
 use App\Http\Controllers\Admin\UserController;
 
 //** App Settings   */
 Route::resource('settings', SettingController::class);
 
 Route::prefix('setting')->group(function () {
+    Route::resource('terms', TermController::class);
     Route::resource('currencies', CurrencyController::class);
     Route::resource('users', UserController::class);
     Route::resource('localisation', LocalisationController::class);
