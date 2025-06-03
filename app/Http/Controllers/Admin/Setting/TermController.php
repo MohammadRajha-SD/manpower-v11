@@ -22,7 +22,7 @@ class TermController extends Controller
         ]);
 
         Term::updateOrCreate(
-            ['id' => $id],
+            ['id' => 1],
             ['content' => $request->terms]
         );
 

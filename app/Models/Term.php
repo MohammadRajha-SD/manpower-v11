@@ -12,6 +12,6 @@ class Term extends Model
     use HasTranslations;
 
     protected $guarded = [];
-    public $translatable = ['name', 'desc'];
+    public $translatable = ['content'];
 
 }

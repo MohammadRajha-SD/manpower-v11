@@ -23,7 +23,7 @@ use App\Http\Controllers\API\ServiceController;
 use App\Http\Controllers\API\ServiceReviewController;
 use App\Http\Controllers\API\SlideController;
 use App\Http\Controllers\API\SubscriptionController;
-use App\Http\Controllers\Api\TermController;
+use App\Http\Controllers\API\TermController;
 use App\Http\Controllers\API\UserController;
 
 
