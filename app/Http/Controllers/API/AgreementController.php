@@ -26,7 +26,7 @@ class AgreementController extends Controller
 
         return response()->json([
             'redirect' => $prequest->signed == 1 || ($prequest->agreement && $prequest->agreement?->signed == 1),
-            // 'redirect' => false,
+            'id' => $prequest->agreement?->id ?? $prequest->id,
             'uid' => $uid,
             'legal_business_name' => $prequest->agreement?->name ?? $prequest->company_name,
             'trade_license_number' => $prequest->agreement?->license_number ?? 'N/A',
