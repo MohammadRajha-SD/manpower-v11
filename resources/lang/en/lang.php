@@ -1821,4 +1821,10 @@ return [
     "agreement.edited" => "Agreement edited successfully",
     "agreement.deleted" => "Agreement deleted successfully",
 
+
+    'expiring' => 'Expiring',
+    'expired' => 'Expired',
+    'trial_active' => 'Trial Active',
+    'trial_expiring' => 'Trial Expiring',
+    'days' => 'Days',
 ];

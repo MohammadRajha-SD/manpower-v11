@@ -15,11 +15,6 @@ use Carbon\Carbon;
 
 class SubscriptionDataTable extends DataTable
 {
-    /**
-     * Build the DataTable class.
-     *
-     * @param QueryBuilder $query Results from query() method.
-     */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -33,7 +28,7 @@ class SubscriptionDataTable extends DataTable
                 return $query->plan?->text;
             })
             ->addColumn('status', function ($query) {
-            return in_array($query->stripe_status, ['active', 'paid']) ?
+                return in_array($query->stripe_status, ['active', 'paid']) ?
                     "<span class='badge badge-success'>" . $query->stripe_status . "</span>"
                     : "<span class='badge badge-danger'>" . $query->stripe_status . "</span>";
             })
@@ -43,24 +38,59 @@ class SubscriptionDataTable extends DataTable
             ->addColumn('ends_at', function ($query) {
                 return Carbon::parse($query->ends_at)->format('Y-m-d');
             })
+            ->addColumn('trial_ends_at', function ($query) {
+                return Carbon::parse($query->trial_ends_at)->format('Y-m-d');
+            })
+            ->addColumn('remaining_trial_days', function ($query) {
+                $now = Carbon::now();
+                if ($query->trial_ends_at && $now->lt($query->trial_ends_at)) {
+                    return $now->diffInDays(Carbon::parse($query->trial_ends_at)) . ' ' . __('lang.days');
+                }
+                return 0 . ' ' . __('lang.days');
+            })
+            ->addColumn('status_tracker', function ($query) {
+                $now = Carbon::now();
+                $trialEndsAt = Carbon::parse($query->trial_ends_at);
+                $endsAt = Carbon::parse($query->ends_at);
+
+                // If still in trial period
+                if ($query->stripe_status !== 'paid' && $now->lt($trialEndsAt)) {
+                    // Calculate remaining trial days
+                    $remainingTrialDays = $now->diffInDays($trialEndsAt);
+
+                    // For example, if trial is about to expire in 1-3 days, show expiring else active
+                    if ($remainingTrialDays >= 0 && $remainingTrialDays <= 3) {
+                        return __('lang.trial_expiring');
+                    }
+                    return __('lang.trial_active');
+                }
+
+                // If paid user (or trial over), check ends_at
+                if ($now->gt($endsAt)) {
+                    return __('lang.expired');
+                }
+
+                $daysDiff = $now->diffInDays($endsAt, false);
+
+                if ($daysDiff >= 0 && $daysDiff <= 3) {
+                    return __('lang.expiring');
+                }
+
+                return __('lang.active');
+            })
+
             ->addColumn('action', function ($subscription) {
                 return view('admins.subscriptions.actions', compact('subscription'))->render();
             })
-            ->rawColumns(['action', 'status',])
+            ->rawColumns(['action', 'status', 'trial_ends_at', 'remaining_trial_days', 'status_tracker'])
             ->setRowId('id');
     }
 
-    /**
-     * Get the query source of dataTable.
-     */
     public function query(Subscription $model): QueryBuilder
     {
         return $model->newQuery();
     }
 
-    /**
-     * Optional method if you want to use the html builder.
-     */
     public function html(): HtmlBuilder
     {
         return $this->builder()
@@ -80,9 +110,6 @@ class SubscriptionDataTable extends DataTable
             ]);
     }
 
-    /**
-     * Get the dataTable columns definition.
-     */
     public function getColumns(): array
     {
         return [
@@ -92,6 +119,9 @@ class SubscriptionDataTable extends DataTable
             Column::make('status'),
             Column::make('subscribed_at'),
             Column::make('ends_at'),
+            Column::make('trial_ends_at'),
+            Column::make('remaining_trial_days')->addClass('text-center'),
+            Column::make('status_tracker'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -100,9 +130,6 @@ class SubscriptionDataTable extends DataTable
         ];
     }
 
-    /**
-     * Get the filename for export.
-     */
     protected function filename(): string
     {
         return 'Subscription_' . date('YmdHis');

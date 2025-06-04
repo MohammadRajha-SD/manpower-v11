@@ -1710,4 +1710,9 @@ return [
     "agreement.created" => "تم إنشاء الاتفاقية بنجاح",
     "agreement.edited" => "تم تعديل الاتفاقية بنجاح",
     "agreement.deleted" => "تم حذف الاتفاقية بنجاح",
+    'expiring' => 'على وشك الانتهاء',
+    'expired' => 'منتهي',
+    'trial_active' => 'الفترة التجريبية نشطة',
+    'trial_expiring' => 'الفترة التجريبية على وشك الانتهاء',
+    'days' => 'ايام',
 ];
