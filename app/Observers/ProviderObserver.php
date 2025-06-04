@@ -12,7 +12,7 @@ class ProviderObserver
      */
     public function created(Provider $provider): void
     {
-        $provider->notify(new ProviderAddedNotification($provider));
+        // $provider->notify(new ProviderAddedNotification($provider));
     }
 
     /**

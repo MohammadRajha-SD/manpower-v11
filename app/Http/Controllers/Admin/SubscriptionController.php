@@ -104,7 +104,6 @@ class SubscriptionController extends Controller
 
         return view('admins.subscriptions.edit', compact('subscription', 'packs', 'providers'));
     }
-
     public function update(Request $request, Subscription $subscription)
     {
         $this->validate($request, [
@@ -146,7 +145,6 @@ class SubscriptionController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
     public function destroy($id)
     {
         $subscription = Subscription::findOrFail($id);

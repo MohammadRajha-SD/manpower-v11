@@ -35,7 +35,7 @@
 
             <!-- Handle the delete form submission with a button -->
             
-            @if($subscription->stripe_status == 'refunded') 
+            @if($subscription->stripe_status) 
             <a href='{{ route('admin.subscriptions.destroy', $subscription->id) }}' class='btn text-danger btn-sm ml-2
                 delete-item'><i class='fa fa-trash'></i> {{ __('lang.delete_subscription') }}</a> 
             @endif

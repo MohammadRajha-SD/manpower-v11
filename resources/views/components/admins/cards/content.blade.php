@@ -12,7 +12,7 @@
 </style>
 
 @props(['name1' => null, 'name2' => null, 'route2'=> null, 'route1'=>null ,'isEditMode' => false, 'route3' => null,
-'name3' => null, 'isCreateMode' => 'true', 'isAgreementAction' => 'false'])
+'name3' => null, 'isCreateMode' => 'true', 'isAgreementAction' => false])
 @php
 $route_1 = $route1 != null ? route($route1) : '#';
 $route_2 = $route2 != null ? route($route2) : '#';
@@ -36,7 +36,7 @@ $route_2 = $route2 != null ? route($route2) : '#';
                     </li>
                     @endif
 
-                    @if($isAgreementAction)
+                    @if($isAgreementAction == true)
                     <livewire:agreement-provider-create-action  />
                     @endif
 
