@@ -28,6 +28,7 @@ use App\Http\Controllers\Admin\PaymentStatusController;
 use App\Http\Controllers\Admin\ProviderPayoutController;
 use App\Http\Controllers\Admin\ProviderRequestController;
 use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\AgreementController;
 
 Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 Route::resource('notifications', NotificationController::class);
@@ -78,11 +79,16 @@ Route::post('provider-requests/{id}/toggle-signed', [ProviderRequestController::
 Route::post('provider-requests/{id}/toggle-subscribed', [ProviderRequestController::class, 'toggleSubscribed'])->name('provider-requests.toggleSubscribed');
 Route::post('provider-requests/{id}/toggle-accepted', [ProviderRequestController::class, 'toggleAccepted'])->name('provider-requests.toggleAccepted');
 Route::resource('provider-requests', ProviderRequestController::class);
- 
+
+/** Agreements */
+Route::get('agreements/{id}/send/{lang}', [AgreementController::class, 'send'])->name('agreements.send');
+Route::resource('agreements',AgreementController::class);
+
+/** Partners */
+Route::resource('partners', PartnerController::class);
+
 Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 Route::put('profile/update', [ProfileController::class, 'update'])->name('user.profile.update');
-
-Route::resource('partners', PartnerController::class);
 
 Route::delete('image/{id}/delete', [DeleteImageController::class, 'deleteImageFunc'])->name('image.delete');
 

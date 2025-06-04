@@ -37,10 +37,56 @@
                         <tbody>
                             <tr>
                                 <th>{{ __('lang.provider_request') }}</th>
-                                <td><strong>#PRR_11{{ $agreement->prequest?->id }}</strong> - {{
+                                <td>
+                                    @if($editMode)
+                                    <select class="form-control form-control-sm"
+                                        wire:model.live="form.provider_request_id">
+                                        <option value="">Select</option>
+                                        @foreach ($prequests as $prequest)
+                                        <option value="{{ $prequest?->id }}">
+                                            <strong>#PRR_11{{ $prequest?->id }}</strong> - {{
+                                            $prequest?->company_name }} - {{
+                                            $prequest?->contact_email }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @else
+                                    @if ($agreement->prequest)
+                                    <strong>#PRR_11{{ $agreement->prequest?->id }}</strong> - {{
                                     $agreement->prequest?->company_name }} - {{
-                                    $agreement->prequest?->contact_email }}</td>
+                                    $agreement->prequest?->contact_email }}
+                                    @else
+                                    N/A
+                                    @endif
+                                    @endif
+                                </td>
                             </tr>
+                            <tr>
+                                <th>{{ __('lang.e_provider') }}</th>
+                                <td>
+                                    @if($editMode)
+                                    <select class="form-control form-control-sm" wire:model.live="form.provider_id">
+                                        <option value="">Select</option>
+                                        @foreach ($providers as $provider)
+                                        <option value="{{ $provider?->id }}">
+                                            <strong>#PR_11{{ $provider?->id }}</strong> - {{
+                                            $provider?->name }} - {{
+                                            $provider?->email }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @else
+                                    @if ($agreement->provider)
+                                    <strong>#PR_11{{ $agreement->provider?->id }}</strong> - {{
+                                    $agreement->provider?->name }} - {{
+                                    $agreement->provider?->email }}
+                                    @else
+                                    N/A
+                                    @endif
+                                    @endif
+                                </td>
+                            </tr>
+
                             <tr>
                                 <th>{{ __('lang.plan') }}</th>
                                 <td>

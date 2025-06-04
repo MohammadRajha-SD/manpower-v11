@@ -1808,4 +1808,17 @@ return [
     "company_website" => "Company Website",
     "contact_person" => "Contact Person",
     "no_booking_details" => "No Booking Details Found...",
+
+    "agreement_plural" => "Agreements",
+    "agreement_desc" => "Agreement",
+    "agreement_table" => "Agreement List",
+
+    "agreement.create" => "Create agreement",
+    "agreement.edit" => "Edit agreement",
+    "agreement.delete" => "Delete agreement",
+
+    "agreement.created" => "Agreement created successfully",
+    "agreement.edited" => "Agreement edited successfully",
+    "agreement.deleted" => "Agreement deleted successfully",
+
 ];

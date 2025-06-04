@@ -1699,4 +1699,15 @@ return [
     "company_website" => "موقع الشركة",
     "contact_person" => "الشخص المسؤول",
     "no_booking_details" => "لم يتم العثور على تفاصيل الحجز...",
+    "agreement_plural" => "الاتفاقيات",
+    "agreement_desc" => "الاتفاقية",
+    "agreement_table" => "قائمة الاتفاقيات",
+
+    "agreement.create" => "إنشاء اتفاقية",
+    "agreement.edit" => "تعديل الاتفاقية",
+    "agreement.delete" => "حذف الاتفاقية",
+
+    "agreement.created" => "تم إنشاء الاتفاقية بنجاح",
+    "agreement.edited" => "تم تعديل الاتفاقية بنجاح",
+    "agreement.deleted" => "تم حذف الاتفاقية بنجاح",
 ];

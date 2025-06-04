@@ -28,6 +28,9 @@
     <x-admins.sidebar-item :name="trans('lang.requested_e_providers_plural')" icon="fas fa-list-alt"
         :activeRoutes="['admin.provider-requests*']" route="provider-requests.index" />
 
+    <x-admins.sidebar-item :name="trans('lang.agreement_plural')" icon="fas fa-file"
+        :activeRoutes="['admin.agreements*']" route="agreements.index" />
+
     <x-admins.sidebar-item :name="__('lang.address_plural')" icon="fas fa-map-marked-alt"
         :activeRoutes="['admin.addresses*']" route="addresses.index" />
 

@@ -2,23 +2,39 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Agreement;
 use App\Models\Pack;
+use Livewire\Component;
+use App\Models\Provider;
+use App\Models\ProviderRequest;
 
-class AgreementDetails extends Component
+class AgreementProviderDetails extends Component
 {
-    public $showModal = false;
     public $agreement;
-    public $plans;
+    public $showModal = false;
     public $editMode = false;
+    protected $listeners = ['open-agreement-provider-details-modal' => 'openModal'];
     public $form = [];
-    protected $listeners = ['open-agreement-details-modal' => 'openModal'];
+    public $plans;
+    public $prequests;
+    public $providers;
+    public function openModal($id)
+    {
+        $this->agreement = Agreement::where('id', $id)->first();
+        $this->showModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->reset(['showModal', 'agreement']);
+    }
 
     public function editAgreement($id)
     {
         $this->agreement = Agreement::findOrFail($id);
         $this->plans = Pack::all();
+        $this->prequests = ProviderRequest::all();
+        $this->providers = Provider::all();
         $this->form = [
             'name' => $this->agreement->name,
             'license_number' => $this->agreement->license_number,
@@ -28,7 +44,10 @@ class AgreementDetails extends Component
             'terms' => $this->agreement->terms,
             'signed' => $this->agreement->signed,
             'plan_id' => $this->agreement?->plan?->id,
+            'provider_request_id' => $this->agreement?->prequest?->id ?? null,
+            'provider_id' => $this->agreement?->provider?->id ?? null,
         ];
+
         $this->editMode = true;
     }
 
@@ -43,21 +62,13 @@ class AgreementDetails extends Component
             'form.terms' => 'boolean',
             'form.signed' => 'boolean',
             'form.plan_id' => 'required|integer|exists:packs,id',
+            'form.provider_request_id' => 'nullable|exists:provider_requests,id',
+            'form.provider_id' => 'nullable|exists:providers,id',
         ]);
 
         $this->agreement->update($this->form);
+        $this->editAgreement($this->agreement->id);
         $this->editMode = false;
-    }
-
-    public function openModal($id)
-    {
-        $this->agreement = Agreement::where('provider_request_id', $id)->first();
-        $this->showModal = true;
-    }
-
-    public function closeModal()
-    {
-        $this->reset(['showModal', 'agreement']);
     }
 
     public function toggleEditMode()
@@ -65,8 +76,9 @@ class AgreementDetails extends Component
         $this->editMode = !$this->editMode;
     }
 
+
     public function render()
     {
-        return view('livewire.agreement-details');
+        return view('livewire.agreement-provider-details');
     }
 }
