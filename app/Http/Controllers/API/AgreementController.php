@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\AgreementSignedMail;
 use App\Mail\AgreementSignedMailAR;
+use App\Models\Agreement;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
@@ -18,8 +19,12 @@ class AgreementController extends Controller
 
     public function index($uid)
     {
-        $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
-
+        // $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
+   $prequest = ProviderRequest::with('agreement')
+            ->whereHas('agreement', function ($query) use ($uid) {
+                $query->where('uid', $uid);
+            })
+            ->first();
         if (!$prequest) {
             return response()->json(['error' => 'Request not found'], 404);
         }
@@ -42,7 +47,14 @@ class AgreementController extends Controller
 
     public function store(Request $request, $uid)
     {
-        $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
+        // $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
+        // $agreement = Agreement::where('uid', $uid)->first();
+
+        $prequest = ProviderRequest::with('agreement')
+            ->whereHas('agreement', function ($query) use ($uid) {
+                $query->where('uid', $uid);
+            })
+            ->first();
 
         if ($prequest) {
             $imageData = $request->input('eSignture');

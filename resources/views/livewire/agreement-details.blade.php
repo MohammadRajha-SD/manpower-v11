@@ -1,5 +1,5 @@
 <div>
-    @if($showModal)
+    @if($showModal && $agreement)
     <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background-color: rgba(0,0,0,0.5);">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
