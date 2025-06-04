@@ -28,20 +28,11 @@ class TrialEndingSoonAdmin extends Notification
         return (new MailMessage)
             ->subject('Provider Trial Ending Soon')
             ->greeting('Hello Admin,')
-            ->line('A provider trial is ending in 3 days.')
+            ->line('A provider trial is ending in 1-3 days.')
             ->line('Provider: ' . $this->subscription->provider?->name)
             ->line('Plan: ' . $this->subscription?->name)
             ->line('Trial Ends At: ' . $this->subscription?->trial_ends_at)
             ->action('View Dashboard', url('/admin/providers'))
             ->line('Thanks!');
     }
-
-    // public function toDatabase($notifiable)
-    // {
-    //     return [
-    //         'provider_id' => $this->subscription?->provider?->id,
-    //         'title' => 'Trial Ending Soon',
-    //         'body' => 'Provider "' . $this->subscription?->provider?->name . '" has a trial ending in 3 days (Plan: ' . $this->subscription?->name . 'Trial Ends At: ' . $this->subscription?->trial_ends_at . ')',
-    //     ];
-    // }
 }

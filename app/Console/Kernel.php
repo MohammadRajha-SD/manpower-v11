@@ -10,7 +10,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('notify:trial-ending')->daily();
-        $schedule->command('notify:trial-ending')->everyMinute();
+        $schedule->command('notify:trial-ending')->dailyAt('10:00');
     }
 
     protected function commands(): void

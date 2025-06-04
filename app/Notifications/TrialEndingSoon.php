@@ -27,10 +27,10 @@ class TrialEndingSoon extends Notification
         return (new MailMessage)
             ->subject('Trial Ending Soon')
             ->greeting("Hello " . ($notifiable->name ?? ''))
-            ->line('Your free trial will end in 3 days.')
+            ->line('Your free trial will end in 1-3 days.')
             ->line('Plan: ' . $this->subscription?->name)
             ->line('Trial Ends At: ' . $this->subscription?->trial_ends_at)
-            ->action('Manage Subscription', url('/dashboard')) 
+            // ->action('Manage Subscription', url('/dashboard')) 
             ->line('Thank you for using our service!');
     }
 
