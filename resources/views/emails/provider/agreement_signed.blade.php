@@ -1,19 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+@component('mail::message')
+# Welcome, {{ $name }} – You’re Officially Part of H Power!
 
-<head>
-    <meta charset="UTF-8">
-    <title>Thank You</title>
-</head>
+Thank you for registering as a trusted service provider with **H Power**.  
+We’re excited to have you join our growing network.
 
-<body>
-    <p>Dear {{ $name ?? 'User'}},</p>
+Just one last step before you can start receiving bookings!
 
-    <p>Thank you for signing the agreement. We appreciate your trust.</p>
-    
-    <p><strong>Agreement Tracking Number: AG_11{{ $id }}</strong></p>
-    
-    <p>Best regards,<br>Team</p>
-</body>
+To activate your account, please    review and sign your provider agreement by clicking the button below:
 
-</html>
+@component('mail::button', ['url' => $agreementLink])
+Review & Sign My Agreement
+@endcomponent
+
+Best regards,  
+**The H Power Team**
+@endcomponent

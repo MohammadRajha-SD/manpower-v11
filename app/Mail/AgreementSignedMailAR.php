@@ -12,18 +12,22 @@ use Illuminate\Queue\SerializesModels;
 class AgreementSignedMailAR extends Mailable
 {
     use Queueable, SerializesModels;
+    public $attachmentPath;
     public $name;
-    public $id;
 
-    public function __construct($name, $id)
+    public function __construct($name, $attachmentPath)
     {
         $this->name = $name;
-        $this->id = $id;
+        $this->attachmentPath = $attachmentPath;
     }
 
     public function build()
     {
-        return $this->subject('شكراً لتوقيعك')
-            ->view('emails.provider.agreement_signed_ar');
+        return $this->markdown('emails.provider.agreement_signed_ar')
+            ->subject("مرحباً بك، {$this->name} – أنت الآن جزء رسمي من H Power")
+            ->with([
+                'name' => $this->name,
+                'agreementLink' => $this->attachmentPath,
+            ]);
     }
 }

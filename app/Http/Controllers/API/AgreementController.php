@@ -21,13 +21,13 @@ class AgreementController extends Controller
     {
         // $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
         $agreement = Agreement::where('uid', $uid)->first();
-        
+
         // $prequest = ProviderRequest::with('agreement')
         //     ->whereHas('agreement', function ($query) use ($uid) {
         //         $query->where('uid', $uid);
         //     })
         //     ->first();
-            
+
         if (!$agreement) {
             return response()->json(['error' => 'Agreement not found'], 404);
         }
@@ -59,7 +59,7 @@ class AgreementController extends Controller
         //     ->first();
 
         $agreement = Agreement::where('uid', $uid)->first();
-        
+
         if ($agreement) {
             $imageData = $request->input('eSignture');
             $imageData = str_replace('data:image/png;base64,', '', $imageData);
@@ -76,12 +76,13 @@ class AgreementController extends Controller
 
             $name = $agreement?->name ?? $agreement->prequest?->contact_person;
             $email = $agreement?->email ?? $agreement->prequest?->contact_email;
-            $id = $agreement?->id;
+            
+            $attachmentPath = 'https://hpower.ae/' . $request->lang . '/agreement/' . $agreement->uid . '/details';
 
             if ($request->lang == 'ar') {
-                Mail::to($email)->send(new AgreementSignedMailAR($name, $id));
+                Mail::to($email)->send(new AgreementSignedMailAR($name, $attachmentPath));
             } else {
-                Mail::to($email)->send(new AgreementSignedMail($name, $id));
+                Mail::to($email)->send(new AgreementSignedMail($name, $attachmentPath));
             }
 
             return response()->json([
