@@ -1,24 +1,17 @@
 @component('mail::message')
-# Welcome, {{ $provider->contact_person }} – You’re Officially Part of H Power!
+# Welcome aboard, {{ $name }}!
 
-Dear {{ $provider->contact_person }},
-We’re happy to confirm that your signed provider agreement has been received.  
+Thank you for registering as a trusted service provider with **H Power**.  
+We’re excited to have you join our growing network.
 
-You can now start receiving bookings!
+Just one last step before you can start receiving bookings!
 
-We’ve attached a copy of your signed agreement for your records.  
+To activate your account, please review and sign your provider agreement by clicking the button below:
 
-Welcome to the H Power family — we look forward to growing together.
-For anything you need, our support team is here for you during working hours.
-
-@component('mail::button', ['url' => $downloadUrl])
-Link the Agreement
+@component('mail::button', ['url' => $agreementLink])
+Review & Sign My Agreement
 @endcomponent
 
 Best regards,  
 **The H Power Team**
-
----
-
-**📎 Attachment:** <a href="{{ $downloadUrl }}" download>Signed Agreement Copy</a>
 @endcomponent

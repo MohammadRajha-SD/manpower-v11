@@ -15,17 +15,20 @@
             <livewire:agreement-actions :id="$request->id" />
             @endif
 
+            @if ($request->agreement)
+
             <livewire:agreement-details-action :id="$request->id" />
 
-            <a href="{{ route('admin.provider-requests.send', ['id' => $request->id, 'lang' => 'en']) }}"
+            <a href="{{ route('admin.provider-requests.send', ['id' => $request->agreement?->uid, 'lang' => 'en']) }}"
                 class="btn text-primary btn-sm ml-2">
                 <i class="fa fa-paper-plane"></i> {{ __('lang.send') }} - EN
             </a>
 
-            <a href="{{ route('admin.provider-requests.send', ['id' => $request->id, 'lang' => 'ar']) }}"
+            <a href="{{ route('admin.provider-requests.send', ['id' => $request->agreement?->uid, 'lang' => 'ar']) }}"
                 class="btn text-primary btn-sm ml-2">
                 <i class="fa fa-paper-plane"></i> {{ __('lang.send') }} - AR
             </a>
+            @endif
         </div>
     </div>
 </td>

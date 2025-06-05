@@ -12,23 +12,21 @@ use Illuminate\Queue\SerializesModels;
 class ProviderWelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $provider;
+    public $name;
     public $attachmentPath;
 
-    public function __construct($provider, $attachmentPath)
+    public function __construct($name, $attachmentPath)
     {
-        $this->provider = $provider;
+        $this->name = $name;
         $this->attachmentPath = $attachmentPath;
     }
-
-
     public function build()
     {
         return $this->markdown('emails.provider.welcome')
-            ->subject("Welcome, {$this->provider->contact_person} – You’re Officially Part of H Power!")
+            ->subject("Welcome aboard, {$this->name}")
             ->with([
-                'provider' => $this->provider,
-                'downloadUrl' => $this->attachmentPath,
+                'name' => $this->name,
+                'agreementLink' => $this->attachmentPath,
             ]);
     }
 }

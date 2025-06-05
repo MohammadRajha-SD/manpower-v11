@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ProviderWelcomeMailAR;
 use App\Models\ProviderRequest;
 use App\Mail\ProviderWelcomeMail;
+use App\Models\Agreement;
 use Illuminate\Support\Facades\Mail;
 
 class ProviderRequestController extends Controller
@@ -64,18 +65,18 @@ class ProviderRequestController extends Controller
 
     public function send($id, $lang)
     {
-        $provider = ProviderRequest::findOrFail($id);
+        $agreement = Agreement::where('uid', $id)->first();
 
-        if (empty($provider->contact_email)) {
-            return back()->with('error', 'Provider email is missing.');
+        if (empty($agreement->email)) {
+            return back()->with('error', 'Agreement email is missing.');
         }
 
-        $attachmentPath = 'https://hpower.ae/' . $lang . '/agreement/' . $provider->uid;
+        $attachmentPath = 'https://hpower.ae/' . $lang . '/agreement/' . $agreement->uid;
 
         if ($lang === 'ar') {
-            Mail::to($provider->contact_email)->send(new ProviderWelcomeMailAR($provider, $attachmentPath));
+            Mail::to($agreement->email)->send(new ProviderWelcomeMailAR($agreement->name, $attachmentPath));
         } else {
-            Mail::to($provider->contact_email)->send(new ProviderWelcomeMail($provider, $attachmentPath));
+            Mail::to($agreement->email)->send(new ProviderWelcomeMail($agreement->name, $attachmentPath));
         }
 
         return back()->with('success', 'Email sent successfully.');

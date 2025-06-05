@@ -27,9 +27,9 @@ class AgreementController extends Controller
         $attachmentPath = 'https://hpower.ae/' . $lang . '/agreement/' . $agreement->uid;
 
         if ($lang === 'ar') {
-            Mail::to($agreement->email)->send(new ProviderWelcomeMailAR($agreement, $attachmentPath));
+            Mail::to($agreement->email)->send(new ProviderWelcomeMailAR($agreement->name, $attachmentPath));
         } else {
-            Mail::to($agreement->email)->send(new ProviderWelcomeMail($agreement, $attachmentPath));
+            Mail::to($agreement->email)->send(new ProviderWelcomeMail($agreement->name, $attachmentPath));
         }
 
         return back()->with('success', 'Email sent successfully.');
