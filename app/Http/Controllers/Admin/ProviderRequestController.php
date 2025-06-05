@@ -70,7 +70,7 @@ class ProviderRequestController extends Controller
             return back()->with('error', 'Provider email is missing.');
         }
 
-        $attachmentPath = 'https://hpower.ae/agreement/' . $provider->uid;
+        $attachmentPath = 'https://hpower.ae/' . $lang . '/agreement/' . $provider->uid;
 
         if ($lang === 'ar') {
             Mail::to($provider->contact_email)->send(new ProviderWelcomeMailAR($provider, $attachmentPath));

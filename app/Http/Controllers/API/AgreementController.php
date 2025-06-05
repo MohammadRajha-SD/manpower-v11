@@ -20,26 +20,29 @@ class AgreementController extends Controller
     public function index($uid)
     {
         // $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
-   $prequest = ProviderRequest::with('agreement')
-            ->whereHas('agreement', function ($query) use ($uid) {
-                $query->where('uid', $uid);
-            })
-            ->first();
-        if (!$prequest) {
-            return response()->json(['error' => 'Request not found'], 404);
+        $agreement = Agreement::where('uid', $uid)->first();
+        
+        // $prequest = ProviderRequest::with('agreement')
+        //     ->whereHas('agreement', function ($query) use ($uid) {
+        //         $query->where('uid', $uid);
+        //     })
+        //     ->first();
+            
+        if (!$agreement) {
+            return response()->json(['error' => 'Agreement not found'], 404);
         }
 
         return response()->json([
-            'redirect' => $prequest->signed == 1 || ($prequest->agreement && $prequest->agreement?->signed == 1),
-            'id' => $prequest->agreement?->id ?? $prequest->id,
+            'redirect' => $agreement?->signed == 1,
+            'id' => $agreement?->id,
             'uid' => $uid,
-            'legal_business_name' => $prequest->agreement?->name ?? $prequest->company_name,
-            'trade_license_number' => $prequest->agreement?->license_number ?? 'N/A',
-            'company_address' => $prequest->agreement?->address ?? 'N/A',
-            'contact_email' => $prequest->agreement?->email ?? $prequest->contact_email,
-            'contact_phone_number' => $prequest->agreement?->phone ?? $prequest->phone_number,
-            'commission_agreed' => $prequest->agreement?->commission . '%' ?? '0%',
-            'signature' => $prequest->agreement?->signature ? asset($prequest->agreement?->signature) : null,
+            'legal_business_name' => $agreement?->name ?? $agreement->prequest?->company_name,
+            'trade_license_number' => $agreement?->license_number ?? 'N/A',
+            'company_address' => $agreement?->address ?? 'N/A',
+            'contact_email' => $agreement?->email ?? $agreement->prequest?->contact_email,
+            'contact_phone_number' => $agreement?->phone ?? $agreement->prequest?->phone_number,
+            'commission_agreed' => $agreement?->commission . '%' ?? '0%',
+            'signature' => $agreement?->signature ? asset($agreement?->signature) : null,
         ]);
     }
 
@@ -48,31 +51,32 @@ class AgreementController extends Controller
     public function store(Request $request, $uid)
     {
         // $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
-        // $agreement = Agreement::where('uid', $uid)->first();
 
-        $prequest = ProviderRequest::with('agreement')
-            ->whereHas('agreement', function ($query) use ($uid) {
-                $query->where('uid', $uid);
-            })
-            ->first();
+        // $prequest = ProviderRequest::with('agreement')
+        //     ->whereHas('agreement', function ($query) use ($uid) {
+        //         $query->where('uid', $uid);
+        //     })
+        //     ->first();
 
-        if ($prequest) {
+        $agreement = Agreement::where('uid', $uid)->first();
+        
+        if ($agreement) {
             $imageData = $request->input('eSignture');
             $imageData = str_replace('data:image/png;base64,', '', $imageData);
             $imageData = str_replace(' ', '+', $imageData);
             $imageName = 'signature_' . time() . '.png';
 
-            $prequest->agreement->signed = 1;
-            $prequest->agreement->terms = $request->terms == 'true' ? true : false;
-            $prequest->agreement->signature = 'storage/uploads/' . $imageName;
+            $agreement->signed = 1;
+            $agreement->terms = $request->terms == 'true' ? true : false;
+            $agreement->signature = 'storage/uploads/' . $imageName;
 
-            $prequest->agreement->save();
+            $agreement->save();
 
             Storage::disk('public')->put('uploads/' . $imageName, base64_decode($imageData));
 
-            $name = $prequest->agreement?->name ?? $prequest->contact_person;
-            $email = $prequest->agreement?->email ?? $prequest->contact_email;
-            $id = $prequest->agreement?->id;
+            $name = $agreement?->name ?? $agreement->prequest?->contact_person;
+            $email = $agreement?->email ?? $agreement->prequest?->contact_email;
+            $id = $agreement?->id;
 
             if ($request->lang == 'ar') {
                 Mail::to($email)->send(new AgreementSignedMailAR($name, $id));
@@ -82,7 +86,7 @@ class AgreementController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'data' => $prequest,
+                'data' => $agreement,
             ], 201);
         } else {
             return response()->json([

@@ -24,7 +24,7 @@ class AgreementController extends Controller
             return back()->with('error', 'Provider email is missing.');
         }
 
-        $attachmentPath = 'https://hpower.ae/agreement/' . $agreement->uid;
+        $attachmentPath = 'https://hpower.ae/' . $lang . '/agreement/' . $agreement->uid;
 
         if ($lang === 'ar') {
             Mail::to($agreement->email)->send(new ProviderWelcomeMailAR($agreement, $attachmentPath));
