@@ -29,4 +29,9 @@ return [
     'reset_title' => 'Email to reset password',
     'send_password' => 'Send password reset link',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+
+    'email_required' => 'Email is required.',
+    'email_invalid' => 'Enter a valid email address.',
+    'email_not_found' => 'No account found with this email.',
+    'reset_link_sent' => 'Password reset link sent. Check your email.',
 ];

@@ -121,3 +121,5 @@ Route::get('agreement/{uid}', [AgreementController::class, 'index']);
 Route::post('agreement/{uid}', [AgreementController::class, 'store']);
 
 Route::get('terms', [TermController::class, 'index']);
+
+require __DIR__ . '/app.api.php';
