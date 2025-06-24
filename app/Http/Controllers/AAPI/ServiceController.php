@@ -4,7 +4,7 @@ namespace App\Http\Controllers\AAPI;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Service;
+use App\Models\Service;use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
 class ServiceController extends Controller
@@ -22,7 +22,7 @@ class ServiceController extends Controller
                 'price' => $service->price,
                 'description' => $service->description ?? '',
                 'discount' => $service->discount > 0 ? (string) $service->discount : '0.00',
-                'duration' => $service->duration,
+                'duration' => Carbon::parse($service->duration)->format('H:i'),
                 'images' => $service->images
                     ? $service->images->map(function ($img) {
                         return asset('uploads/' . $img->path);
