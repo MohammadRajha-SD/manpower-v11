@@ -7,7 +7,6 @@ use App\Traits\ImageHandler;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -15,8 +14,7 @@ class UserController extends Controller
 
     public function user(Request $request)
     {
-        // $user = $request->user(); 
-        $user = User::where('device_token', $request->api_token)?->first();
+        $user = User::with('image')->where('device_token', $request->api_token)?->first();
 
         if (!$user) {
             return response()->json([
@@ -33,6 +31,8 @@ class UserController extends Controller
                 "name" => $user->name,
                 "email" => $user->email,
                 "phone" => $user->phone_number,
+                "avatar" => $user->image ? asset('uploads/' . $user->image->path) : asset('images/avatar_default.png'),
+
             ],
         ]);
     }
@@ -40,7 +40,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('image')->findOrFail($id);
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -60,13 +60,17 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone_number = $request->phone_number;
 
-        // if ($request->hasFile('avatar')) {
-        //     $avatar = $request->file('avatar');
-        //     $this->uploadImage($avatar, 'uploads');
-        //     $filename = time() . '.' . $avatar->getClientOriginalExtension();
-        //     $path = $avatar->storeAs('public/avatars', $filename);
-        //     $user->avatar = str_replace('public/', 'storage/', $path); // so it can be accessed via URL
-        // }
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+
+            $path = $this->uploadImage($avatar, 'uploads');
+
+            if ($user->image) {
+                $user->image()->update(['path' => $path]);
+            } else {
+                $user->image()->create(['path' => $path]);
+            }
+        }
 
         $user->save();
 
@@ -78,7 +82,7 @@ class UserController extends Controller
                 "name" => $user->name,
                 "email" => $user->email,
                 "phone" => $user->phone_number,
-                // "avatar" => $user->avatar ? asset($user->avatar) : null,
+                "avatar" => $user->avatar ? asset('uploads/' . $user->avatar) : asset('images/avatar_default.png'),
             ],
         ]);
     }
@@ -109,6 +113,7 @@ class UserController extends Controller
                 "name" => $user->name,
                 "email" => $user->email,
                 "phone" => $user->phone_number,
+                "avatar" => $user->image ? asset('uploads/' . $user->image->path) : asset('images/avatar_default.png'),
             ],
         ]);
     }
