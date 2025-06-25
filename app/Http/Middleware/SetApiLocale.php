@@ -16,8 +16,13 @@ class SetApiLocale
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // $lang = $request->input('lang') ?? 'ar';
-        $lang = $request->header('Accept-Language') ?? $request->input('lang', 'ar');
+        
+        // $lang = $request->input('lang', 'ar'); 
+        
+        
+          $lang = $request->input('lang') // Check query or body param first
+            ?? $request->header('Accept-Language') // Then header
+            ?? 'ar'; // Default fallback
         App::setLocale($lang);
 
         return $next($request);

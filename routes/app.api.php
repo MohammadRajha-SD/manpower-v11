@@ -5,6 +5,7 @@ use App\Http\Controllers\AAPI\UserController;
 use App\Http\Controllers\AAPI\CategoryController;
 use App\Http\Controllers\AAPI\ForgetPasswordController;
 use App\Http\Controllers\AAPI\ServiceController;
+use App\Http\Controllers\AAPI\AboutUsController;
 
 Route::prefix('app')
     ->middleware('auth:sanctum')
@@ -26,6 +27,7 @@ Route::prefix('app')
         Route::get('sub-categories/details/{id}', [CategoryController::class, 'subCategories']);
         Route::get('categories/search', [CategoryController::class, 'searchCategories']);
         Route::get('services/details/{id}', [ServiceController::class, 'index']);
+        Route::get('about-us', [AboutUsController::class, 'index']);
 
         Route::post("send-reset-link-email", [ForgetPasswordController::class, 'forgotPassword']);
     });
