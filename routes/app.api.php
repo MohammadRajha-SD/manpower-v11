@@ -6,6 +6,7 @@ use App\Http\Controllers\AAPI\CategoryController;
 use App\Http\Controllers\AAPI\ForgetPasswordController;
 use App\Http\Controllers\AAPI\ServiceController;
 use App\Http\Controllers\AAPI\AboutUsController;
+use App\Http\Controllers\AAPI\BookingController;
 
 Route::prefix('app')
     ->middleware('auth:sanctum')
@@ -14,8 +15,8 @@ Route::prefix('app')
         Route::post('/profile/update/{id}', [UserController::class, 'update']);
         Route::post('/user/password/update/{id}', [UserController::class, 'updatePassword']);
         Route::get('/user', [UserController::class, 'user']);
+        Route::get('bookings', [BookingController::class, 'index']);
     });
-
 
 Route::prefix('app')
     ->group(function () {
@@ -28,6 +29,5 @@ Route::prefix('app')
         Route::get('categories/search', [CategoryController::class, 'searchCategories']);
         Route::get('services/details/{id}', [ServiceController::class, 'index']);
         Route::get('about-us', [AboutUsController::class, 'index']);
-
         Route::post("send-reset-link-email", [ForgetPasswordController::class, 'forgotPassword']);
     });
