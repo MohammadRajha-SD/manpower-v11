@@ -138,13 +138,48 @@ class ProviderRequestDataTable extends DataTable
                     </form>';
             })
             ->addColumn('licence', function ($query) {
-                return '<a href="' . route('admin.provider-requests.streamLicence', $query->id) . '" 
-                    target="_blank" 
-                    class="btn btn-sm btn-outline-primary" 
-                    title="Preview Licence">
-                        <i class="fas fa-eye"></i>
-                    </a>';
+                $filePath = asset($query->licence);
+                $extension = pathinfo($filePath, PATHINFO_EXTENSION);
+
+                if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png'])) {
+                    // Image preview with modal trigger
+                    return '
+            <button class="btn btn-sm btn-outline-info" 
+                data-toggle="modal" 
+                data-target="#licenceModal' . $query->id . '">
+                <i class="fas fa-image"></i>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="licenceModal' . $query->id . '" tabindex="-1" role="dialog" aria-labelledby="licenceModalLabel' . $query->id . '" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="licenceModalLabel' . $query->id . '">Licence Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <img src="' . $filePath . '" alt="Licence Image" class="img-fluid rounded" style="max-height:600px;" />
+                  </div>
+                </div>
+              </div>
+            </div>
+        ';
+                } else {
+                    // PDF or other file types
+                    return '
+            <a href="' . route('admin.provider-requests.streamLicence', $query->id) . '" 
+               target="_blank" 
+               class="btn btn-sm btn-outline-primary" 
+               title="Preview Licence">
+                <i class="fas fa-eye"></i>
+            </a>
+        ';
+                }
             })
+
             ->addColumn('action', function ($request) {
                 return view('admins.providers.provider-requests.actions', compact('request'))->render();
             })
