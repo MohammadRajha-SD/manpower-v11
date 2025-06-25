@@ -11,7 +11,7 @@ class BookingController extends Controller
 {
     public function index(Request $request)
     {
-        $user = User::with('bookings')->where('device_token', $request->api_token)->first();
+        $user = User::with('bookings.service')->where('device_token', $request->api_token)->first();
 
         if (!$user) {
             return response()->json([
@@ -27,6 +27,7 @@ class BookingController extends Controller
                 'id' => $booking->id,
                 'quantity' => $booking->quantity,
                 'status' => $booking->booking_status_id,
+                'service_name' => $booking->service?->name ?? 'service name',
                 'booking_at' => $booking->booking_at,
             ];
         });
