@@ -23,7 +23,8 @@ class ProviderWelcomeMailAR extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.provider.welcome-ar')
+        return $this->from('noreply@hpower.ae', 'HPower')
+            ->markdown('emails.provider.welcome-ar')
             ->subject("مرحباً بك معنا، {$this->name}!")
             ->with([
                 'name' => $this->name,

@@ -35,7 +35,7 @@ class ContactUsController extends Controller
                 'message' => $request->input('message'),
             ]);
 
-            $email = setting('contact_email', 'info@hpower.ae');
+            $email = setting('contact_email', 'noreply@hpower.ae');
 
             Mail::to($email)->send(new NewContactMessage());
 

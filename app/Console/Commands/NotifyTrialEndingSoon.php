@@ -38,7 +38,7 @@ class NotifyTrialEndingSoon extends Command
             }
 
             // 2. Send email to admin ONLY 
-            Notification::route('mail', 'info@hpower.ae')
+            Notification::route('mail', 'noreply@hpower.ae')
                 ->notify(new TrialEndingSoonAdmin($subscription));
         }
 

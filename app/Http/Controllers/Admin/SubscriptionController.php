@@ -344,7 +344,7 @@ class SubscriptionController extends Controller
         $price = $request->price;
         $link = $request->link;
 
-        $cc_email = env('CC_EMAIL') ?? 'info@hpower.ae';
+        $cc_email = env('CC_EMAIL') ?? 'noreply@hpower.ae';
         Mail::to($email)->cc($cc_email)->send(new ProviderSubscriptionMail($link, $name, $email, $price));
 
         return response()->json(['success' => 'Email sent successfully']);

@@ -158,6 +158,20 @@
                         </div>
                     </div>
 
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="status" class="col-md-3 control-label text-md-right mx-1">{{
+                            trans("lang.status") }}</label>
+                        <div class="col-md-9">
+                            <select id="status" name="status" class="form-control">
+                                <option value="1">{{ trans('lang.yes') }}</option>
+                                <option value="0">{{ trans('lang.no') }}</option>
+                            </select>
+                            <div class="form-text text-muted">
+                                {{ trans("lang.status") }}
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Do not display images on image slider -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="not_on_image_slider" class="col-md-3 control-label text-md-right mx-1">{{

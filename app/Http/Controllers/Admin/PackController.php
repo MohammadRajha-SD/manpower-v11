@@ -46,20 +46,22 @@ class PackController extends Controller
             if (!$validated['stripe_plan_id']) {
                 $product = Product::create([
                     'name' => $validated['text'],
-                    'description' => $validated['short_description'], 
+                    'description' => $validated['short_description'],
                     'type' => 'service',
                 ]);
 
                 // Create a Price for the Product
                 $price = Price::create([
                     'unit_amount' => $validated['price'] * 100,
-                    'currency' => 'usd',  
-                    'recurring' => ['interval' => 'month'], 
+                    'currency' => 'usd',
+                    'recurring' => ['interval' => 'month'],
                     'product' => $product->id,
                 ]);
 
                 $validated['stripe_plan_id'] = $price->id;
             }
+
+            $validated['status'] = $request->status ?? 1;
 
             $pack = new Pack($validated);
             $pack->save();
@@ -97,6 +99,7 @@ class PackController extends Controller
         ]);
 
         $pack = Pack::findOrFail($id);
+        $validated['status'] = $request->status ?? 1;
         $pack->update($validated);
 
         return redirect()->route('admin.packs.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.pack')]));

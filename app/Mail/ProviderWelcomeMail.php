@@ -20,9 +20,12 @@ class ProviderWelcomeMail extends Mailable
         $this->name = $name;
         $this->attachmentPath = $attachmentPath;
     }
+    
     public function build()
     {
-        return $this->markdown('emails.provider.welcome')
+        return $this
+            ->from('noreply@hpower.ae', 'HPower')
+            ->markdown('emails.provider.welcome')
             ->subject("Welcome aboard, {$this->name}")
             ->with([
                 'name' => $this->name,

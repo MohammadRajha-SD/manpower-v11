@@ -195,7 +195,7 @@ class BookingController extends Controller
 
         $user = User::find($request->user_id);
 
-        $cc_email = env('CC_EMAIL') ?? 'info@hpower.ae';
+        $cc_email = env('CC_EMAIL') ?? 'noreply@hpower.ae';
 
         Mail::to($user->email)
             ->send(new SendPaymentLink($user, $checkoutSession->url));
@@ -280,7 +280,7 @@ class BookingController extends Controller
 
             // ✅ Send email to user with CC to provider and admin
             Mail::to($booking->user?->email)
-                ->cc([$booking->service?->provider?->email, env('CC_EMAIL', 'info@hpower.ae')])
+                ->cc([$booking->service?->provider?->email, env('CC_EMAIL', 'noreply@hpower.ae')])
                 ->send(new BookingCancelledMail($booking, $request->reason));
 
             return response()->json([

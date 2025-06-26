@@ -11,7 +11,7 @@ class PackController extends Controller
     public function index()
     {
         try {
-            $packs = Pack::all();
+            $packs = Pack::where('status', 1)->get();
 
             $newPacks = $packs->map(function ($p) {
                 return [
