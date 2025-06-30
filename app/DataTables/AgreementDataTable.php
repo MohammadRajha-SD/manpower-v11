@@ -11,6 +11,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Carbon\Carbon;
 
 class AgreementDataTable extends DataTable
 {
@@ -28,6 +29,9 @@ class AgreementDataTable extends DataTable
             })
             ->addColumn('terms', function ($query) {
                 return $query->terms ? __('lang.yes') : __('lang.no');
+            })
+             ->addColumn('agreed_at', function ($query) {
+                return Carbon::parse($query?->created_at)->format('Y/m/d');
             })
             ->addColumn('action', function ($request) {
                 return view('admins.providers.agreements.actions', compact('request'))->render();
@@ -71,6 +75,7 @@ class AgreementDataTable extends DataTable
             Column::make('license_number'),
             Column::make('signed'),
             Column::make('terms'),
+            Column::make('agreed_at'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

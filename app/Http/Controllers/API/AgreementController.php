@@ -42,6 +42,7 @@ class AgreementController extends Controller
             'contact_email' => $agreement?->email ?? $agreement->prequest?->contact_email,
             'contact_phone_number' => $agreement?->phone ?? $agreement->prequest?->phone_number,
             'commission_agreed' => $agreement?->commission . '%' ?? '0%',
+            'plan_name' => $agreement?->plan?->text ?? '',
             'signature' => $agreement?->signature ? asset($agreement?->signature) : null,
         ]);
     }

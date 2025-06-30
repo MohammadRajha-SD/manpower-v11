@@ -11,6 +11,7 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Carbon\Carbon;
 
 class ProviderRequestDataTable extends DataTable
 {
@@ -179,7 +180,9 @@ class ProviderRequestDataTable extends DataTable
         ';
                 }
             })
-
+            ->addColumn('requested_at', function ($query) {
+                return Carbon::parse($query?->created_at)->format('Y/m/d');
+            })
             ->addColumn('action', function ($request) {
                 return view('admins.providers.provider-requests.actions', compact('request'))->render();
             })
@@ -240,6 +243,7 @@ class ProviderRequestDataTable extends DataTable
             Column::make('signed'),
             Column::make('subscribed'),
             Column::make('licence'),
+            Column::make('requested_at'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
