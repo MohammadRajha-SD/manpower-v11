@@ -14,11 +14,13 @@ class AgreementSignedMailAR extends Mailable
     use Queueable, SerializesModels;
     public $attachmentPath;
     public $name;
-
-    public function __construct($name, $attachmentPath)
+    public $signed_at;
+  
+    public function __construct($name, $attachmentPath, $signed_at)
     {
         $this->name = $name;
-        $this->attachmentPath = $attachmentPath;
+        $this->attachmentPath = $attachmentPath;        
+        $this->signed_at = $signed_at;
     }
 
     public function build()
@@ -27,6 +29,7 @@ class AgreementSignedMailAR extends Mailable
             ->subject("مرحباً بك، {$this->name} – أنت الآن جزء رسمي من H Power")
             ->with([
                 'name' => $this->name,
+                 'signed_at' => $this->signed_at,
                 'agreementLink' => $this->attachmentPath,
             ]);
     }

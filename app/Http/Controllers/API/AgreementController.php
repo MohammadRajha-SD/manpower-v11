@@ -19,14 +19,7 @@ class AgreementController extends Controller
 
     public function index($uid)
     {
-        // $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
         $agreement = Agreement::where('uid', $uid)->first();
-
-        // $prequest = ProviderRequest::with('agreement')
-        //     ->whereHas('agreement', function ($query) use ($uid) {
-        //         $query->where('uid', $uid);
-        //     })
-        //     ->first();
 
         if (!$agreement) {
             return response()->json(['error' => 'Agreement not found'], 404);
@@ -36,14 +29,15 @@ class AgreementController extends Controller
             'redirect' => $agreement?->signed == 1,
             'id' => $agreement?->id,
             'uid' => $uid,
-            'legal_business_name' => $agreement?->name ?? $agreement->prequest?->company_name,
+            'legal_business_name' => $agreement?->name,
             'trade_license_number' => $agreement?->license_number ?? 'N/A',
             'company_address' => $agreement?->address ?? 'N/A',
-            'contact_email' => $agreement?->email ?? $agreement->prequest?->contact_email,
-            'contact_phone_number' => $agreement?->phone ?? $agreement->prequest?->phone_number,
+            'contact_email' => $agreement?->email,
+            'contact_phone_number' => $agreement?->phone,
             'commission_agreed' => $agreement?->commission . '%' ?? '0%',
             'plan_name' => $agreement?->plan?->text ?? '',
             'signature' => $agreement?->signature ? asset($agreement?->signature) : null,
+            'signed_at' => $agreement->created_at ?? now(),
         ]);
     }
 
@@ -51,14 +45,6 @@ class AgreementController extends Controller
 
     public function store(Request $request, $uid)
     {
-        // $prequest = ProviderRequest::with('agreement')->where('uid', $uid)->first();
-
-        // $prequest = ProviderRequest::with('agreement')
-        //     ->whereHas('agreement', function ($query) use ($uid) {
-        //         $query->where('uid', $uid);
-        //     })
-        //     ->first();
-
         $agreement = Agreement::where('uid', $uid)->first();
 
         if ($agreement) {
@@ -77,14 +63,19 @@ class AgreementController extends Controller
 
             $name = $agreement?->name ?? $agreement->prequest?->contact_person;
             $email = $agreement?->email ?? $agreement->prequest?->contact_email;
-            
+
             $attachmentPath = 'https://hpower.ae/' . $request->lang . '/agreement/' . $agreement->uid . '/details';
 
-            if ($request->lang == 'ar') {
-                Mail::to($email)->send(new AgreementSignedMailAR($name, $attachmentPath));
-            } else {
-                Mail::to($email)->send(new AgreementSignedMail($name, $attachmentPath));
+            try {
+                if ($request->lang == 'ar') {
+                    Mail::to($email)->send(new AgreementSignedMailAR($name, $attachmentPath, $agreement->created_at));
+                } else {
+                    Mail::to($email)->send(new AgreementSignedMail($name, $attachmentPath, $agreement->created_at));
+                }
+            } catch (\Exception $e) {
+                Log::error('Failed to send agreement signed email: ' . $e->getMessage());
             }
+
 
             return response()->json([
                 'status' => 'success',
