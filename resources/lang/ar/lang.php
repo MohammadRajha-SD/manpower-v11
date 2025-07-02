@@ -1715,4 +1715,9 @@ return [
     'trial_active' => 'الفترة التجريبية نشطة',
     'trial_expiring' => 'الفترة التجريبية على وشك الانتهاء',
     'days' => 'ايام',
+    'service_charge' => 'رسوم الخدمة',
+    'no_service_addresses' => 'لا توجد عناوين خدمة',
+    'editing' => 'التحرير...',
+    'add_new_address' => 'إضافة عنوان جديد',
+    'select_address' => 'اختر العنوان',
 ];

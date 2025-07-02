@@ -20,9 +20,9 @@ class ServiceDataTable extends DataTable
             ->addColumn('name', function ($query) {
                 return ucwords($query->name);
             })
-            
+
             ->addColumn('available', function ($query) {
-                return isActive($query->available,'success', 'danger');
+                return isActive($query->available, 'success', 'danger');
             })
             ->addColumn('provider', function ($query) {
                 return ucwords($query->provider?->name) ?? 'N/A';
@@ -30,16 +30,31 @@ class ServiceDataTable extends DataTable
             ->addColumn('categories', function ($query) {
                 // $categories = $query->categories;
                 // $categoryLinks = '';
-
+    
                 // if ($categories->isEmpty()) {
                 //     $categoryLinks = 'N/A';
                 // } else {
                 //     foreach ($categories as $category) {
                 //     }
                 // }
-                
+    
                 return '<a href="' . route('admin.categories.edit', $query->id) . '"><small>' . $query->category?->name . '</small></a><br>';
                 // return $categoryLinks;
+            })
+
+            ->addColumn('addresses', function ($query) {
+                $addresses = $query->addresses;
+                $addressLinks = '';
+
+                if ($addresses->isEmpty()) {
+                    return 'N/A';
+                }
+
+                foreach ($addresses as $address) {
+                    $addressLinks .= '<small>' . setting('default_currency_code') . ' ' . number_format($address->service_charge, 2) . ' - ' . e($address->address) . '</small><br>';
+                }
+
+                return $addressLinks;
             })
             ->addColumn('price', function ($query) {
                 return number_format($query->price, 2);
@@ -51,11 +66,10 @@ class ServiceDataTable extends DataTable
                 return $query->updated_at->format('Y-m-d H:i:s');
             })
             ->addColumn('action', function ($query) {
-                $editBtn = "<a href='" . route('admin.services.edit', $query->id) . "' class='btn btn-success btn-sm'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='" . route('admin.services.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
-                return $editBtn . $deleteBtn;
+                return view('admins.services.actions', compact('query'))->render();
             })
-            ->rawColumns(['available', 'action', 'categories'])
+
+            ->rawColumns(['available', 'action', 'categories', 'addresses'])
             ->setRowId('id');
     }
 
@@ -98,6 +112,7 @@ class ServiceDataTable extends DataTable
             Column::make('price')->addClass('text-center'),
             Column::make('discount')->addClass('text-center'),
             Column::make('categories')->addClass('text-center'),
+            // Column::make('addresses')->addClass('text-center'),
             Column::make('available')->addClass('text-center'),
             Column::make('updated_at')->addClass('text-center'),
             Column::computed('action')

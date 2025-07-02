@@ -43,6 +43,7 @@ Route::prefix('user')
 
         Route::middleware('auth:sanctum')->group(function () {
             // Auth User
+            Route::post('address', [AuthUserController::class, 'updateAddress'])->name('updateAddress');
             Route::get('me', [AuthUserController::class, 'me'])->name('me');
             Route::post('logout', [AuthUserController::class, 'logout'])->name('logout');
             Route::put('change-password', [AuthUserController::class, 'changePassword'])->name('change-password');

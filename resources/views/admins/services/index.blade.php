@@ -14,6 +14,17 @@
         @include('admins.layouts.datatables_js')
         {!! $dataTable->scripts() !!}
         @endpush
+        <livewire:service-address />
 
+        <script>
+            window.addEventListener('confirm-delete', event => {
+                
+            const id = event.detail[0].id;
+
+            if (confirm("Are you sure?")) {
+                    Livewire.dispatch('deleteConfirmed', { id: id });
+                }
+            });
+        </script>
     </x-admins.cards.content>
 </x-admin-layout>

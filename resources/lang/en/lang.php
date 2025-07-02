@@ -1827,4 +1827,9 @@ return [
     'trial_active' => 'Trial Active',
     'trial_expiring' => 'Trial Expiring',
     'days' => 'Days',
+    'service_charge' => 'Service Charge',
+    'no_service_addresses' => "No service addresses",
+    'editing' => 'Editing...',
+    'add_new_address' => 'Add New Address',
+    'select_address' => 'Select Address',
 ];

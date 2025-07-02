@@ -14,7 +14,7 @@ class Service extends Model
 
     protected $guarded = [];
 
-    public $translatable = ['name', 'terms' , 'description'];
+    public $translatable = ['name', 'terms', 'description'];
 
     public function categories()
     {
@@ -67,5 +67,10 @@ class Service extends Model
     public function getPrice(): float
     {
         return $this->discount_price > 0 ? $this->discount_price : $this->price;
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(ServiceAddress::class);
     }
 }

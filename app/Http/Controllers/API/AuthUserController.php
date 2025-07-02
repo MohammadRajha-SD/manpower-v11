@@ -13,10 +13,12 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
 
 class AuthUserController extends Controller
 {
- 
+
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -47,7 +49,7 @@ class AuthUserController extends Controller
 
         Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
         Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
-        
+
         // Log the user in after registration
         Auth::login($user);
 
@@ -110,6 +112,7 @@ class AuthUserController extends Controller
             'data' => [
                 'user_type' => 'user',
                 'id' => $user->id,
+                'address' => $user->address ?? null,
                 'name' => $user->name,
                 'username' => $user->username,
                 'email' => $user->email,
@@ -243,5 +246,28 @@ class AuthUserController extends Controller
                 $e->getMessage(),
             ], 500);
         }
+    }
+
+
+    public function updateAddress(Request $request)
+    {
+        $request->validate([
+            'address' => 'nullable|string|max:255',
+        ]);
+
+        $user = $request->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $user->address = $request->address;
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Address updated successfully.",
+            'user' => $user,
+        ]);
     }
 }

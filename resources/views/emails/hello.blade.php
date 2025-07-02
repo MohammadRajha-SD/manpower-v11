@@ -85,7 +85,7 @@
     <!-- Main Content -->
     <div class="content">
         <h2>Thank You for Joining Us!</h2>
-        <p>We are excited to have you with us at ManPower For U. To get started, please confirm your email address:</p>
+        <p>We are excited to have you with us at HPower. To get started, please confirm your email address:</p>
         <p style="text-align: center;"><a href="{{ $verificationUrl }}" class="verify-button">Verify Email Address</a></p>
         <p>If you didn’t create an account, please disregard this email.</p>
     </div>
