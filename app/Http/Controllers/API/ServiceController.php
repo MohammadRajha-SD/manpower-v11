@@ -8,9 +8,19 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // $address = $request->address;
+
         $query = Service::query();
+
+        // if ($address != null) {
+        //     $query->whereHas('addresses', function ($q) use ($address) {
+        //         $q->where('address', $address);
+        //         // or partial match:
+        //         // $q->where('address', 'like', "%{$address}%");
+        //     });
+        // }
 
         // Filter services where available and enable_booking are 1
         $query->where('available', 1);
@@ -46,15 +56,15 @@ class ServiceController extends Controller
                 'quantity_unit' => $slide->quantity_unit,
                 'duration' => $slide->duration,
                 'featured' => $slide->featured,
-                 'terms' => $slide->terms,
-                 'qty_limit' => $slide->qty_limit,
+                'terms' => $slide->terms,
+                'qty_limit' => $slide->qty_limit,
                 'enable_booking' => $slide->enable_booking,
                 'available' => $slide->available,
-                 'bookings' => $slide->bookings?->filter(fn($b) => $b->booking_status_id != 4 ||  $b->booking_status_id != 3)?->map(function ($b) {
+                'bookings' => $slide->bookings?->filter(fn($b) => $b->booking_status_id != 4 || $b->booking_status_id != 3)?->map(function ($b) {
                     return [
                         'id' => $b->id,
-                        'start_at'=> $b->start_at,
-                        'ends_at'=> $b->ends_at,
+                        'start_at' => $b->start_at,
+                        'ends_at' => $b->ends_at,
                     ];
                 }),
                 'created_at' => $slide->created_at,
@@ -62,7 +72,7 @@ class ServiceController extends Controller
                     'name' => $slide->provider->name,
                     'email' => $slide->provider->email,
                     'description' => $slide->provider->description,
-                     'schedules' => $slide->provider->getSchedules(),
+                    'schedules' => $slide->provider->getSchedules(),
                     'phone_number' => $slide->provider->phone_number,
                     'mobile_number' => $slide->provider->mobile_number,
                     'availability_range' => $slide->provider->availability_range,
@@ -71,9 +81,15 @@ class ServiceController extends Controller
                     'featured' => $slide->provider->featured,
                     'created_at' => $slide->provider->created_at,
                 ],
+                'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) {
+                    return [
+                        'address' => $ad->address,
+                        'service_charge' => $ad->service_charge,
+                    ];
+                }) : [],
 
                 'images' => $slide->images->map(function ($img) {
-                    return asset('uploads/' .$img->path);
+                    return asset('uploads/' . $img->path);
                 })->toArray(),
             ];
         });

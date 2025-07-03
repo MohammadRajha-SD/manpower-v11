@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\SendPaymentLink;
+use App\Mail\SendPaymentLinkAR;
 use App\Mail\BookingCancelledMail;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Stripe;
@@ -86,7 +87,8 @@ class BookingController extends Controller
             'quantity' => 'required|integer|min:1',
             'service_id' => 'required|exists:services,id',
             'user_id' => 'required|exists:users,id',
-            'address' => 'nullable',
+            'address' => 'required',
+            'emirate' => 'required',
             'coupon' => 'nullable|string',
             'hint' => 'nullable|string',
         ]);
@@ -102,7 +104,10 @@ class BookingController extends Controller
 
         $service = Service::findOrFail($request->service_id);
 
-        $price = $service->discount_price > 0  ? $service->discount_price : $service->price;
+        $selectedAddress = $service->addresses()->where('address', $request->emirate)->first();
+        $serviceCharge = $selectedAddress?->service_charge ?? 0;
+
+        $price = $service->discount_price > 0 ? $service->discount_price : $service->price;
 
         if (!empty($request->coupon)) {
             $coupon = Coupon::where('code', $request->coupon)
@@ -125,7 +130,9 @@ class BookingController extends Controller
             }
         }
 
-        $subtotal = $price * $validated['quantity'];
+        // $subtotal = $price * $validated['quantity'];
+        $subtotal = ($price * $validated['quantity']) + $serviceCharge;
+
         $totalAmount = $subtotal - $discountAmount;
 
         // $taxAmount = 0;
@@ -151,8 +158,9 @@ class BookingController extends Controller
         $booking->booking_status_id = $booking_status->id;
         $booking->hint = $request->hint;
         $booking->coupon = $request->coupon;
-            $booking->start_at = $request->start_at?? null;
-                $booking->ends_at = $request->ends_at ?? null;
+        $booking->emirate = $request->emirate;
+        $booking->start_at = $request->start_at ?? null;
+        $booking->ends_at = $request->ends_at ?? null;
         $booking->booking_at = now();
 
         $payment = Payment::create([
@@ -197,8 +205,18 @@ class BookingController extends Controller
 
         $cc_email = env('CC_EMAIL') ?? 'noreply@hpower.ae';
 
-        Mail::to($user->email)
-            ->send(new SendPaymentLink($user, $checkoutSession->url));
+        try {
+            if ($request->lang === 'ar') {
+                Mail::to($user->email)
+                    ->send(new SendPaymentLinkAR($user, $checkoutSession->url));
+            } else {
+                Mail::to($user->email)
+                    ->send(new SendPaymentLink($user, $checkoutSession->url));
+            }
+        } catch (\Exception $e) {
+            // Log or handle exception
+        }
+
 
         return response()->json([
             'status' => 'success',
@@ -291,8 +309,8 @@ class BookingController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message_en' =>  $e->getMessage(),
-                'message_ar' =>  $e->getMessage(),
+                'message_en' => $e->getMessage(),
+                'message_ar' => $e->getMessage(),
             ], 404);
         }
     }

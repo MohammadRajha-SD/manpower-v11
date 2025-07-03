@@ -113,7 +113,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('profile/update', [ProfileController::class, 'store']);
 });
 
-
 Route::get('global-settings', [GlobalSettingController::class, 'index']);
 
 Route::post('become-partner', [ProviderRequestController::class, 'store']);

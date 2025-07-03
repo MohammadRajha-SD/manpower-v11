@@ -47,8 +47,16 @@ class AuthUserController extends Controller
         // Generate a custom confirmation URL
         $confirmationUrl = url('register/confirm/' . $user->confirmation_code);
 
-        Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
-        Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
+
+        try {
+            if ($request->lang == 'ar') {
+                Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
+            } else {
+                Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send registeration email: ' . $e->getMessage());
+        }
 
         // Log the user in after registration
         Auth::login($user);
@@ -208,7 +216,7 @@ class AuthUserController extends Controller
             ], 400);
     }
 
-    public function resetPassword(Request $request)
+    public function resetPasswordOld(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
@@ -248,6 +256,52 @@ class AuthUserController extends Controller
         }
     }
 
+    public function resetPassword(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email|exists:users,email',
+                'password' => 'required|min:6|confirmed',
+                'token' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $validator->errors(),
+                ], 400);
+            }
+
+            // Use Laravel's built-in Password Broker to verify the token
+            $status = Password::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function ($user, $password) {
+                    $user->forceFill([
+                        'password' => Hash::make($password),
+                    ])->save();
+                }
+            );
+
+            if ($status == Password::PASSWORD_RESET) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Password has been reset successfully.',
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 'error',
+                'message' => __($status),
+            ], 400);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Server Error',
+                'exception' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
     public function updateAddress(Request $request)
     {

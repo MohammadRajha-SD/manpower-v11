@@ -27,7 +27,7 @@ class BookingDataTable extends DataTable
                 return '#' . $query->id;
             })
             ->addColumn('user', function ($query) {
-                return $query?->user?->name  ?? 'N/A';
+                return $query?->user?->name ?? 'N/A';
             })
             ->addColumn('service', function ($query) {
                 return $query->service?->name ?? 'N/A';
@@ -36,12 +36,13 @@ class BookingDataTable extends DataTable
                 return ucwords($query?->address);
             })
             ->addColumn('total', function ($query) {
-                return "<span class='text-bold text-success'>" . getPrice($query?->getTotal()) . "</span>";
+                // return "<span class='text-bold text-success'>" . getPrice($query?->getTotal()) . "</span>";
+                return "<span class='text-bold text-success'>" . getPrice($query?->payment->amount) . "</span>";
             })
             ->addColumn('coupon', function ($query) {
                 $coupon = $query->couponx;
                 $value = 0;
-                if($coupon) {
+                if ($coupon) {
                     if ($coupon->discount_type === 'fixed') {
                         $value = $coupon->discount . setting('default_currency', 'AED');
                     } elseif ($coupon->discount_type === 'percent') {

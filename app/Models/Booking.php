@@ -40,9 +40,6 @@ class Booking extends Model
 
         return $total;
     }
-
-
-
     
     public function getSubtotal(): float
     {
@@ -52,7 +49,6 @@ class Booking extends Model
         }
         return $total;
     }
-
 
     public function getTax(): float
     {

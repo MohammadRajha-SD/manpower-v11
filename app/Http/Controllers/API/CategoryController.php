@@ -5,11 +5,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
-
 class CategoryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // $address = $request->address;
+        // $address = null;
+
         $categories = Category::with([
             'images',
             'image',
@@ -17,7 +19,14 @@ class CategoryController extends Controller
             'children',
         ])->get();
 
+        // use ($address)
         $newCategories = $categories->map(function ($category) {
+            // $services = $address
+            //     ? $category->services()->whereHas('addresses', function ($q) use ($address) {
+            //         $q->where('address', $address);
+            //     })->get()
+            //     : $category->services;
+
             return [
                 'id' => $category->id,
                 'name' => $category->name,
@@ -29,11 +38,17 @@ class CategoryController extends Controller
                 'images' => $category->images?->map(function ($img) {
                     return asset('uploads/' . $img->path);
                 }),
-                'has_parent' =>  $category->parent ? true : false,
-                'has_services' =>  $category->services->isEmpty() ? false : true,
-                'services' =>  $category->services?->map(function ($srv) {
+                'has_parent' => $category->parent ? true : false,
+                'has_services' => $category->services->isEmpty() ? false : true,
+                'services' => $category->services?->map(function ($srv) {
                     return [
                         'id' => $srv->id,
+                        'addresses' => $srv->addresses ? $srv->addresses->map(function ($ad) {
+                            return [
+                                'address' => $ad->address,
+                                'service_charge' => $ad->service_charge,
+                            ];
+                        }) : [],
                         'name' => $srv->name,
                         'address' => $srv->address,
                         'category' => $srv->category,
@@ -58,7 +73,7 @@ class CategoryController extends Controller
                     ];
                 }),
 
-                'parent' =>  $category->parent ? [
+                'parent' => $category->parent ? [
                     'id' => $category->parent->id,
                     'name' => $category->parent->name,
                     'desc' => $category->parent->desc,
@@ -72,8 +87,15 @@ class CategoryController extends Controller
 
                 ] : null,
 
-                'has_children' =>  $category->children->isEmpty() ? false : true,
-                'children' =>  $category->children?->map(function ($chld) {
+                'has_children' => $category->children->isEmpty() ? false : true,
+                'children' => $category->children?->map(function ($chld) {
+                    // use ($address)
+                    // $services = $address
+                    //     ? $chld->services()->whereHas('addresses', function ($q) use ($address) {
+                    //         $q->where('address', $address);
+                    //     })->get()
+                    //     : $chld->services;
+    
                     return [
                         'id' => $chld->id,
                         'name' => $chld->name,
@@ -85,7 +107,7 @@ class CategoryController extends Controller
                         'images' => $chld?->images?->map(function ($img) {
                             return asset('uploads/' . $img->path);
                         }),
-                        'parent' =>  $chld->parent ? [
+                        'parent' => $chld->parent ? [
                             'id' => $chld->parent->id,
                             'name' => $chld->parent->name,
                             'desc' => $chld->parent->desc,
@@ -97,8 +119,8 @@ class CategoryController extends Controller
                                 return asset('uploads/' . $img->path);
                             }),
                         ] : null,
-                        'has_services' =>  $chld->services->isEmpty() ? false : true,
-                        'services' =>  $chld->services?->map(function ($srv) {
+                        'has_services' => $chld->services->isEmpty() ? false : true,
+                        'services' => $chld->services?->map(function ($srv) {
                             return [
                                 'id' => $srv->id,
                                 'name' => $srv->name,
@@ -118,6 +140,12 @@ class CategoryController extends Controller
                                 'featured' => $srv->featured,
                                 'enable_booking' => $srv->enable_booking,
                                 'available' => $srv->available,
+                                'addresses' => $srv->addresses ? $srv->addresses->map(function ($ad) {
+                                    return [
+                                        'address' => $ad->address,
+                                        'service_charge' => $ad->service_charge,
+                                    ];
+                                }) : [],
                                 'image_path' => $srv?->image ? asset('uploads/' . $srv?->image?->path) : null,
                                 'images' => $srv?->images?->map(function ($img) {
                                     return asset('uploads/' . $img->path);

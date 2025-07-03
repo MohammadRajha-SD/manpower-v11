@@ -25,6 +25,7 @@ class ProfileController extends Controller
         // Validate request
         $validator = Validator::make($request->all(), [
             'name' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
             'email' => [
                 'nullable',
                 'email',
@@ -45,14 +46,24 @@ class ProfileController extends Controller
             ], 422);
         }
         $data = $validator->validated();
+
         unset($data['user_type']);
-        
+
         // Update profile
         $authUser->update($data);
 
         return response()->json([
+            'success' => true,
             'message' => 'Profile updated successfully.',
             'user' => $authUser,
+            'data' => [
+                'email' => $authUser->email,
+                'phone_number' => $authUser->phone_number,
+                'username' => $authUser->username,
+                'name' => $authUser->name,
+                'address' => $authUser->address,
+                'user_type' => $authUser->user_type,
+            ],
         ]);
     }
 }

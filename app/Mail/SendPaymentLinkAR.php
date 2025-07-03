@@ -6,7 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class SendPaymentLink extends Mailable
+class SendPaymentLinkAR extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -22,7 +22,7 @@ class SendPaymentLink extends Mailable
     public function build()
     {
         return $this->from('noreply@hpower.ae', 'HPOWER')
-            ->subject('Complete Your Booking Payment')
-            ->view('emails.payment_link');
+            ->subject('أكمل عملية الدفع الخاصة بحجزك')
+            ->view('emails.payment_link_ar');
     }
 }
