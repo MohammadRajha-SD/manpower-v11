@@ -195,6 +195,7 @@ class BookingController extends Controller
         ]);
 
         $payment->stripe_payment_id = $checkoutSession->id;
+        $payment->stripe_payment_link = $checkoutSession->url;
         $payment->save();
 
         $booking->update([
@@ -202,9 +203,7 @@ class BookingController extends Controller
         ]);
 
         $user = User::find($request->user_id);
-
-        $cc_email = env('CC_EMAIL') ?? 'noreply@hpower.ae';
-
+        
         try {
             if ($request->lang === 'ar') {
                 Mail::to($user->email)

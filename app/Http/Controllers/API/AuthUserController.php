@@ -135,6 +135,7 @@ class AuthUserController extends Controller
                         'service_id' => $b->service_id,
                         'booking_status' => $b->booking_status->status,
                         'payment_status' => $b->payment?->payment_status?->status,
+                        'payment_link' => $b->payment?->stripe_payment_link,
                     ];
                 }),
             ],
