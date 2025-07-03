@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,10 +13,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-
 use App\Mail\HelloMail;
 use App\Mail\HelloMailArabic;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 
@@ -74,8 +75,6 @@ class RegisteredUserController extends Controller
         return redirect(env('FRONTEND_URL', 'https://hpower.ae'))->with('success', __('lang.confirmation.confirmation_successful'));
     }
     
-    
-    
     public function verifyEmail(Request $request)
     {
 
@@ -102,8 +101,17 @@ class RegisteredUserController extends Controller
     
         $confirmationUrl = url('register/confirm/' . $user->confirmation_code);
     
-        Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
-        Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
+        try{
+
+            if($request->lang == 'ar'){
+                Mail::to($user->email)->send(new HelloMailArabic($user, $confirmationUrl));
+
+            }else{
+                Mail::to($user->email)->send(new HelloMail($user, $confirmationUrl));
+            }
+        }catch(Exception $e){
+            Log::info("Error " . $e->getMessage());
+        }
     
         return response()->json([
             'status' => 'success',
