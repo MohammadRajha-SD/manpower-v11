@@ -69,6 +69,7 @@ class RegisteredUserController extends Controller
         }
 
         $user->email_verified_at = now();
+        $user->confirmation_code = null;
         $user->save();
 
      
