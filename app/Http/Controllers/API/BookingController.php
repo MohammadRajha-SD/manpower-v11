@@ -14,6 +14,7 @@ use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\SendPaymentLink;
 use App\Mail\SendPaymentLinkAR;
@@ -203,7 +204,7 @@ class BookingController extends Controller
         ]);
 
         $user = User::find($request->user_id);
-        
+
         try {
             if ($request->lang === 'ar') {
                 Mail::to($user->email)
@@ -300,6 +301,54 @@ class BookingController extends Controller
                 ->cc([$booking->service?->provider?->email, env('CC_EMAIL', 'noreply@hpower.ae')])
                 ->send(new BookingCancelledMail($booking, $request->reason));
 
+            return response()->json([
+                'status' => 'success',
+                'message_en' => 'Booking has been cancelled successfully.',
+                'message_ar' => 'تم إلغاء الحجز بنجاح.',
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message_en' => $e->getMessage(),
+                'message_ar' => $e->getMessage(),
+            ], 404);
+        }
+    }
+
+
+    public function cancelBooking2(Request $request)
+    {
+        $request->validate([
+            'bookingId' => 'required|exists:bookings,id',
+        ]);
+
+        $booking = Booking::findOrFail($request->bookingId);
+
+        // Check if the booking is already cancelled or completed
+        if ($booking->booking_status->status == 'Cancelled' || $booking->payment->payment_status->status == 'Refunded') {
+            return response()->json([
+                'status' => 'error',
+                'message_en' => 'The booking is already cancelled or completed.',
+                'message_ar' => 'تم إلغاء الحجز أو إكماله بالفعل',
+            ], 404);
+        }
+
+
+        try {
+            $paymentStatus = PaymentStatus::where('status', 'Refunded')->first();
+
+            if ($paymentStatus) {
+                $booking->payment->update([
+                    'payment_status_id' => $paymentStatus->id,
+                ]);
+            }
+
+            $bookingStatus = BookingStatus::where('status', 'Cancelled')->first();
+
+            $booking->update([
+                'booking_status_id' => $bookingStatus->id,
+                'cancel' => 1,
+            ]);
             return response()->json([
                 'status' => 'success',
                 'message_en' => 'Booking has been cancelled successfully.',
