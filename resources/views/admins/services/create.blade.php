@@ -18,11 +18,11 @@
                 <div class="d-flex flex-column col-sm-12 col-md-6">
                     <!-- Address Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="address" class="col-md-3 control-label text-md-right mx-1">
+                        <label for="addresses" class="col-md-3 control-label text-md-right mx-1">
                             {{ trans("lang.address_address") }}
                         </label>
                         <div class="col-md-9">
-                            <select name="address" class="form-control select2">
+                            <select name="addresses[]" class="form-control select2" multiple>
                                 @foreach (config('emirates') as $emirate => $cities)
                                 <optgroup label="{{ $emirate }}">
                                     @foreach ($cities as $city)

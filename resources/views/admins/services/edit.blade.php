@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="{{asset('vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')}}">
 @endpush
 <x-admin-layout>
+    @php
+    $selectedAddresses = $service->addresses->pluck('address')->toArray();
+    @endphp
+    
     <x-admins.cards.header :name="__('lang.e_service_plural')" :desc="__('lang.e_service_desc')"
         :table_name="__('lang.e_service_edit')" :route="route('admin.services.index')" />
 
@@ -26,11 +30,14 @@
                             {{ trans("lang.address_address") }}
                         </label>
                         <div class="col-md-9">
-                            <select name="address" class="form-control select2">
+                            <select name="addresses[]" class="form-control select2" multiple>
                                 @foreach (config('emirates') as $emirate => $cities)
                                 <optgroup label="{{ $emirate }}">
                                     @foreach ($cities as $city)
-                                    <option value="{{ $city['slug'] }}">{{ $city['name'] }}</option>
+                                    <option value="{{ $city['slug'] }}" {{ in_array($city['slug'], $selectedAddresses)
+                                        ? 'selected' : '' }}>
+                                        {{ $city['name'] }}
+                                    </option>
                                     @endforeach
                                 </optgroup>
                                 @endforeach
@@ -93,18 +100,18 @@
                             <div class="form-text text-muted">{{ trans("lang.e_service_price_help") }}</div>
                         </div>
                     </div>
-                    
-                    
+
+
                     <!-- QTY LIMIT Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="qty_limit" class="col-md-3 control-label text-md-right mx-1">Qty Limit</label>
                         <div class="col-md-9">
                             <div class="input-group">
                                 <input type="number" name="qty_limit" class="form-control" step="any" min="0"
-                                    placeholder="Enter qty limit"
-                                    value="{{ old('qty_limit', $service->qty_limit) }}" required>
+                                    placeholder="Enter qty limit" value="{{ old('qty_limit', $service->qty_limit) }}"
+                                    required>
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -191,10 +198,11 @@
                             <div class="form-text text-muted">{{ trans("lang.e_service_e_provider_id_help") }}</div>
                         </div>
                     </div>
-                    
-                      <!-- Terms Field -->
+
+                    <!-- Terms Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="terms" class="col-md-3 control-label text-md-right mx-1">Terms & Condications</label>
+                        <label for="terms" class="col-md-3 control-label text-md-right mx-1">Terms &
+                            Condications</label>
                         <div class="col-md-9">
                             <textarea name="terms" id="terms" class="form-control"
                                 placeholder="{{ trans('lang.e_service_review_review_placeholder') }}">{!! old('terms', $service->terms) !!}</textarea>

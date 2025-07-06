@@ -9,6 +9,8 @@ use App\Models\Image;
 use App\Models\Provider;
 use Illuminate\Http\Request;
 use App\Models\Service;
+use App\Models\ServiceAddress;
+use Illuminate\Support\Facades\Log;
 
 class ServiceController extends Controller
 {
@@ -28,7 +30,8 @@ class ServiceController extends Controller
     {
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'address' => 'required',
+            'addresses' => 'required|array|min:1',
+            'addresses.*' => 'required|string',
             'provider_id' => 'required|exists:providers,id',
             'name' => 'required',
             'description' => 'required',
@@ -46,7 +49,7 @@ class ServiceController extends Controller
 
         $service = Service::create([
             'provider_id' => $request->provider_id,
-            'address' => $request->address,
+            'address' => $request->addresses[0],
             'name' => $request->name,
             'description' => $request->description,
             'discount_price' => $request->discount_price,
@@ -59,8 +62,16 @@ class ServiceController extends Controller
             'available' => 1,
             'terms' => $request->terms,
             'category_id' => $request->category_id,
-            'qty_limit' => $request->qty_limit, 
+            'qty_limit' => $request->qty_limit,
         ]);
+
+
+        foreach ($request->addresses as $address) {
+            $service->addresses()->create([
+                'address' => $address,
+                'service_charge' => 0,
+            ]);
+        }
 
         // Upload images and associate with 'service'
         if ($request->hasFile('images')) {
@@ -76,7 +87,7 @@ class ServiceController extends Controller
 
     public function edit($id)
     {
-        $service = Service::with('category')->findOrFail($id);
+        $service = Service::with('category', 'addresses')->findOrFail($id);
         $categories = Category::all();
         $providers = Provider::all();
 
@@ -86,7 +97,8 @@ class ServiceController extends Controller
     {
         $validatedData = $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'address' => 'required',
+            'addresses' => 'required|array|min:1',
+            'addresses.*' => 'required|string',
             'provider_id' => 'required|exists:providers,id',
             'name' => 'required',
             'description' => 'required',
@@ -95,13 +107,15 @@ class ServiceController extends Controller
             'price_unit' => 'required|in:fixed,hourly',
             'quantity_unit' => 'nullable|integer|min:1',
             'duration' => 'required',
-             'terms' => 'nullable',
+            'terms' => 'nullable',
             'featured' => 'boolean',
             'enable_booking' => 'boolean',
             'available' => 'boolean',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-$service = Service::findOrFail($id);
+
+        $service = Service::findOrFail($id);
+
         $service->update([
             'provider_id' => $request->provider_id,
             'name' => $request->name,
@@ -114,10 +128,35 @@ $service = Service::findOrFail($id);
             'featured' => $request->featured,
             'enable_booking' => $request->enable_booking,
             'category_id' => $request->category_id,
-            'address' => $request->address,
-             'terms' => $request->terms,
-             'qty_limit' => $request->qty_limit, 
+            'address' => $request->addresses[0],
+            'terms' => $request->terms,
+            'qty_limit' => $request->qty_limit,
         ]);
+
+        $existingAddressIds = [];
+
+        foreach ($request->addresses as $addressSlug) {
+            if (!$addressSlug)
+                continue;
+
+            // Check if the address already exists for this service
+            $existing = $service->addresses()->where('address', $addressSlug)->first();
+
+            if ($existing) {
+                // Already exists, just add ID to keep
+                $existingAddressIds[] = $existing->id;
+            } else {
+                // Create new
+                $new = $service->addresses()->create([
+                    'address' => $addressSlug,
+                    'service_charge' => 0,
+                ]);
+                $existingAddressIds[] = $new->id;
+            }
+        }
+
+        // Delete any old addresses not in the new list
+        $service->addresses()->whereNotIn('id', $existingAddressIds)->delete();
 
         // Handle image uploads
         if ($request->hasFile('images')) {
@@ -142,7 +181,7 @@ $service = Service::findOrFail($id);
             ]);
         }
 
-      if ($service->bookings()->exists()) {
+        if ($service->bookings()->exists()) {
             return response()->json([
                 'status' => 'error',
                 'message' => __('lang.cannot_delete_has_children', ['operator' => __('lang.booking')]),
