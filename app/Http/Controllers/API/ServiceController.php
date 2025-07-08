@@ -48,6 +48,7 @@ class ServiceController extends Controller
                 'id' => $slide->id,
                 'address' => $slide->address,
                 'category_id' => $slide->category_id,
+                'parent_category_id' => $slide->category?->parent ? $slide->category->parent->id : null,
                 'provider_id' => $slide->provider_id,
                 'name' => $slide->name,
                 'description' => $slide->description,

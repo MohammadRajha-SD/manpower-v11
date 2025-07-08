@@ -335,13 +335,13 @@ class BookingController extends Controller
 
 
         try {
-            $paymentStatus = PaymentStatus::where('status', 'Refunded')->first();
+            // $paymentStatus = PaymentStatus::where('status', 'Refunded')->first();
 
-            if ($paymentStatus) {
-                $booking->payment->update([
-                    'payment_status_id' => $paymentStatus->id,
-                ]);
-            }
+            // if ($paymentStatus) {
+            //     $booking->payment->update([
+            //         'payment_status_id' => $paymentStatus->id,
+            //     ]);
+            // }
 
             $bookingStatus = BookingStatus::where('status', 'Cancelled')->first();
 
@@ -349,6 +349,7 @@ class BookingController extends Controller
                 'booking_status_id' => $bookingStatus->id,
                 'cancel' => 1,
             ]);
+            
             return response()->json([
                 'status' => 'success',
                 'message_en' => 'Booking has been cancelled successfully.',
