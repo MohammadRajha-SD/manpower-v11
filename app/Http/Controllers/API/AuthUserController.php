@@ -132,6 +132,7 @@ class AuthUserController extends Controller
                 'bookings' => $user->bookings?->map(function ($b) {
                     return [
                         'id' => $b->id,
+                        'address'=> $b->address,
                         'service_id' => $b->service_id,
                         'booking_status' => $b->booking_status->status,
                         'payment_status' => $b->payment?->payment_status?->status,
