@@ -93,6 +93,8 @@ Route::post('contact-us', [ContactUsController::class, 'store']);
 Route::get('service-review', [ServiceReviewController::class, 'index']);
 
 Route::middleware(['auth:sanctum',])->group(function () {
+    Route::post('/upload-profile-image', [ProfileController::class, 'updateProfileImage']);
+    
     Route::post('service-review', [ServiceReviewController::class, 'store']);
 
     Route::post('check-coupon', [BookingController::class, 'checkCoupon']);

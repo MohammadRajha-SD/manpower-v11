@@ -7,9 +7,49 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use App\Traits\ImageHandler;
 
 class ProfileController extends Controller
 {
+    use ImageHandler;
+
+    public function updateProfileImage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'userId' => 'required|exists:users,id',
+        ]);
+
+        $user = User::with('image')->findOrFail($request->userId);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            $path = $this->uploadImage($image, 'uploads');
+
+            if ($user->image) {
+                $user->image()->update(['path' => $path]);
+            } else {
+                $user->image()->create(['path' => $path]);
+            }
+        }
+
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Profile updated successfully',
+            'data' => [
+                "id" => $user->id,
+                "name" => $user->name,
+                "email" => $user->email,
+                "phone" => $user->phone_number,
+                "image" => asset('uploads/'.$user->image->path) ?? null,
+            ],
+        ]);
+    }
+
     public function store(Request $request)
     {
         if (Auth::guard('provider')->check()) {
