@@ -121,6 +121,7 @@ class AuthUserController extends Controller
                 'user_type' => 'user',
                 'id' => $user->id,
                 'address' => $user->address ?? null,
+                'addresses' => $user->addresses ?? [],
                 'name' => $user->name,
                 'username' => $user->username,
                 'email' => $user->email,

@@ -14,7 +14,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens, HasFactory, Notifiable;
 
     use ImageHandler;
-    
+
     /**
      * The attributes that are mass assignable.
      *
@@ -58,5 +58,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Booking::class);
     }
 
-
+    public function addresses()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
 }
