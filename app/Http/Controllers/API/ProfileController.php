@@ -108,18 +108,21 @@ class ProfileController extends Controller
         ]);
     }
 
-
     public function storeAddress(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'address' => 'required|string|max:255',
+            'apartment_name' => 'nullable|string|max:255',
+            'building_number' => 'nullable|string|max:255',
         ]);
+
 
         $user = $request->user();
 
         $user->addresses()->create([
             'address' => $request->address,
+            'apartment_name' => $request->apartment_name,
+            'building_number' => $request->building_number,
             'created_at' => now(),
         ]);
 
