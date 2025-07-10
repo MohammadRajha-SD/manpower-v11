@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use App\Traits\ImageHandler;
+use App\Models\UserAddress;
 
 class ProfileController extends Controller
 {
@@ -45,7 +46,7 @@ class ProfileController extends Controller
                 "name" => $user->name,
                 "email" => $user->email,
                 "phone" => $user->phone_number,
-                "image" => asset('uploads/'.$user->image->path) ?? null,
+                "image" => asset('uploads/' . $user->image->path) ?? null,
             ],
         ]);
     }
@@ -104,6 +105,49 @@ class ProfileController extends Controller
                 'address' => $authUser->address,
                 'user_type' => $authUser->user_type,
             ],
+        ]);
+    }
+
+
+    public function storeAddress(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'address' => 'required|string|max:255',
+        ]);
+
+        $user = $request->user();
+
+        $user->addresses()->create([
+            'address' => $request->address,
+            'created_at' => now(),
+        ]);
+
+        return response()->json([
+            'message_en' => 'Address added successfully.',
+            'message_ar' => 'تمت إضافة العنوان بنجاح.',
+            'status' => true,
+        ]);
+    }
+
+    public function destroyAddress(Request $request)
+    {
+        $address = UserAddress::find($request->addressId);
+
+        if (!$address) {
+            return response()->json([
+                'status' => false,
+                'message_en' => 'Address not found.',
+                'message_ar' => 'العنوان غير موجود.',
+            ], 404);
+        }
+
+        $address->delete();
+
+        return response()->json([
+            'status' => true,
+            'message_en' => 'Address deleted successfully.',
+            'message_ar' => 'تم حذف العنوان بنجاح.',
         ]);
     }
 }

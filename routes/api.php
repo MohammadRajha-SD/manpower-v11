@@ -94,10 +94,11 @@ Route::post('contact-us', [ContactUsController::class, 'store']);
 Route::get('service-review', [ServiceReviewController::class, 'index']);
 
 Route::middleware(['auth:sanctum',])->group(function () {
+    Route::post('/profile/add-address', [ProfileController::class, 'storeAddress'])->name('profile.add_address');
+    Route::delete('/profile/delete-address/{id}', [ProfileController::class, 'destroyAddress'])->name('profile.delete_address');
     Route::post('/upload-profile-image', [ProfileController::class, 'updateProfileImage']);
-    
-    Route::post('service-review', [ServiceReviewController::class, 'store']);
 
+    Route::post('service-review', [ServiceReviewController::class, 'store']);
     Route::post('check-coupon', [BookingController::class, 'checkCoupon']);
     Route::post('new-booking', [BookingController::class, 'store']);
     Route::post('cancel-booking', [BookingController::class, 'cancelBooking']);
