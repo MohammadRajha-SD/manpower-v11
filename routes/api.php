@@ -77,6 +77,7 @@ Route::get('partners', [PartnerController::class, 'index']);
 
 // services
 Route::get('services', [ServiceController::class, 'index']);
+Route::get('search-services', [ServiceController::class, 'search']);
 
 // faqs 
 Route::get('faqs', [FaqController::class, 'index']);
