@@ -95,6 +95,7 @@ Route::get('service-review', [ServiceReviewController::class, 'index']);
 
 Route::middleware(['auth:sanctum',])->group(function () {
     Route::post('/profile/add-address', [ProfileController::class, 'storeAddress'])->name('profile.add_address');
+    Route::post('/profile/edit-address', [ProfileController::class, 'updateAddress'])->name('profile.edit_address');
     Route::delete('/profile/delete-address/{id}', [ProfileController::class, 'destroyAddress'])->name('profile.delete_address');
     Route::post('/upload-profile-image', [ProfileController::class, 'updateProfileImage']);
 

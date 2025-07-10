@@ -132,7 +132,6 @@ class ProfileController extends Controller
             'status' => true,
         ]);
     }
-
     public function destroyAddress(Request $request)
     {
         $address = UserAddress::find($request->addressId);
@@ -153,4 +152,40 @@ class ProfileController extends Controller
             'message_ar' => 'تم حذف العنوان بنجاح.',
         ]);
     }
+
+
+    public function updateAddress(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:user_addresses,id',
+            'address' => 'required|string|max:255',
+            'apartment_name' => 'nullable|string|max:255',
+            'building_number' => 'nullable|string|max:255',
+        ]);
+
+        $address = UserAddress::find($request->id);
+
+        // Optional: Make sure the address belongs to the authenticated user
+        if ($address->user_id !== $request->user()->id) {
+            return response()->json([
+                'message_en' => 'Unauthorized.',
+                'message_ar' => 'غير مصرح.',
+                'status' => false,
+            ], 403);
+        }
+
+        $address->update([
+            'address' => $request->address,
+            'apartment_name' => $request->apartment_name,
+            'building_number' => $request->building_number,
+            'updated_at' => now(),
+        ]);
+
+        return response()->json([
+            'message_en' => 'Address updated successfully.',
+            'message_ar' => 'تم تحديث العنوان بنجاح.',
+            'status' => true,
+        ]);
+    }
+
 }
