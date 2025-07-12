@@ -20,9 +20,8 @@ class ServiceDataTable extends DataTable
             ->addColumn('name', function ($query) {
                 return ucwords($query->name);
             })
-
             ->addColumn('available', function ($query) {
-                return isActive($query->available, 'success', 'danger');
+                return isActive($query->enable_booking, 'success', 'danger');
             })
             ->addColumn('provider', function ($query) {
                 return ucwords($query->provider?->name) ?? 'N/A';
