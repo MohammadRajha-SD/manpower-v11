@@ -26,12 +26,14 @@ class AgreementSignedMail extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.provider.agreement_signed')
+        return $this->from('noreply@hpower.ae', 'HPower')
             ->subject("Welcome, {$this->name} – You’re Officially Part of H Power")
+            ->markdown('emails.provider.agreement_signed')
             ->with([
                 'name' => $this->name,
                 'signed_at' => $this->signed_at,
                 'agreementLink' => $this->attachmentPath,
             ]);
+
     }
 }

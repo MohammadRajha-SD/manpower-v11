@@ -187,5 +187,4 @@ class ProfileController extends Controller
             'status' => true,
         ]);
     }
-
 }
