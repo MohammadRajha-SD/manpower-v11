@@ -20,7 +20,11 @@ class ServiceDataTable extends DataTable
             ->addColumn('name', function ($query) {
                 return ucwords($query->name);
             })
+
             ->addColumn('available', function ($query) {
+                return isActive($query->available, 'success', 'danger');
+            })
+              ->addColumn('enable_booking', function ($query) {
                 return isActive($query->enable_booking, 'success', 'danger');
             })
             ->addColumn('provider', function ($query) {
@@ -68,7 +72,7 @@ class ServiceDataTable extends DataTable
                 return view('admins.services.actions', compact('query'))->render();
             })
 
-            ->rawColumns(['available', 'action', 'categories', 'addresses'])
+            ->rawColumns(['available', 'action', 'categories', 'addresses','enable_booking'])
             ->setRowId('id');
     }
 
@@ -112,7 +116,7 @@ class ServiceDataTable extends DataTable
             Column::make('discount')->addClass('text-center'),
             Column::make('categories')->addClass('text-center'),
             // Column::make('addresses')->addClass('text-center'),
-            Column::make('available')->addClass('text-center'),
+            Column::make('available')->addClass('text-center'), Column::make('enable_booking')->addClass('text-center'),
             Column::make('updated_at')->addClass('text-center'),
             Column::computed('action')
                 ->exportable(false)

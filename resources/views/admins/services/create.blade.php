@@ -37,8 +37,8 @@
                             </div>
                         </div>
                     </div>
-                    
-             
+
+
                     <!-- Name Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="name" class="col-md-3 control-label text-md-right mx-1">{{
@@ -88,17 +88,16 @@
                             <div class="form-text text-muted">{{ trans("lang.e_service_price_help") }}</div>
                         </div>
                     </div>
-    
+
                     <!-- QTY LIMIT Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="qty_limit" class="col-md-3 control-label text-md-right mx-1">Qty Limit</label>
                         <div class="col-md-9">
                             <div class="input-group">
                                 <input type="number" name="qty_limit" class="form-control" step="any" min="0"
-                                    placeholder="Enter qty limit"
-                                    value="{{ old('qty_limit') }}" required>
+                                    placeholder="Enter qty limit" value="{{ old('qty_limit') }}" required>
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -182,11 +181,12 @@
                             <div class="form-text text-muted">{{ trans("lang.e_service_e_provider_id_help") }}</div>
                         </div>
                     </div>
-                    
-                   
+
+
                     <!-- Review Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
-                        <label for="terms" class="col-md-3 control-label text-md-right mx-1">terms & condications</label>
+                        <label for="terms" class="col-md-3 control-label text-md-right mx-1">terms &
+                            condications</label>
                         <div class="col-md-9">
                             <textarea name="terms" id="terms" class="form-control"
                                 placeholder="{{ trans('lang.e_service_review_review_placeholder') }}">{!! old('terms') !!}</textarea>
@@ -249,6 +249,15 @@
                     <span class="icheck-{{ setting('theme_color') }}">
                         <input type="checkbox" name="enable_booking" value="1" id="enable_booking">
                         <label for="enable_booking"></label>
+                    </span>
+                </div>
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <label for="available" class="control-label my-0 mx-3">{!! __('lang.e_service_available')
+                        !!}</label>
+                    <input type="hidden" name="available" value="0" id="hidden_available">
+                    <span class="icheck-{{ setting('theme_color') }}">
+                        <input type="checkbox" name="available" value="1" id="available">
+                        <label for="available"></label>
                     </span>
                 </div>
                 <button type="submit" class="btn bg-{{setting('theme_color')}} mx-md-3 my-lg-0 my-xl-0 my-md-0 my-2">

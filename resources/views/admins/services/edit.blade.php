@@ -289,6 +289,16 @@
                         <label for="enable_booking"></label>
                     </span>
                 </div>
+                 <div class="d-flex flex-row justify-content-between align-items-center">
+                    <label for="available" class="control-label my-0 mx-3">{!! __('lang.e_service_available')
+                        !!}</label>
+                    <input type="hidden" name="available" value="0" id="hidden_available">
+                    <span class="icheck-{{ setting('theme_color') }}">
+                        <input type="checkbox" name="available" value="1" id="available" {{
+                            $service->available == 1 ? 'checked' : '' }}>
+                        <label for="available"></label>
+                    </span>
+                </div>
                 <button type="submit" class="btn bg-{{setting('theme_color')}} mx-md-3 my-lg-0 my-xl-0 my-md-0 my-2">
                     <i class="fa fa-save"></i> {{trans('lang.save')}} {{trans('lang.e_service')}}
                 </button>
