@@ -14,7 +14,6 @@ use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\SendPaymentLink;
 use App\Mail\SendPaymentLinkAR;
@@ -22,6 +21,7 @@ use App\Mail\BookingCancelledMail;
 use Stripe\Checkout\Session as StripeSession;
 use Stripe\Stripe;
 use Stripe\Refund;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -203,19 +203,19 @@ class BookingController extends Controller
             'payment_id' => $payment->id,
         ]);
 
-        $user = User::find($request->user_id);
+        // $user = User::find($request->user_id);
 
-        try {
-            if ($request->lang === 'ar') {
-                Mail::to($user->email)
-                    ->send(new SendPaymentLinkAR($user, $checkoutSession->url));
-            } else {
-                Mail::to($user->email)
-                    ->send(new SendPaymentLink($user, $checkoutSession->url));
-            }
-        } catch (\Exception $e) {
-            // Log or handle exception
-        }
+        // try {
+        //     if ($request->lang === 'ar') {
+        //         Mail::to($user->email)
+        //             ->send(new SendPaymentLinkAR($user, $checkoutSession->url));
+        //     } else {
+        //         Mail::to($user->email)
+        //             ->send(new SendPaymentLink($user, $checkoutSession->url));
+        //     }
+        // } catch (\Exception $e) {
+        //     // Log or handle exception
+        // }
 
 
         return response()->json([
@@ -228,11 +228,12 @@ class BookingController extends Controller
 
     public function success(Request $request)
     {
-        $booking = Booking::findOrFail($request->booking_id);
+        $booking = Booking::with('user', 'payment')->findOrFail($request->booking_id);
 
         Stripe::setApiKey(config('services.stripe.secret'));
 
         $payment = $booking->payment;
+        $user = $booking->user;
 
         $session = StripeSession::retrieve($payment->stripe_payment_id);
 
@@ -241,7 +242,17 @@ class BookingController extends Controller
                 'payment_status_id' => 2,
                 'stripe_payment_id' => $session->payment_intent,
             ]);
-
+            try {
+                if ($request->lang === 'ar') {
+                    Mail::to($user->email)
+                        ->send(new SendPaymentLinkAR($user, $payment->stripe_payment_link));
+                } else {
+                    Mail::to($user->email)
+                        ->send(new SendPaymentLink($user, $payment->stripe_payment_link));
+                }
+            } catch (\Exception $e) {
+                // Log or handle exception
+            }
             return redirect(env('FRONTEND_URL'));
         } else {
             return redirect(env('FRONTEND_URL'));
@@ -315,9 +326,10 @@ class BookingController extends Controller
         }
     }
 
-
     public function cancelBooking2(Request $request)
     {
+
+
         $request->validate([
             'bookingId' => 'required|exists:bookings,id',
         ]);
@@ -349,7 +361,6 @@ class BookingController extends Controller
                 'booking_status_id' => $bookingStatus->id,
                 'cancel' => 1,
             ]);
-            
             return response()->json([
                 'status' => 'success',
                 'message_en' => 'Booking has been cancelled successfully.',
