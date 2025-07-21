@@ -190,6 +190,7 @@ class AuthUserController extends Controller
         ]);
     }
 
+        // forget password
     public function forgotPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -259,6 +260,7 @@ class AuthUserController extends Controller
         }
     }
 
+    // reset password
     public function resetPassword(Request $request)
     {
         try {
