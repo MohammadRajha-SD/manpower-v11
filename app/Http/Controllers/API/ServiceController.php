@@ -42,8 +42,13 @@ class ServiceController extends Controller
 
         // Execute the query to get the results
         $services = $query->get();
+        $emirates = $request->lang === 'ar' ? config('emirates_ar') : config('emirates');
+// Flatten config to [slug => name]
+$slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
+    return [$item['slug'] => $item['name']];
+});
 
-        $newServices = $services->map(function ($slide) {
+        $newServices = $services->map(function ($slide) use ($slugToName)  {
             return [
                 'id' => $slide->id,
                 'address' => $slide->address,
@@ -82,12 +87,13 @@ class ServiceController extends Controller
                     'featured' => $slide->provider->featured,
                     'created_at' => $slide->provider->created_at,
                 ],
-                'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) {
-                    return [
-                        'address' => $ad->address,
-                        'service_charge' => $ad->service_charge,
-                    ];
-                }) : [],
+                
+               'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) use ($slugToName) {
+    return [
+        'address' => $slugToName[$ad->address] ?? $ad->address, // Translate slug to name if found
+        'service_charge' => $ad->service_charge,
+    ];
+}) : [],
 
                 'images' => $slide->images->map(function ($img) {
                     return asset('uploads/' . $img->path);
@@ -124,8 +130,16 @@ class ServiceController extends Controller
 
         // Execute the query to get the results
         $services = $query->get();
+        
+        $emirates = $request->lang === 'ar' ? config('emirates_ar') : config('emirates');
 
-        $newServices = $services->map(function ($slide) {
+        // Flatten config to [slug => name]
+        $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
+            return [$item['slug'] => $item['name']];
+        });
+
+
+        $newServices = $services->map(function ($slide) use ($slugToName) {
             return [
                 'id' => $slide->id,
                 'address' => $slide->address,
@@ -165,14 +179,13 @@ class ServiceController extends Controller
                     'accepted' => $slide->provider->accepted,
                     'featured' => $slide->provider->featured,
                     'created_at' => $slide->provider->created_at,
-                ],
-                'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) {
+                ],              
+                'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) use ($slugToName) {
                     return [
-                        'address' => $ad->address,
+                        'address' => $slugToName[$ad->address] ?? $ad->address, 
                         'service_charge' => $ad->service_charge,
                     ];
                 }) : [],
-
                 'images' => $slide->images->map(function ($img) {
                     return asset('uploads/' . $img->path);
                 })->toArray(),
