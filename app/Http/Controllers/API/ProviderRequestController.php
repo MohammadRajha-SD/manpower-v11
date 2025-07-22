@@ -8,20 +8,34 @@ use Illuminate\Http\Request;
 use App\Models\ProviderRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class ProviderRequestController extends Controller
 {
     use ImageHandler;
+
     public function store(Request $request)
     {
+        $messages = [
+            'company_name.required' => $request->lang === 'ar' ? 'اسم الشركة مطلوب.' : 'Company name is required.',
+            'contact_person.required' => $request->lang === 'ar' ? 'اسم الشخص المسؤول مطلوب.' : 'Contact person is required.',
+            'contact_email.required' => $request->lang === 'ar' ? 'البريد الإلكتروني مطلوب.' : 'Email is required.',
+            'contact_email.email' => $request->lang === 'ar' ? 'صيغة البريد الإلكتروني غير صحيحة.' : 'Invalid email format.',
+            'contact_email.unique' => $request->lang === 'ar'
+                ? 'لقد قمت بالفعل بإرسال طلب من قبل باستخدام هذا البريد الإلكتروني.'
+                : 'You have already submitted a request using this email address.',
+            'phone.required' => $request->lang === 'ar' ? 'رقم الهاتف مطلوب.' : 'Phone number is required.',
+            'licence.required' => $request->lang === 'ar' ? 'ملف الترخيص مطلوب.' : 'Licence file is required.',
+        ];
+
         try {
             Log::info('Incoming Request:', $request->all());
 
-            $validated = $request->validate([
+            $validator = Validator::make($request->all(), [
                 'company_name' => 'required',
                 'company_website' => 'nullable',
                 'contact_person' => 'required',
-                'contact_email' => 'required|email',
+                'contact_email' => 'required|email|unique:provider_requests,contact_email',
                 'phone' => 'required',
                 'number_employees' => 'nullable',
                 'cities' => 'nullable',
@@ -29,7 +43,15 @@ class ProviderRequestController extends Controller
                 'plans' => 'nullable',
                 'notes' => 'nullable',
                 'licence' => 'required',
-            ]);
+            ], $messages);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $validated = $validator->validated();
+
+
 
             // Upload licence file if exists
             if ($request->hasFile('licence')) {
