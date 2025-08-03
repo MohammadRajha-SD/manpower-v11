@@ -54,6 +54,21 @@ class BookingDataTable extends DataTable
             ->addColumn('tax', function ($query) {
                 return "<span class='text-bold'>" . getPrice($query->getTax()) . "</span>";
             })
+            ->addColumn('num_cleaner', function ($query) {
+                return $query->num_cleaner;
+            })
+            ->addColumn('stay_hours', function ($query) {
+                return $query->stay_hours;
+            })
+            ->addColumn('cleaning_times', function ($query) {
+                return $query->cleaning_times;
+            })
+            ->addColumn('cleaning_need', function ($query) {
+                return $query->cleaning_need ? __('lang.yes') : __('lang.no');
+            })
+            ->addColumn('special_instructions', function ($query) {
+                return $query->special_insteuctions ?? 'N/A';
+            })
             ->addColumn('booking_status', function ($query) {
                 return ($query?->booking_status?->status);
             })
@@ -111,6 +126,11 @@ class BookingDataTable extends DataTable
             Column::make('service'),
             Column::make('address'),
             Column::make('coupon'),
+            Column::make('num_cleaner'),
+            Column::make('stay_hours'),
+            Column::make('cleaning_times'),
+            Column::make('cleaning_need'),
+            Column::make('special_instructions'),
             Column::make('booking_status'),
             Column::make('payment_status'),
             Column::make('total'),

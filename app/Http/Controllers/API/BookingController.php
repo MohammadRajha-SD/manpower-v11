@@ -92,6 +92,12 @@ class BookingController extends Controller
             'emirate' => 'required',
             'coupon' => 'nullable|string',
             'hint' => 'nullable|string',
+
+            'num_cleaner' => 'nullable|integer|min:1',
+            'stay_hours' => 'nullable|integer|min:1',
+            'cleaning_times' => 'nullable|in:once,weekly,multiple',
+            'cleaning_need' => 'nullable',
+            'special_instructions' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -146,7 +152,6 @@ class BookingController extends Controller
         //     }
         // }
 
-
         $booking_status = BookingStatus::where('status', 'Pending')->orWhere('order', 1)->first();
         $payment_status = PaymentStatus::where('status', 'Pending')->orWhere('order', 1)->first();
         $payment_method = PaymentMethod::where('name', 'stripe')->orwhere('order', 1)->first();
@@ -162,6 +167,11 @@ class BookingController extends Controller
         $booking->emirate = $request->emirate;
         $booking->start_at = $request->start_at ?? null;
         $booking->ends_at = $request->ends_at ?? null;
+        $booking->num_cleaner = $request->num_cleaner;
+        $booking->stay_hours = $request->stay_hours;
+        $booking->cleaning_times = $request->cleaning_times;
+        $booking->cleaning_need = $request->cleaning_need == 1;
+        $booking->special_insteuctions = $request->special_instructions;
         $booking->booking_at = now();
 
         $payment = Payment::create([
