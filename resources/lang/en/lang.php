@@ -1837,4 +1837,13 @@ return [
     'reset_password_line1' => 'You are receiving this email because we received a password reset request for your account.',
     'reset_password_action' => 'Reset Password',
     'reset_password_line2' => 'If you did not request a password reset, no further action is required.',
+
+    
+    // Testimonials
+    'stars' => 'Stars',
+    'testimonial' => 'Testimonial',
+    'testimonial_plural' => 'Testimonials',
+    'testimonial_create' => 'Create Testimonial',
+    'testimonial_table' => 'Testimonials Table',
+    'testimonial_desc' => 'List of customer opinions and feedback',
 ];

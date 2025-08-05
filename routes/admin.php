@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\ProviderPayoutController;
 use App\Http\Controllers\Admin\ProviderRequestController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\AgreementController;
+use App\Http\Controllers\Admin\TestimonialController;
 
 Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 Route::resource('notifications', NotificationController::class);
@@ -86,6 +87,8 @@ Route::resource('agreements',AgreementController::class);
 
 /** Partners */
 Route::resource('partners', PartnerController::class);
+
+Route::resource('testimonials', TestimonialController::class);
 
 Route::get('profile', [ProfileController::class, 'index'])->name('user.profile');
 Route::put('profile/update', [ProfileController::class, 'update'])->name('user.profile.update');

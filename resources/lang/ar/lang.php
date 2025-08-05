@@ -1725,4 +1725,12 @@ return [
     'reset_password_line1' => 'لقد تلقّيت هذا البريد الإلكتروني لأننا استلمنا طلبًا لإعادة تعيين كلمة المرور لحسابك.',
     'reset_password_action' => 'إعادة تعيين كلمة المرور',
     'reset_password_line2' => 'إذا لم تطلب إعادة تعيين كلمة المرور، فلا حاجة لاتخاذ أي إجراء.',
+
+    'stars' => 'عدد النجوم',
+    'testimonial' => 'شهادة',
+    'testimonial_plural' => 'الشهادات',
+    'testimonial_create' => 'إضافة شهادة',
+    'testimonial_table' => 'جدول الشهادات',
+    'testimonial_desc' => 'قائمة آراء العملاء وشهاداتهم',
 ];
+
