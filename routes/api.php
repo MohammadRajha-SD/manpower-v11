@@ -24,6 +24,7 @@ use App\Http\Controllers\API\ServiceReviewController;
 use App\Http\Controllers\API\SlideController;
 use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\API\TermController;
+use App\Http\Controllers\API\TestimonialController;
 use App\Http\Controllers\API\UserController;
 
 
@@ -74,6 +75,7 @@ Route::prefix('provider')
 // packs
 Route::get('packs', [PackController::class, 'index']);
 Route::get('partners', [PartnerController::class, 'index']);
+Route::get('testimonials', [TestimonialController::class, 'index']);
 
 // services
 Route::get('services', [ServiceController::class, 'index']);

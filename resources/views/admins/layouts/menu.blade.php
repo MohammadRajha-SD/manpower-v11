@@ -114,7 +114,11 @@
 
     <x-admins.sidebar-item :name="__('lang.user_plural')" icon="fas fa-users" :activeRoutes="['admin.users*']"
         route="users.index" />
-         <x-admins.sidebar-item :name="__('lang.terms')" icon="fas fa-file-contract" :activeRoutes="['admin.terms*']"
+
+    <x-admins.sidebar-item :name="__('lang.testimonial_plural')" icon="fas fa-star"
+        :activeRoutes="['admin.testimonials*']" route="testimonials.index" />
+        
+    <x-admins.sidebar-item :name="__('lang.terms')" icon="fas fa-file-contract" :activeRoutes="['admin.terms*']"
         route="terms.index" />
 
     <x-admins.sidebar-item :name="__('lang.app_setting_mail')" icon="fas fa-envelope" :activeRoutes="['admin.mails*']"
