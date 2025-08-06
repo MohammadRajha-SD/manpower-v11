@@ -77,8 +77,9 @@ class SettingController extends Controller
         ];
 
         $image_path = setting('app_logo', '') != '' ? 'uploads/'. setting('app_logo') : '';
+        $banner_img = setting('banner_img', '') != '' ? 'uploads/'. setting('banner_img') : '';
 
-        return view('admins.settings.global-settings.index', compact('themes','logo_bg_clrs','navbar_colors','image_path'));
+        return view('admins.settings.global-settings.index', compact('themes','logo_bg_clrs','navbar_colors','image_path', 'banner_img'));
     }
 
     public function update(Request $request, string $id)
@@ -97,11 +98,17 @@ class SettingController extends Controller
             'fixed_header' => 'required|boolean',
             'fixed_footer' => 'required|boolean',
             'app_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'banner_img' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         if ($request->hasFile('app_logo')) {
             $path = $this->uploadImage($request->app_logo, 'uploads');
             $settings['app_logo'] = $path;
+        }
+
+        if ($request->hasFile('banner_img')) {
+            $path = $this->uploadImage($request->banner_img, 'uploads');
+            $settings['banner_img'] = $path;
         }
 
         foreach ($settings as $key => $value) {

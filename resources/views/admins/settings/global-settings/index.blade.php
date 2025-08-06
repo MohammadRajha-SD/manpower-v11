@@ -197,6 +197,36 @@
                         </div>
                     </div>
 
+                    <div class="form-group align-items-start d-flex flex-column flex-md-row">
+                        <label for="banner_img" class="col-md-3 control-label text-md-right mx-1">
+                            Banner Image
+                        </label>
+
+                        <div class="col-md-9">
+                            @if($banner_img != '')
+                            <!-- Preview existing image -->
+                            <div class="row g-3 mb-2">
+                                <div class="col-12 text-center">
+                                    <div
+                                        class="border rounded p-2 bg-light shadow-sm d-flex flex-column align-items-center">
+                                        <img src="{{ asset($banner_img) }}" class="img-fluid rounded mb-2"
+                                            style="width: 100%; height: 100px; object-fit: cover;">
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
+
+                            <!-- Upload new image -->
+                            <div style="width: 100%" class="dropzone image" id="banner_img" data-field="image">
+                                <input type="file" name="banner_img" />
+                            </div>
+
+                            <div class="form-text text-muted w-50">
+                                @lang("lang.category_image_help")
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Fixed Header Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="fixed_header" class="col-4 control-label text-right">{{
