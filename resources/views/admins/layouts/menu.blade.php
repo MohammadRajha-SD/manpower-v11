@@ -42,6 +42,9 @@
 <x-admins.sidebar-item :name="__('lang.category_plural')" icon="fas fa-folder-open"
     :activeRoutes="['admin.categories*']" route="categories.index" />
 
+<x-admins.sidebar-item :name="__('lang.most_populars_plural')" icon="fas fa-star"
+    :activeRoutes="['admin.most-populars*']" route="most-populars.index" />
+
 {{-- PACKS --}}
 <x-admins.sidebar-item :name="__('lang.pack')" icon="fas fa-list-alt" :activeRoutes="['admin.packs*']"
     route="packs.index" />
@@ -117,7 +120,7 @@
 
     <x-admins.sidebar-item :name="__('lang.testimonial_plural')" icon="fas fa-star"
         :activeRoutes="['admin.testimonials*']" route="testimonials.index" />
-        
+
     <x-admins.sidebar-item :name="__('lang.terms')" icon="fas fa-file-contract" :activeRoutes="['admin.terms*']"
         route="terms.index" />
 

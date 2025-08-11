@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\MostPopularController;
 use App\Http\Controllers\API\AgreementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\MultiLoginController;
@@ -76,6 +77,7 @@ Route::prefix('provider')
 Route::get('packs', [PackController::class, 'index']);
 Route::get('partners', [PartnerController::class, 'index']);
 Route::get('testimonials', [TestimonialController::class, 'index']);
+Route::resource('most-populars', MostPopularController::class);
 
 // services
 Route::get('services', [ServiceController::class, 'index']);

@@ -1732,5 +1732,11 @@ return [
     'testimonial_create' => 'إضافة شهادة',
     'testimonial_table' => 'جدول الشهادات',
     'testimonial_desc' => 'قائمة آراء العملاء وشهاداتهم',
+
+    'most_popular' => 'الأكثر شهرة',
+    'most_populars_plural' => 'الأكثر شهرة',
+    'most_popular_create' => 'إنشاء عنصر الأكثر شهرة',
+    'most_popular_table' => 'جدول الأكثر شهرة',
+    'most_popular_desc' => 'قائمة العناصر الأكثر شهرة',
 ];
 

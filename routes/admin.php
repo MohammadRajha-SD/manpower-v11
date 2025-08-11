@@ -29,12 +29,14 @@ use App\Http\Controllers\Admin\ProviderPayoutController;
 use App\Http\Controllers\Admin\ProviderRequestController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\AgreementController;
+use App\Http\Controllers\Admin\MostPopularController;
 use App\Http\Controllers\Admin\TestimonialController;
 
 Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 Route::resource('notifications', NotificationController::class);
 Route::resource('contact-us', ContactUsController::class);
 
+Route::resource('most-populars', MostPopularController::class);
 Route::resource('categories', CategoryController::class);
 Route::resource('packs', PackController::class);
 Route::resource('addresses', AddressController::class);

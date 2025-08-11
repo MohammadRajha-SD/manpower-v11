@@ -24,15 +24,19 @@ class TestimonialController extends Controller
         $data = $this->validate(
             $request,
             [
-                'name' => 'required|string|max:255',
+                'name' => 'required|max:255',
                 'description' => 'nullable',
                 'stars' => 'required:min:1',
             ]
         );
 
-        Testimonial::create($data);
+        $ts = new Testimonial();
+        $ts->name = $request->name;
+        $ts->description = $request->description ?? '';
+        $ts->stars = $request->stars;
+        $ts->save();
 
-        return redirect()->route('admin.testimonials.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.faq_category')]));
+        return redirect()->route('admin.testimonials.index')->with('success', __('lang.saved_successfully', ['operator' => __('lang.testimonial')]));
     }
 
     public function edit($id)
@@ -47,7 +51,7 @@ class TestimonialController extends Controller
         $data = $this->validate(
             $request,
             [
-                'name' => 'required|string|max:255',
+                'name' => 'required|max:255',
                 'description' => 'nullable',
                 'stars' => 'required:min:1',
             ]

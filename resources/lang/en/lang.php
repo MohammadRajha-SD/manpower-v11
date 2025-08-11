@@ -1838,7 +1838,7 @@ return [
     'reset_password_action' => 'Reset Password',
     'reset_password_line2' => 'If you did not request a password reset, no further action is required.',
 
-    
+
     // Testimonials
     'stars' => 'Stars',
     'testimonial' => 'Testimonial',
@@ -1846,4 +1846,10 @@ return [
     'testimonial_create' => 'Create Testimonial',
     'testimonial_table' => 'Testimonials Table',
     'testimonial_desc' => 'List of customer opinions and feedback',
+
+    'most_popular' => 'Most Popular',
+    'most_populars_plural' => 'Most Populars',
+    'most_popular_create' => 'Create Most Popular',
+    'most_popular_table' => 'Most Populars Table',
+    'most_popular_desc' => 'List of best-selling items',
 ];
