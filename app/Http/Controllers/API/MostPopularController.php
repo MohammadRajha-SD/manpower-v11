@@ -22,11 +22,11 @@ class MostPopularController extends Controller
                     'name' => $mp->category?->name,
                     'desc' => $mp->category?->desc,
                 ],
-                'image' => $mp->image ? asset($mp->image->path) : null,
+                'image' => $mp->image ? asset('uploads/' . $mp->image->path) : null,
                 'created_at' => $mp->created_at->toDateTimeString(),
             ];
         });
-        
+
         return response()->json($mapped, 200);
     }
 }

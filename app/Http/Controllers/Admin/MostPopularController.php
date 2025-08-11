@@ -52,20 +52,21 @@ class MostPopularController extends Controller
     public function edit($id)
     {
         $most_popular = MostPopular::with('image', 'category')->findOrFail($id);
+        $categories = Category::all();
 
-        return view('admins.most-populars.edit', compact('most_popular'));
+        return view('admins.most-populars.edit', compact('most_popular', 'categories'));
     }
 
-    public function update(Request $request, MostPopular $mp)
+    public function update(Request $request, MostPopular $most_popular)
     {
         $request->validate([
             'name' => 'required',
-            'description' => 'required',
-            'category_id' => 'required|exists:categories,id',
+            'description' => 'nullable',
+            'category_id' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $mp->update([
+        $most_popular->update([
             'name' => $request->name,
             'desc' => $request->description,
             'category_id' => $request->category_id,
@@ -74,8 +75,8 @@ class MostPopularController extends Controller
         if ($request->hasFile('image')) {
             $path = $this->uploadImage($request->image, 'uploads');
 
-            $mp->image()->delete();
-            $mp->image()->create(['path' => $path]);
+            $most_popular->image()->delete();
+            $most_popular->image()->create(['path' => $path]);
         }
 
         return redirect()->route('admin.most-populars.index')->with('success', __('lang.updated_successfully', ['operator' => __('lang.most_popular')]));
