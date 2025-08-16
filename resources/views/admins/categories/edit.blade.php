@@ -154,6 +154,16 @@
                             <label for="featured"></label>
                         </span>
                     </div>
+
+                    <div class="d-flex flex-row justify-content-between align-items-center">
+                        <label for="is_end_sub_category" class="control-label my-0 mx-3">Is End Sub Category</label>
+                        <input type="hidden" name="is_end_sub_category" value="0" id="hidden_is_end_sub_category">
+                        <span class="icheck-{{ setting('theme_color') }}">
+                            <input type="checkbox" name="is_end_sub_category" value="1" @if ($category->is_end_sub_category == 1) checked
+                            @endif id="is_end_sub_category">
+                            <label for="is_end_sub_category"></label>
+                        </span>
+                    </div>
                     <button type="submit"
                         class="btn bg-{{ setting('theme_color') }} mx-md-3 my-lg-0 my-xl-0 my-md-0 my-2">
                         <i class="fa fa-save"></i> {{ trans('lang.save') }} {{ trans('lang.category') }}

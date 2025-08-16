@@ -20,7 +20,7 @@ class MostPopularController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::where('is_end_sub_category', 1)->get();
 
         return view('admins.most-populars.create', compact('categories'));
     }
@@ -52,7 +52,7 @@ class MostPopularController extends Controller
     public function edit($id)
     {
         $most_popular = MostPopular::with('image', 'category')->findOrFail($id);
-        $categories = Category::all();
+        $categories = Category::where('is_end_sub_category', 1)->get();
 
         return view('admins.most-populars.edit', compact('most_popular', 'categories'));
     }

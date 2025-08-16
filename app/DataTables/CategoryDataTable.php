@@ -34,6 +34,9 @@ class CategoryDataTable extends DataTable
             ->addColumn('featured', function ($query) {
                 return isActive($query->featured, 'primary', 'danger');
             })
+            ->addColumn('is_end_sub_category', function ($query) {
+                return isActive($query->is_end_sub_category, 'primary', 'danger');
+            })
             ->addColumn('parent_category', function ($query) {
                 return $query->parent?->name ?? 'N/A';
             })
@@ -45,7 +48,7 @@ class CategoryDataTable extends DataTable
                 $deleteBtn = "<a href='" . route('admin.categories.destroy', $query->id) . "' class='btn btn-danger btn-sm  ml-2 delete-item'><i class='fa fa-trash'></i></a>";
                 return $editBtn . $deleteBtn;
             })
-            ->rawColumns(['action', 'image', 'featured'])
+            ->rawColumns(['action', 'image', 'featured','is_end_sub_category'])
             ->setRowId('id');
     }
 
@@ -89,6 +92,7 @@ class CategoryDataTable extends DataTable
             Column::make('name'),
             Column::make('color'),
             Column::make('featured'),
+            Column::make('is_end_sub_category'),
             Column::make('parent_category'),
             Column::make('updated_at'),
             Column::computed('action')

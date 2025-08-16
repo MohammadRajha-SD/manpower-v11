@@ -32,6 +32,7 @@ class CategoryController extends Controller
             'color' => 'required|string',
             'order' => 'required|integer',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_end_sub_category' => 'nullable'
         ]);
 
         $category = Category::create([
@@ -39,6 +40,7 @@ class CategoryController extends Controller
             'desc' => $request->description,
             'color' => $request->color,
             'order' => $request->order,
+            'is_end_sub_category' => $request->is_end_sub_category ?? 0,
             'featured' => $request->featured ?? false,
             'parent_id' => $request->parent_id,
         ]);
@@ -71,6 +73,7 @@ class CategoryController extends Controller
             'color' => 'required|string',
             'order' => 'required|integer',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'is_end_sub_category' => 'nullable'
         ]);
 
         $category->update([
@@ -80,6 +83,7 @@ class CategoryController extends Controller
             'order' => $request->order,
             'featured' => $request->featured ?? false,
             'parent_id' => $request->parent_id,
+            'is_end_sub_category' => $request->is_end_sub_category ?? 0,
         ]);
 
         if ($request->hasFile('images')) {
