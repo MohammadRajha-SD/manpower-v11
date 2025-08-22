@@ -70,7 +70,7 @@
                         </label>
                         <div class="col-md-9">
                             <select name="category_id" class="select2 form-control not-required"
-                                data-empty="{{ trans('lang.e_service_categories_placeholder') }}" id="categories">
+                                data-empty="{{ trans('lang.e_service_categories_placeholder') }}" multiple="multiple" id="categories">
                                 @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ $category->id == old('category_id',
                                     $service?->category_id) ? 'selected' : '' }}>
@@ -80,6 +80,23 @@
                             </select>
 
                             <div class="form-text text-muted">{{ trans("lang.e_service_categories_help") }}</div>
+                        </div>
+                    </div>
+
+                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="end_sub_category_id" class="col-md-3 control-label text-md-right mx-1">
+                            End Sub Category
+                        </label>
+                        <div class="col-md-9">
+                            <select name="end_sub_category_id" class="select2 form-control not-required"
+                                data-empty="{{ trans('lang.e_service_categories_placeholder') }}" id="categories">
+                                @foreach($end_sub_categories as $category)
+                                <option value="{{ $category->id }}" {{ $category->id == old('end_sub_category_id',
+                                    $service?->end_sub_category_id) ? 'selected' : '' }}>
+                                    {{ ucwords($category->name) }}
+                                </option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
