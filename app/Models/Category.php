@@ -20,6 +20,7 @@ class Category extends Model
         'order',
         'featured',
         'parent_id',
+        'provider_id'
     ];
 
     public $translatable = ['name', 'desc'];
@@ -37,6 +38,11 @@ class Category extends Model
     public function parent()
     {
         return $this->belongsTo(Category::class, 'parent_id');
+    }
+
+      public function provider()
+    {
+        return $this->belongsTo(Provider::class, 'provider_id');
     }
     
     public function children()

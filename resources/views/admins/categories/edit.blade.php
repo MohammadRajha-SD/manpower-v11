@@ -139,6 +139,24 @@
                             </div>
                         </div>
                     </div>
+
+                         <!-- Providers Field -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="provider_id" class="col-md-3 control-label text-md-right mx-1">
+                            @lang("lang.e_provider")
+                        </label>
+
+                        <div class="col-md-9">
+                            <select name="provider_id" class="select2 not-required form-control"
+                                data-empty="@lang('lang.e_provider')">
+                                <option value="">@lang('lang.e_provider_name_placeholder')</option>
+                                @foreach ($providers as $value)
+                                <option value="{{ $value->id }}" {{$category->provider_id == $value->id ? 'selected' :
+                                    ''}}>{{ $value->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Submit Field -->

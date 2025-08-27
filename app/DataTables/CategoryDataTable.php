@@ -37,6 +37,9 @@ class CategoryDataTable extends DataTable
             ->addColumn('is_end_sub_category', function ($query) {
                 return isActive($query->is_end_sub_category, 'primary', 'danger');
             })
+             ->addColumn('provider', function ($query) {
+                return $query->provider?->name ?? 'N/A';
+            })
             ->addColumn('parent_category', function ($query) {
                 return $query->parent?->name ?? 'N/A';
             })
@@ -90,6 +93,7 @@ class CategoryDataTable extends DataTable
         return [
             Column::make('image'),
             Column::make('name'),
+            Column::make('provider'),
             Column::make('color'),
             Column::make('featured'),
             Column::make('is_end_sub_category'),

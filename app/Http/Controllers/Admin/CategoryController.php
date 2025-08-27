@@ -6,6 +6,7 @@ use App\DataTables\CategoryDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Image;
+use App\Models\Provider;
 use App\Traits\ImageHandler;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,8 @@ class CategoryController extends Controller
     public function create()
     {
         $parentCategory = Category::all();
-        return view('admins.categories.create', compact('parentCategory'));
+        $providers = Provider::all();
+        return view('admins.categories.create', compact('parentCategory', 'providers'));
     }
 
     public function store(Request $request)
@@ -32,7 +34,9 @@ class CategoryController extends Controller
             'color' => 'required|string',
             'order' => 'required|integer',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'is_end_sub_category' => 'nullable'
+            'is_end_sub_category' => 'nullable',
+                        'provider_id' => 'nullable|exists:providers,id'
+
         ]);
 
         $category = Category::create([
@@ -43,6 +47,8 @@ class CategoryController extends Controller
             'is_end_sub_category' => $request->is_end_sub_category ?? 0,
             'featured' => $request->featured ?? false,
             'parent_id' => $request->parent_id,
+                        'provider_id' => $request->provider_id,
+
         ]);
 
         // Upload images and associate with category
@@ -59,10 +65,10 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::with('provider')->findOrFail($id);
         $parentCategory = Category::where('id', '!=', $category->id)->get();
-
-        return view('admins.categories.edit', compact('category', 'parentCategory'));
+ $providers = Provider::all();
+        return view('admins.categories.edit', compact('category', 'parentCategory','providers'));
     }
 
     public function update(Request $request, Category $category)
@@ -73,7 +79,9 @@ class CategoryController extends Controller
             'color' => 'required|string',
             'order' => 'required|integer',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-            'is_end_sub_category' => 'nullable'
+            'is_end_sub_category' => 'nullable',
+                        'provider_id' => 'nullable|exists:providers,id'
+
         ]);
 
         $category->update([
@@ -84,6 +92,8 @@ class CategoryController extends Controller
             'featured' => $request->featured ?? false,
             'parent_id' => $request->parent_id,
             'is_end_sub_category' => $request->is_end_sub_category ?? 0,
+                        'provider_id' => $request->provider_id,
+
         ]);
 
         if ($request->hasFile('images')) {

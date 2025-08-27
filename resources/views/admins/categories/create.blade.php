@@ -25,7 +25,7 @@
 
                         <div class="col-md-9">
                             <input type="text" name="name" id="name" class="form-control"
-                                placeholder="@lang('lang.category_name_placeholder')" required/>
+                                placeholder="@lang('lang.category_name_placeholder')" required />
 
                             <div class="form-text text-muted">
                                 @lang("lang.category_name_help")
@@ -40,7 +40,7 @@
 
                         <div class="col-md-9">
                             <input type="text" name="color" id="color" class="form-control"
-                                placeholder="@lang('lang.category_color_placeholder')"required />
+                                placeholder="@lang('lang.category_color_placeholder')" required />
 
                             <div class="form-text text-muted">
                                 @lang("lang.category_color_help")
@@ -89,7 +89,7 @@
 
                         <div class="col-md-9">
                             <input type="number" name="order" id="name" class="form-control"
-                                placeholder="@lang('lang.category_order_placeholder')" step="1" min="0" required/>
+                                placeholder="@lang('lang.category_order_placeholder')" step="1" min="0" required />
 
                             <div class="form-text text-muted">
                                 @lang("lang.category_order_help")
@@ -117,20 +117,38 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Providers Field -->
+                    <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
+                        <label for="provider_id" class="col-md-3 control-label text-md-right mx-1">
+                            @lang("lang.e_provider")
+                        </label>
+
+                        <div class="col-md-9">
+                            <select name="provider_id" class="select2 not-required form-control"
+                                data-empty="@lang('lang.e_provider')">
+                                <option value="">@lang('lang.e_provider_name_placeholder')</option>
+                                @foreach ($providers as $value)
+                                <option value="{{ $value->id }}">{{ $value->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Submit Field -->
                 <div
                     class="form-group col-12 d-flex flex-column flex-md-row justify-content-md-end justify-content-sm-center border-top pt-4">
                     <div class="d-flex flex-row justify-content-between align-items-center">
-                        <label for="featured" class="control-label my-0 mx-3">{!! __('lang.category_featured_help') !!}</label>
+                        <label for="featured" class="control-label my-0 mx-3">{!! __('lang.category_featured_help')
+                            !!}</label>
                         <input type="hidden" name="featured" value="0" id="hidden_featured">
                         <span class="icheck-{{ setting('theme_color') }}">
                             <input type="checkbox" name="featured" value="1" id="featured">
                             <label for="featured"></label>
                         </span>
                     </div>
-                     <div class="d-flex flex-row justify-content-between align-items-center">
+                    <div class="d-flex flex-row justify-content-between align-items-center">
                         <label for="is_end_sub_category" class="control-label my-0 mx-3">Is End Sub Category</label>
                         <input type="hidden" name="is_end_sub_category" value="0" id="hidden_is_end_sub_category">
                         <span class="icheck-{{ setting('theme_color') }}">
