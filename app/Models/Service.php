@@ -36,6 +36,13 @@ class Service extends Model
         return $this->morphMany(Image::class, 'imageable');
     }
 
+        public function bookings()
+{
+    return $this->belongsToMany(Booking::class, 'booking_service')
+                ->withPivot(['quantity', 'price'])
+                ->withTimestamps();
+}
+
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
@@ -44,11 +51,6 @@ class Service extends Model
     public function reviews()
     {
         return $this->hasMany(ServiceReview::class, 'service_id');
-    }
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
     }
 
 

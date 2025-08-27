@@ -29,9 +29,16 @@ class BookingDataTable extends DataTable
             ->addColumn('user', function ($query) {
                 return $query?->user?->name ?? 'N/A';
             })
-            ->addColumn('service', function ($query) {
-                return $query->service?->name ?? 'N/A';
+            ->addColumn('services', function ($query) {
+                if ($query->services?->isEmpty()) {
+                    return 'N/A';
+                }
+
+                return $query->services?->map(function ($service) {
+                    return $service->name; 
+                })->implode(', ');
             })
+
             ->addColumn('address', function ($query) {
                 return ucwords($query?->address);
             })
