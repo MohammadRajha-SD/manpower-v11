@@ -130,7 +130,7 @@ class BookingDataTable extends DataTable
         return [
             Column::make('id'),
             Column::make('user'),
-            Column::make('service'),
+            Column::make('services'),
             Column::make('address'),
             Column::make('coupon'),
             Column::make('num_cleaner'),

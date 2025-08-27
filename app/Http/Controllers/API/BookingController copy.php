@@ -86,21 +86,18 @@ class BookingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'quantity' => 'required|integer|min:1',
-            'services' => 'required|array|min:1',
-            'services.*.id' => 'required|exists:services,id',
-            // 'services.*.quantity' => 'required|integer|min:1',
+            'service_id' => 'required|exists:services,id',
             'user_id' => 'required|exists:users,id',
-            'address' => 'required|string',
-            'emirate' => 'required|string',
+            'address' => 'required',
+            'emirate' => 'required',
             'coupon' => 'nullable|string',
             'hint' => 'nullable|string',
+
             'num_cleaner' => 'nullable|integer|min:1',
             'stay_hours' => 'nullable|integer|min:1',
             'cleaning_times' => 'nullable|in:once,weekly,multiple',
-            'cleaning_need' => 'nullable|boolean',
+            'cleaning_need' => 'nullable',
             'special_instructions' => 'nullable|string',
-            'start_at' => 'nullable|date',
-            'ends_at' => 'nullable|date|after_or_equal:start_at',
         ]);
 
         if ($validator->fails()) {
@@ -109,102 +106,85 @@ class BookingController extends Controller
 
         $validated = $validator->validated();
 
+        $coupon = null;
         $discountAmount = 0;
-        $serviceCharge = 0;
-        $totalAmount = 0;
 
-        // calculate total across all services
-        foreach ($validated['services'] as $srv) {
-            $service = Service::findOrFail($srv['id']);
+        $service = Service::findOrFail($request->service_id);
 
-            $selectedAddress = $service->addresses()
-                ->where('address', $validated['emirate'])
-                ->first();
+        $selectedAddress = $service->addresses()->where('address', $request->emirate)->first();
+        $serviceCharge = $selectedAddress?->service_charge ?? 0;
 
-            $charge = $selectedAddress?->service_charge ?? 0;
-            $serviceCharge += $charge;
+        $price = $service->discount_price > 0 ? $service->discount_price : $service->price;
 
-            $price = $service->discount_price > 0 ? $service->discount_price : $service->price;
-            $subtotal = $price ;
-
-            $totalAmount += $subtotal;
-        }
-
-        $totalAmount += $serviceCharge;
-
-        // coupon check
-        if (!empty($validated['coupon'])) {
-            $coupon = Coupon::where('code', $validated['coupon'])
+        if (!empty($request->coupon)) {
+            $coupon = Coupon::where('code', $request->coupon)
                 ->where('enabled', 1)
                 ->where('expires_at', '>', Carbon::now())
                 ->first();
 
             if (!$coupon) {
-                return response()->json(['message' => 'Invalid or expired coupon.'], 422);
+                return response()->json([
+                    'message' => 'Invalid or expired coupon.',
+                ], 422);
             }
 
+            $subtotal = $price * $validated['quantity'];
+
             if ($coupon->discount_type === 'percent') {
-                $discountAmount = ($totalAmount * $coupon->discount) / 100;
+                $discountAmount = ($subtotal * $coupon->discount) / 100;
             } else {
                 $discountAmount = $coupon->discount;
             }
-
-            $totalAmount -= $discountAmount;
         }
 
-        // statuses
-        $booking_status = BookingStatus::where('status', 'Pending')
-            ->orWhere('order', 1)->first();
-        $payment_status = PaymentStatus::where('status', 'Pending')
-            ->orWhere('order', 1)->first();
-        $payment_method = PaymentMethod::where('name', 'stripe')
-            ->orWhere('order', 1)->first();
+        // $subtotal = $price * $validated['quantity'];
+        $subtotal = ($price * $validated['quantity']) + $serviceCharge;
 
-        // create booking
-        $booking = Booking::create([
-            'quantity' => $validated['quantity'],
-            'user_id' => $validated['user_id'],
-            'address' => $validated['address'],
-            'emirate' => $validated['emirate'],
-            'booking_status_id' => $booking_status->id,
-            'hint' => $validated['hint'] ?? null,
-            'coupon' => $validated['coupon'] ?? null,
-            'start_at' => $validated['start_at'] ?? null,
-            'ends_at' => $validated['ends_at'] ?? null,
-            'num_cleaner' => $validated['num_cleaner'] ?? null,
-            'stay_hours' => $validated['stay_hours'] ?? null,
-            'cleaning_times' => $validated['cleaning_times'] ?? null,
-            'cleaning_need' => $validated['cleaning_need'] ?? 0,
-            'special_insteuctions' => $validated['special_instructions'] ?? null,
-            'booking_at' => now(),
-        ]);
+        $totalAmount = $subtotal - $discountAmount;
 
-        // attach services to pivot
-        $pivotData = [];
+        // $taxAmount = 0;
 
-        foreach ($validated['services'] as $srv) {
-            $service = Service::find($srv['id']);
-            $price = $service->discount_price > 0 ? $service->discount_price : $service->price;
+        // if ($request->tax_id) {
+        //     $tax = Tax::find($request->tax_id);
+        //     if ($tax) {
+        //         $subtotal = $price * $validated['quantity'];
+        //         $taxAmount = ($subtotal - $discountAmount) * ($tax->rate / 100);
+        //     }
+        // }
 
-            $pivotData[$srv['id']] = [
-                // 'quantity' => $srv['quantity'],
-                'price' => $price,
-            ];
-        }
+        $booking_status = BookingStatus::where('status', 'Pending')->orWhere('order', 1)->first();
+        $payment_status = PaymentStatus::where('status', 'Pending')->orWhere('order', 1)->first();
+        $payment_method = PaymentMethod::where('name', 'stripe')->orwhere('order', 1)->first();
 
-        $booking->services()->sync($pivotData);
+        $booking = new Booking();
+        $booking->quantity = $request->quantity;
+        $booking->service_id = $request->service_id;
+        $booking->user_id = $request->user_id;
+        $booking->address = $request->address;
+        $booking->booking_status_id = $booking_status->id;
+        $booking->hint = $request->hint;
+        $booking->coupon = $request->coupon;
+        $booking->emirate = $request->emirate;
+        $booking->start_at = $request->start_at ?? null;
+        $booking->ends_at = $request->ends_at ?? null;
+        $booking->num_cleaner = $request->num_cleaner;
+        $booking->stay_hours = $request->stay_hours;
+        $booking->cleaning_times = $request->cleaning_times;
+        $booking->cleaning_need = $request->cleaning_need == 1;
+        $booking->special_insteuctions = $request->special_instructions;
+        $booking->booking_at = now();
 
-        // create payment
         $payment = Payment::create([
             'amount' => $totalAmount,
             'description' => 'Transaction for Booking #' . $booking->id,
-            'user_id' => $validated['user_id'],
+            'user_id' => $request->user_id,
             'payment_status_id' => $payment_status->id,
             'payment_method_id' => $payment_method->id,
         ]);
 
-        // Stripe checkout
         Stripe::setApiKey(config('services.stripe.secret'));
+
+        $booking->save();
 
         $checkoutSession = StripeSession::create([
             'payment_method_types' => ['card'],
@@ -225,17 +205,33 @@ class BookingController extends Controller
             'cancel_url' => route('booking.payment.cancel', ['booking_id' => $booking->id]),
         ]);
 
-        $payment->update([
-            'stripe_payment_id' => $checkoutSession->id,
-            'stripe_payment_link' => $checkoutSession->url,
+        $payment->stripe_payment_id = $checkoutSession->id;
+        $payment->stripe_payment_link = $checkoutSession->url;
+        $payment->save();
+
+        $booking->update([
+            'payment_id' => $payment->id,
         ]);
 
-        $booking->update(['payment_id' => $payment->id]);
+        // $user = User::find($request->user_id);
+
+        // try {
+        //     if ($request->lang === 'ar') {
+        //         Mail::to($user->email)
+        //             ->send(new SendPaymentLinkAR($user, $checkoutSession->url));
+        //     } else {
+        //         Mail::to($user->email)
+        //             ->send(new SendPaymentLink($user, $checkoutSession->url));
+        //     }
+        // } catch (\Exception $e) {
+        //     // Log or handle exception
+        // }
+
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Booking created successfully.',
-            'booking' => $booking->load('services'),
+            'message' => 'Booking created and payment email sent.',
+            'booking' => $booking,
             'payment_url' => $checkoutSession->url,
         ]);
     }

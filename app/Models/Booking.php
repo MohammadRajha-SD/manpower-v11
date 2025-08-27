@@ -34,11 +34,11 @@ class Booking extends Model
     }
 
     public function services()
-{
-    return $this->belongsToMany(Service::class, 'booking_service')
-                ->withPivot(['quantity', 'price'])
-                ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(Service::class, 'booking_service')
+            ->withPivot(['price'])
+            ->withTimestamps();
+    }
 
 
     public function getTotal(): float
@@ -48,7 +48,7 @@ class Booking extends Model
 
         return $total;
     }
-    
+
     public function getSubtotal(): float
     {
         $total = 0;
@@ -74,7 +74,7 @@ class Booking extends Model
 
         return $taxValue;
     }
-    
+
     public function couponx()
     {
         return $this->belongsTo(Coupon::class, 'coupon', 'code');
