@@ -175,7 +175,90 @@ class CategoryController extends Controller
         ], 200);
     }
 
+
+
     public function subCategories($id)
+    {
+        $category = Category::with('children', 'image', 'parent', 'services')->find($id);
+
+        if (!$category) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Category not found',
+                'categories' => [],
+            ], 404);
+        }
+
+        $formatCategory = function ($cat) use (&$formatCategory) {
+            return [
+                'id' => $cat->id,
+                'name' => $cat->name,
+                'description' => $cat->description, // ✅ make sure column is correct
+                'image' => $cat->image ? asset('uploads/' . $cat->image->path) : null,
+                'is_end_sub_category' => $cat->is_end_sub_category,
+                'has_children' => $cat->children->isNotEmpty(),
+                'children' => $cat->children->map(fn($child) => $formatCategory($child)),
+                'services' => $cat->services?->map(function ($srv) {
+                    return [
+                        'id' => $srv->id,
+                        'name' => $srv->name,
+                        'description' => $srv->description,
+                        'price' => $srv->price,
+                        'discount_price' => $srv->discount_price,
+                        'price_unit' => $srv->price_unit,
+                        'quantity_unit' => $srv->quantity_unit,
+                        'duration' => $srv->duration,
+                        'featured' => $srv->featured,
+                        'enable_booking' => $srv->enable_booking,
+                        'end_sub_category_id' => $srv->end_sub_category_id,
+                        'available' => $srv->available,
+                        'addresses' => $srv->addresses?->map(fn($ad) => [
+                            'address' => $ad->address,
+                            'service_charge' => $ad->service_charge,
+                        ]),
+                        'provider' => $srv->provider ? [
+                            'id' => $srv->provider->id,
+                            'name' => $srv->provider->name,
+                            'email' => $srv->provider->email,
+                        ] : null,
+                        'image_path' => $srv?->image ? asset('uploads/' . $srv?->image?->path) : null,
+                        'images' => $srv?->images?->map(fn($img) => asset('uploads/' . $img->path)),
+                    ];
+                }),
+
+            ];
+        };
+
+        $result = $formatCategory($category);
+
+        $result['parent'] = $category->parent ? [
+            'id' => $category->parent->id,
+            'name' => $category->parent->name,
+            'description' => $category->parent->description,
+            'is_end_sub_category' => $category->parent->is_end_sub_category,
+            'image' => $category->parent->image ? asset('uploads/' . $category->parent->image->path) : null,
+        ] : null;
+
+        // $result['services'] = $category->services->map(function ($service) {
+        //     return [
+        //         'id' => $service->id,
+        //         'name' => $service->name,
+        //         'description' => $service->description,
+        //         'price' => $service->price,
+        //         'discount_price' => $service->discount_price,
+        //         'images' => $service->images ? $service->images->map(fn($img) => asset('uploads/' . $img->path))->toArray() : [],
+        //     ];
+        // });
+
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Category retrieved successfully.',
+            'category' => $result,
+        ]);
+    }
+
+    public function subCategoriesOld($id)
     {
         if (!Category::where('id', $id)->exists()) {
             return response()->json([
