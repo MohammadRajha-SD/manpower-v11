@@ -76,10 +76,10 @@ class SettingController extends Controller
             'text-dark navbar-light' => trans('lang.app_setting_light'),
         ];
 
-        $image_path = setting('app_logo', '') != '' ? 'uploads/'. setting('app_logo') : '';
-        $banner_img = setting('banner_img', '') != '' ? 'uploads/'. setting('banner_img') : '';
+        $image_path = setting('app_logo', '') != '' ? 'uploads/' . setting('app_logo') : '';
+        $banner_img = setting('banner_img', '') != '' ? 'uploads/' . setting('banner_img') : '';
 
-        return view('admins.settings.global-settings.index', compact('themes','logo_bg_clrs','navbar_colors','image_path', 'banner_img'));
+        return view('admins.settings.global-settings.index', compact('themes', 'logo_bg_clrs', 'navbar_colors', 'image_path', 'banner_img'));
     }
 
     public function update(Request $request, string $id)
@@ -99,6 +99,21 @@ class SettingController extends Controller
             'fixed_footer' => 'required|boolean',
             'app_logo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'banner_img' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'app_title' => 'required',
+            'app_subtitle' => 'required',
+            'booking_title' => 'required',
+            'booking_subtitle' => 'required',
+            'testimonial_title' => 'required',
+            'testimonial_subtitle' => 'required',
+            'service_title' => 'required',
+            'service_subtitle' => 'required',
+            'return_policy_title' => 'required',
+            'return_policy_subtitle' => 'required',
+            'privacy_policy_title' => 'required',
+            'privacy_policy_subtitle' => 'required',
+            'terms_content' => 'required',
+            'meta_description' => 'required',
+            'meta_keywords' => 'required',
         ]);
 
         if ($request->hasFile('app_logo')) {

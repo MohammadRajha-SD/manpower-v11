@@ -200,6 +200,7 @@
                     <div class="form-group align-items-start d-flex flex-column flex-md-row">
                         <label for="banner_img" class="col-md-3 control-label text-md-right mx-1">
                             Banner Image
+
                         </label>
 
                         <div class="col-md-9">
@@ -226,7 +227,6 @@
                             </div>
                         </div>
                     </div>
-
                     <!-- Fixed Header Field -->
                     <div class="form-group align-items-baseline d-flex flex-column flex-md-row">
                         <label for="fixed_header" class="col-4 control-label text-right">{{
@@ -250,6 +250,170 @@
                             <label for="fixed_footer">{{ __('lang.app_setting_fixed_footer_help') }}</label>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <hr />
+
+            {{-- part 2 --}}
+            <div class="row">
+                <div class="d-flex flex-column col-sm-12 col-md-6">
+                    <!-- app_title Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="app_title" class="col-4 text-right">App Title</label>
+                        <div class="col-8">
+                            <input type="text" name="app_title" id="app_title" class="form-control"
+                                value="{{ old('app_title', setting('app_title', '')) }}" placeholder="App Title...">
+                        </div>
+                    </div>
+
+                    <!-- booking_title Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="booking_title" class="col-4 text-right">Booking Title</label>
+                        <div class="col-8">
+                            <input type="text" name="booking_title" id="booking_title" class="form-control"
+                                value="{{ old('booking_title', setting('booking_title', '')) }}"
+                                placeholder="Booking Title...">
+                        </div>
+                    </div>
+
+                    <!-- testimonial_title Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="testimonial_title" class="col-4 text-right">Testimonial Title</label>
+                        <div class="col-8">
+                            <input type="text" name="testimonial_title" id="testimonial_title" class="form-control"
+                                value="{{ old('testimonial_title', setting('testimonial_title', '')) }}"
+                                placeholder="Testimonial Title...">
+                        </div>
+                    </div>
+
+                    <!-- service_title Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="service_title" class="col-4 text-right">Service Title</label>
+                        <div class="col-8">
+                            <input type="text" name="service_title" id="service_title" class="form-control"
+                                value="{{ old('service_title', setting('service_title', '')) }}"
+                                placeholder="Service Title...">
+                        </div>
+                    </div>
+
+                    <!-- return_policy_title Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="return_policy_title" class="col-4 text-right">Return Policy Title</label>
+                        <div class="col-8">
+                            <input type="text" name="return_policy_title" id="return_policy_title" class="form-control"
+                                value="{{ old('return_policy_title', setting('return_policy_title', '')) }}"
+                                placeholder="Return Policy Title...">
+                        </div>
+                    </div>
+
+                    <!-- privacy_policy_title Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="privacy_policy_title" class="col-4 text-right">Privacy Policy Title</label>
+                        <div class="col-8">
+                            <input type="text" name="privacy_policy_title" id="privacy_policy_title"
+                                class="form-control"
+                                value="{{ old('privacy_policy_title', setting('privacy_policy_title', '')) }}"
+                                placeholder="Privacy Policy Title...">
+                        </div>
+                    </div>
+
+                    <!-- meta_description Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="meta_description" class="col-4 text-right">Meta Description</label>
+                        <div class="col-8">
+                            <input type="text" name="meta_description" id="meta_description" class="form-control"
+                                value="{{ old('meta_description', setting('meta_description', '')) }}"
+                                placeholder="Meta Description...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column col-sm-12 col-md-6">
+                    <!-- app_subtitle Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="app_subtitle" class="col-4 text-right">App Sub Title</label>
+                        <div class="col-8">
+                            <input type="text" name="app_subtitle" id="app_subtitle" class="form-control"
+                                value="{{ old('app_subtitle', setting('app_subtitle', '')) }}"
+                                placeholder="App Sub Title...">
+                        </div>
+                    </div>
+
+                    <!-- booking_subtitle Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="booking_subtitle" class="col-4 text-right">Booking Sub Title</label>
+                        <div class="col-8">
+                            <input type="text" name="booking_subtitle" id="booking_subtitle" class="form-control"
+                                value="{{ old('booking_subtitle', setting('booking_subtitle', '')) }}"
+                                placeholder="Booking Sub Title...">
+                        </div>
+                    </div>
+
+                    <!-- testimonial_subtitle Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="testimonial_subtitle" class="col-4 text-right">Testimonial Sub Title</label>
+                        <div class="col-8">
+                            <input type="text" name="testimonial_subtitle" id="testimonial_subtitle"
+                                class="form-control"
+                                value="{{ old('testimonial_subtitle', setting('testimonial_subtitle', '')) }}"
+                                placeholder="Testimonial Sub Title...">
+                        </div>
+                    </div>
+
+                    <!-- service_subtitle Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="service_subtitle" class="col-4 text-right">Service Sub Title</label>
+                        <div class="col-8">
+                            <input type="text" name="service_subtitle" id="service_subtitle" class="form-control"
+                                value="{{ old('service_subtitle', setting('service_subtitle', '')) }}"
+                                placeholder="Service Sub Title...">
+                        </div>
+                    </div>
+
+                    <!-- return_policy_subtitle Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="return_policy_subtitle" class="col-4 text-right">Return Policy Sub Title</label>
+                        <div class="col-8">
+                            <input type="text" name="return_policy_subtitle" id="return_policy_subtitle"
+                                class="form-control"
+                                value="{{ old('return_policy_subtitle', setting('return_policy_subtitle', '')) }}"
+                                placeholder="Return Policy Sub Title...">
+                        </div>
+                    </div>
+
+                    <!-- privacy_policy_subtitle Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="privacy_policy_subtitle" class="col-4 text-right">Privacy Policy Sub Title</label>
+                        <div class="col-8">
+                            <input type="text" name="privacy_policy_subtitle" id="privacy_policy_subtitle"
+                                class="form-control"
+                                value="{{ old('privacy_policy_subtitle', setting('privacy_policy_subtitle', '')) }}"
+                                placeholder="Privacy Policy Sub Title...">
+                        </div>
+                    </div>
+
+                    <!-- meta_keywords Field -->
+                    <div class="form-group d-flex flex-column flex-md-row">
+                        <label for="meta_keywords" class="col-4 text-right">Meta Keywords</label>
+                        <div class="col-8">
+                            <input type="text" name="meta_keywords" id="meta_keywords" class="form-control"
+                                value="{{ old('meta_keywords', setting('meta_keywords', '')) }}"
+                                placeholder="Meta Keywords...">
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex flex-column col-12  mx-2">
+                    <!-- terms_content Field -->
+                    <label for="terms_content" class="control-label">
+                        Terms Content
+                    </label>
+                    <textarea name="terms_content" id="terms_content" class="form-control"
+                        placeholder="Terms Content..." required>
+                            {!!  old('terms_content', setting('terms_content', ''))  !!}
+                        </textarea>
                 </div>
             </div>
 
