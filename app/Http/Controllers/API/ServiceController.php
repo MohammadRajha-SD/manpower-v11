@@ -10,17 +10,7 @@ class ServiceController extends Controller
 {
     public function index(Request $request)
     {
-        // $address = $request->address;
-
         $query = Service::query();
-
-        // if ($address != null) {
-        //     $query->whereHas('addresses', function ($q) use ($address) {
-        //         $q->where('address', $address);
-        //         // or partial match:
-        //         // $q->where('address', 'like', "%{$address}%");
-        //     });
-        // }
 
         // Filter services where available and enable_booking are 1
         $query->where('available', 1);
@@ -43,12 +33,13 @@ class ServiceController extends Controller
         // Execute the query to get the results
         $services = $query->get();
         $emirates = $request->lang === 'ar' ? config('emirates_ar') : config('emirates');
-// Flatten config to [slug => name]
-$slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
-    return [$item['slug'] => $item['name']];
-});
+        
+        // Flatten config to [slug => name]
+        $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
+            return [$item['slug'] => $item['name']];
+        });
 
-        $newServices = $services->map(function ($slide) use ($slugToName)  {
+        $newServices = $services->map(function ($slide) use ($slugToName) {
             return [
                 'id' => $slide->id,
                 'address' => $slide->address,
@@ -56,6 +47,7 @@ $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
                 'parent_category_id' => $slide->category?->parent ? $slide->category->parent?->id : null,
                 'provider_id' => $slide->provider_id,
                 'name' => $slide->name,
+                'slug' => $slide->slug,
                 'description' => $slide->description,
                 'discount_price' => $slide->discount_price,
                 'price' => $slide->price,
@@ -87,13 +79,13 @@ $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
                     'featured' => $slide->provider->featured,
                     'created_at' => $slide->provider->created_at,
                 ],
-                
-               'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) use ($slugToName) {
-    return [
-        'address' => $slugToName[$ad->address] ?? $ad->address, // Translate slug to name if found
-        'service_charge' => $ad->service_charge,
-    ];
-}) : [],
+
+                'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) use ($slugToName) {
+                    return [
+                        'address' => $slugToName[$ad->address] ?? $ad->address, // Translate slug to name if found
+                        'service_charge' => $ad->service_charge,
+                    ];
+                }) : [],
 
                 'images' => $slide->images->map(function ($img) {
                     return asset('uploads/' . $img->path);
@@ -130,7 +122,7 @@ $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
 
         // Execute the query to get the results
         $services = $query->get();
-        
+
         $emirates = $request->lang === 'ar' ? config('emirates_ar') : config('emirates');
 
         // Flatten config to [slug => name]
@@ -146,6 +138,7 @@ $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
                 'category_id' => $slide->category_id,
                 'parent_category_id' => $slide->category?->parent ? $slide->category->parent->id : null,
                 'provider_id' => $slide->provider_id,
+                'slug' => $slide->slug,
                 'name' => $slide->getTranslation('name', 'en'),
                 'name_ar' => $slide->getTranslation('name', 'ar', false),
                 'description' => $slide->getTranslation('description', 'en'),
@@ -168,7 +161,7 @@ $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
                 }),
                 'created_at' => $slide->created_at,
                 'provider' => [
-                    'name' => $slide->provider->name,
+                    //'name' => $slide->provider->name,
                     'email' => $slide->provider->email,
                     'description' => $slide->provider->description,
                     'schedules' => $slide->provider->getSchedules(),
@@ -179,10 +172,10 @@ $slugToName = collect($emirates)->flatten(1)->mapWithKeys(function ($item) {
                     'accepted' => $slide->provider->accepted,
                     'featured' => $slide->provider->featured,
                     'created_at' => $slide->provider->created_at,
-                ],              
+                ],
                 'addresses' => $slide->addresses ? $slide->addresses->map(function ($ad) use ($slugToName) {
                     return [
-                        'address' => $slugToName[$ad->address] ?? $ad->address, 
+                        'address' => $slugToName[$ad->address] ?? $ad->address,
                         'service_charge' => $ad->service_charge,
                     ];
                 }) : [],
