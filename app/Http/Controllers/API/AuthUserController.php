@@ -115,6 +115,7 @@ class AuthUserController extends Controller
     {
         $user = $request->user();
 
+
         return response()->json([
             'user_type' => 'user',
             'data' => [
@@ -133,8 +134,11 @@ class AuthUserController extends Controller
                 'bookings' => $user->bookings?->map(function ($b) {
                     return [
                         'id' => $b->id,
-                        'address'=> $b->address,
-                        'service_id' => $b->service_id,
+                        'address' => $b->address,
+                        'services' => $b->services->map(fn($s) => [
+                            'id' => $s->id,
+                            'price' => $s->pivot->price,
+                        ]),
                         'booking_status' => $b->booking_status->status,
                         'payment_status' => $b->payment?->payment_status?->status,
                         'payment_link' => $b->payment?->stripe_payment_link,
@@ -190,7 +194,7 @@ class AuthUserController extends Controller
         ]);
     }
 
-        // forget password
+    // forget password
     public function forgotPassword(Request $request)
     {
         $validator = Validator::make($request->all(), [
